@@ -36,7 +36,7 @@ export default function EndScreen() {
 
         <button
           onClick={restartGame}
-          className="w-full py-2.5 sm:py-3.5 bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-[0.98] text-white font-bold font-sans uppercase tracking-wider rounded-2xl transition-all shadow-md cursor-pointer"
+          className="w-full py-2.5 sm:py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-[0.98] text-white font-bold font-sans uppercase tracking-wider rounded-2xl transition-all shadow-md cursor-pointer"
         >
           Re-Enter Mindscape
         </button>
