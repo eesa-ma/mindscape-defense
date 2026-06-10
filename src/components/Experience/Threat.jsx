@@ -82,14 +82,14 @@ export default function Threat({ threatData }) {
   // To link this flawlessly, we update the removal sequence to trigger local destruction first
   const specs = (() => {
     switch (threatData.type) {
-      case 'Burnout': return { color: '#f59e0b', labelColor: 'text-amber-400 border-amber-500/30' };
-      case 'Academic Pressure': return { color: '#3b82f6', labelColor: 'text-blue-400 border-blue-500/30' };
-      case 'Social Rejection': return { color: '#c084fc', labelColor: 'text-purple-400 border-purple-500/30' };
-      case 'Negative Thoughts': return { color: '#f43f5e', labelColor: 'text-rose-400 border-rose-500/30' };
-      case 'Isolation': return { color: '#6366f1', labelColor: 'text-indigo-400 border-indigo-500/30' };
-      case 'Social Comparison': return { color: '#14b8a6', labelColor: 'text-teal-400 border-teal-500/30' };
-      case 'Family Conflict': return { color: '#ec4899', labelColor: 'text-pink-400 border-pink-500/30' };
-      default: return { color: '#94a3b8', labelColor: 'text-slate-400 border-slate-500/30' };
+      case 'Burnout': return { color: '#f59e0b', labelColor: 'text-amber-600 border-amber-300' };
+      case 'Academic Pressure': return { color: '#3b82f6', labelColor: 'text-blue-600 border-blue-300' };
+      case 'Social Rejection': return { color: '#c084fc', labelColor: 'text-purple-600 border-purple-300' };
+      case 'Negative Thoughts': return { color: '#f43f5e', labelColor: 'text-rose-600 border-rose-300' };
+      case 'Isolation': return { color: '#6366f1', labelColor: 'text-indigo-600 border-indigo-300' };
+      case 'Social Comparison': return { color: '#14b8a6', labelColor: 'text-teal-600 border-teal-300' };
+      case 'Family Conflict': return { color: '#ec4899', labelColor: 'text-pink-600 border-pink-300' };
+      default: return { color: '#94a3b8', labelColor: 'text-slate-600 border-slate-300' };
     }
   })();
 
@@ -128,8 +128,8 @@ export default function Threat({ threatData }) {
             center
             className="pointer-events-none select-none"
           >
-            <div className={`whitespace-nowrap px-2.5 py-1 text-[10px] font-black font-mono uppercase tracking-wider rounded-md border bg-slate-950/90 backdrop-blur-sm transition-all duration-300 shadow-xl ${specs.labelColor} ${
-              isTargeted ? 'scale-110 ring-2 ring-cyan-400 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]' : 'opacity-80'
+            <div className={`whitespace-nowrap px-2.5 py-1 text-[10px] font-bold font-sans uppercase tracking-wider rounded-lg border bg-white/95 backdrop-blur-md transition-all duration-300 shadow-md ${specs.labelColor} ${
+              isTargeted ? 'scale-110 ring-2 ring-amber-400 border-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.3)]' : 'opacity-90'
             }`}>
               {threatData.type}
             </div>
@@ -138,11 +138,11 @@ export default function Threat({ threatData }) {
           <group ref={visualGroupRef} onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}>
             <mesh position={[0, 0.3, 0]}>
               <coneGeometry args={[0.35, 0.7, 5]} />
-              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.0 : 0.4} flatShading />
+              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.2 : 0.6} flatShading fog={false} />
             </mesh>
             <mesh position={[0, -0.3, 0]} rotation={[Math.PI, 0, 0]}>
               <coneGeometry args={[0.35, 0.7, 5]} />
-              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.0 : 0.4} flatShading />
+              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.2 : 0.6} flatShading fog={false} />
             </mesh>
           </group>
 
@@ -155,7 +155,7 @@ export default function Threat({ threatData }) {
                   args={[new Float32Array([0, 0, 0, -threatData.position[0], -threatData.position[1], -threatData.position[2]]), 3]}
                 />
               </bufferGeometry>
-              <lineBasicMaterial color="#22d3ee" transparent opacity={0.15} linewidth={2} />
+              <lineBasicMaterial color="#38bdf8" transparent opacity={0.35} linewidth={2} fog={false} />
             </line>
           )}
         </>

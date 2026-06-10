@@ -58,10 +58,11 @@ export default function FogRing() {
         <mesh key={i} scale={c.scale}>
           <dodecahedronGeometry args={[1.2, 1]} />
           <meshStandardMaterial
-            color="#161925" // Dense, heavy dark shadow mist tone
-            emissive="#090b11"
+            color="#9f7aea" // Richer lavender purple cloud color
+            emissive="#552277" // Soft deep violet depth
+            emissiveIntensity={0.4}
             transparent={true}
-            opacity={0.75} // High opacity so overlapping clusters block out the screen
+            opacity={0.7} // Higher opacity for more defined cloud bodies
             flatShading
           />
         </mesh>

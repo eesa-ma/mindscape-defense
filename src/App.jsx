@@ -11,14 +11,14 @@ function DynamicVignette() {
   const { connection } = useGameState();
   
   // Calculate how intensely the screen border should close in
-  // Lower connection = wider, darker vignette opacity coverage
-  const intensity = (100 - connection) * 0.7; 
+  // Lower connection = wider, soft lavender/violet calming aura coverage
+  const intensity = (100 - connection) * 0.6; 
 
   return (
     <div 
-      className="absolute inset-0 pointer-events-none z-40 transition-all duration-1000 mix-blend-multiply"
+      className="absolute inset-0 pointer-events-none z-40 transition-all duration-1000"
       style={{
-        background: `radial-gradient(circle, transparent ${110 - intensity}%, rgba(15, 17, 26, ${intensity / 100 + 0.2}) 100%)`
+        background: `radial-gradient(circle, transparent ${115 - intensity}%, rgba(139, 92, 246, ${intensity / 200}) 100%)`
       }}
     />
   );
@@ -28,13 +28,13 @@ function HUD() {
   const { connection, score, lives, timer, gameStage } = useGameState();
 
   return (
-    <div className="absolute top-6 left-6 right-6 z-50 flex justify-between items-center pointer-events-none">
+    <div className="absolute top-6 left-6 right-6 z-50 flex justify-between items-center pointer-events-none select-none">
       <div className="flex flex-col gap-2">
-        <div className="bg-slate-950/60 backdrop-blur-md border border-slate-800 px-4 py-2 rounded-xl text-slate-200 pointer-events-auto">
-          <span className="text-xs font-mono uppercase tracking-wider opacity-60 block">Connection Meter</span>
-          <span className="text-xl font-black font-mono text-cyan-400">{connection}%</span>
+        <div className="bg-white/75 backdrop-blur-md border border-white/50 px-4 py-2.5 rounded-2xl text-slate-800 pointer-events-auto shadow-lg shadow-slate-200/20 transition-all duration-500">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Connection Meter</span>
+          <span className="text-2xl font-black text-cyan-600 drop-shadow-[0_1px_2px_rgba(8,145,178,0.1)]">{connection}%</span>
         </div>
-        <div className="flex gap-1.5 text-rose-500 text-lg drop-shadow-[0_0_10px_rgba(244,63,94,0.4)]">
+        <div className="flex gap-1.5 text-rose-500 text-xl drop-shadow-[0_2px_8px_rgba(244,63,94,0.35)] pl-1">
           {Array.from({ length: lives }).map((_, i) => (
             <span key={i}>♥</span>
           ))}
@@ -42,15 +42,15 @@ function HUD() {
       </div>
 
       {/* Real-time Countdown Timer & Stage Tracking Display */}
-      <div className="flex flex-col items-center bg-slate-950/40 border border-slate-800/40 px-6 py-1.5 rounded-full backdrop-blur-sm">
-        <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500">Stage: {gameStage}</span>
-        <span className="text-xl font-black font-mono text-slate-100">00:{timer < 10 ? `0${timer}` : timer}</span>
+      <div className="flex flex-col items-center bg-white/60 border border-white/50 px-6 py-2 rounded-full backdrop-blur-md shadow-md shadow-slate-200/10 text-center">
+        <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Stage: {gameStage}</span>
+        <span className="text-xl font-black text-slate-800">00:{timer < 10 ? `0${timer}` : timer}</span>
       </div>
 
       <div className="flex gap-4">
-        <div className="bg-slate-950/60 backdrop-blur-md border border-slate-800 px-4 py-2 rounded-xl text-slate-200 text-right pointer-events-auto">
-          <span className="text-xs font-mono uppercase tracking-wider opacity-60 block">Score</span>
-          <span className="text-xl font-black font-mono text-amber-400">
+        <div className="bg-white/75 backdrop-blur-md border border-white/50 px-4 py-2.5 rounded-2xl text-slate-800 text-right pointer-events-auto shadow-lg shadow-slate-200/20 transition-all duration-500">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Score</span>
+          <span className="text-2xl font-black text-amber-600 drop-shadow-[0_1px_2px_rgba(217,119,6,0.1)]">
             {score.toLocaleString('en-US', { minimumIntegerDigits: 5, useGrouping: false })}
           </span>
         </div>
@@ -60,15 +60,29 @@ function HUD() {
 }
 
 function GameRunner() {
-  const { executeCopingStrategy } = useGameState();
+  const { executeCopingStrategy, connection } = useGameState();
 
   useKeyboardControls((strategy) => {
     executeCopingStrategy(strategy);
   });
 
+  const factor = (100 - connection) / 100;
+
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-[#111319] select-none">
-      <MindscapeStage />
+    <div className="relative w-screen h-screen overflow-hidden select-none font-sans">
+      {/* Dynamic Background Gradient Layers */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-tr from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] transition-opacity duration-1000 ease-in-out z-0"
+        style={{ opacity: 1 - factor }}
+      />
+      <div 
+        className="absolute inset-0 bg-gradient-to-tr from-[#e0e7ff] via-[#e2e8f0] to-[#ddd6fe] transition-opacity duration-1000 ease-in-out z-0"
+        style={{ opacity: factor }}
+      />
+
+      <div className="relative z-10 w-full h-full">
+        <MindscapeStage />
+      </div>
       <DynamicVignette />
       <HUD />
       <InsightOverlay />
