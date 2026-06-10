@@ -120,7 +120,7 @@ export const GameStateProvider = ({ children }) => {
   const executeCopingStrategy = (strategy) => {
     if (gameStatus !== 'playing' || !targetedThreat) return;
 
-    if (strategy.counteracts === targetedThreat.type) {
+    if (strategy.counteracts.includes(targetedThreat.type)) {
       handleSuccessfulCope(100, strategy.insight);
       removeThreat(targetedThreat.id);
     } else {
