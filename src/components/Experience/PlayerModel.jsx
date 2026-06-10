@@ -11,7 +11,7 @@ export default function PlayerModel(props) {
   const { nodes, materials } = useGraph(clone)
   const { actions } = useAnimations(animations, group)
 
-  const { score, connection } = useGameState()
+  const { score, connection, isPortrait } = useGameState()
   const prevScoreRef = useRef(score)
   const prevConnectionRef = useRef(connection)
 
@@ -65,6 +65,7 @@ export default function PlayerModel(props) {
 
   // Frame loop for dynamic, responsive movements
   useFrame((state) => {
+    if (isPortrait) return
     if (!group.current) return
 
     let targetLeftArmZ = 1.35

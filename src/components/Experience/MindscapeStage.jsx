@@ -64,13 +64,13 @@ function Sparkles() {
 }
 
 function Environment() {
-  const { connection, threats, spawnThreat, gameStatus, getStageModifiers } = useGameState();
+  const { connection, threats, spawnThreat, gameStatus, getStageModifiers, isPortrait } = useGameState();
   const fogDensity = 0.03 + (100 - connection) * 0.003;
   const factor = (100 - connection) / 100;
   const fogColor = interpolateColor('#ffd3b6', '#e0e7ff', factor);
 
   useEffect(() => {
-    if (gameStatus !== 'playing') return;
+    if (gameStatus !== 'playing' || isPortrait) return;
 
     const categories = ['Burnout', 'Academic Pressure', 'Social Rejection', 'Negative Thoughts', 'Isolation', 'Social Comparison', 'Family Conflict'];
     const modifiers = getStageModifiers();
@@ -83,7 +83,7 @@ function Environment() {
     const intervalId = setInterval(spawnLoop, modifiers.spawnRate);
 
     return () => clearInterval(intervalId);
-  }, [spawnThreat, gameStatus, getStageModifiers]);
+  }, [spawnThreat, gameStatus, getStageModifiers, isPortrait]);
 
   return (
     <>

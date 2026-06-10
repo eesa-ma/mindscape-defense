@@ -8,7 +8,7 @@ export default function Threat({ threatData }) {
   const visualGroupRef = useRef();
   const particlesRef = useRef();
   
-  const { handleThreatCollision, targetedThreat, setTargetedThreat } = useGameState();
+  const { handleThreatCollision, targetedThreat, setTargetedThreat, isPortrait } = useGameState();
   const isTargeted = targetedThreat?.id === threatData.id;
 
   // New states for the destruction animation
@@ -30,6 +30,9 @@ export default function Threat({ threatData }) {
   }, []);
 
   useFrame((state) => {
+    // If screen is in portrait mode, freeze frame logic
+    if (isPortrait) return;
+
     // If destroyed, animate the explosion particles breaking outward
     if (isDestroyed) {
       setExplodeTime((prev) => prev + 1);

@@ -14,6 +14,25 @@ export const GameStateProvider = ({ children }) => {
   const [gameStatus, setGameStatus] = useState('playing'); 
   const [timer, setTimer] = useState(60); 
   const [gameStage, setGameStage] = useState('early'); 
+  const [isPortrait, setIsPortrait] = useState(false);
+
+  // Monitor orientation matches in sync with CSS
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(orientation: portrait)");
+    const checkOrientation = (e) => {
+      setIsPortrait(e.matches);
+    };
+    
+    setIsPortrait(mediaQuery.matches);
+    
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', checkOrientation);
+      return () => mediaQuery.removeEventListener('change', checkOrientation);
+    } else {
+      mediaQuery.addListener(checkOrientation);
+      return () => mediaQuery.removeListener(checkOrientation);
+    }
+  }, []);
 
   // Difficulty scaling logic based on game plan stages
   const getStageModifiers = useCallback(() => {
@@ -23,7 +42,7 @@ export const GameStateProvider = ({ children }) => {
   }, [gameStage]);
 
   useEffect(() => {
-    if (gameStatus !== 'playing') return;
+    if (gameStatus !== 'playing' || isPortrait) return;
 
     const clock = setInterval(() => {
       setTimer((prev) => {
@@ -42,7 +61,7 @@ export const GameStateProvider = ({ children }) => {
     }, 1000);
 
     return () => clearInterval(clock);
-  }, [gameStatus]);
+  }, [gameStatus, isPortrait]);
 
   const handleSuccessfulCope = (points, insightText) => {
     if (gameStatus !== 'playing') return;
@@ -126,7 +145,7 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage,
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait,
       setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, getStageModifiers
     }}>
       {children}
