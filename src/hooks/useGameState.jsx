@@ -1,5 +1,6 @@
 // src/hooks/useGameState.jsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { audioSynth } from '../utils/audioSynth';
 
 const GameStateContext = createContext();
 
@@ -16,6 +17,7 @@ export const GameStateProvider = ({ children }) => {
   const [timer, setTimer] = useState(60); 
   const [gameStage, setGameStage] = useState('early'); 
   const [isPortrait, setIsPortrait] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
   // Monitor orientation matches in sync with CSS
   useEffect(() => {
@@ -64,8 +66,32 @@ export const GameStateProvider = ({ children }) => {
     return () => clearInterval(clock);
   }, [gameStatus, isPortrait, isPaused]);
 
+  // Handle game music ambient pad playback
+  useEffect(() => {
+    if (gameStatus === 'playing' && !isPaused && !isPortrait) {
+      audioSynth.startPad();
+    } else {
+      audioSynth.stopPad();
+    }
+  }, [gameStatus, isPaused, isPortrait]);
+
+  // Handle ambient pad chord transition dynamically based on connection levels
+  useEffect(() => {
+    audioSynth.updateConnection(connection);
+  }, [connection]);
+
+  // Trigger victory/defeat sound effects on status changes
+  useEffect(() => {
+    if (gameStatus === 'won') {
+      audioSynth.playVictory();
+    } else if (gameStatus === 'lost' || gameStatus === 'quit') {
+      audioSynth.playDefeat();
+    }
+  }, [gameStatus]);
+
   const handleSuccessfulCope = (points, insightText) => {
     if (gameStatus !== 'playing') return;
+    audioSynth.playSuccess(); // play success arpeggio
     setScore(prev => prev + points); 
     setConnection(prev => Math.min(prev + 10, 100)); 
     setActiveInsight(insightText);
@@ -103,6 +129,7 @@ export const GameStateProvider = ({ children }) => {
 
   const handleThreatCollision = (id) => {
     removeThreat(id);
+    audioSynth.playFailure(); // play collision crash
     
     setConnection((prev) => {
       const nextConnection = Math.max(prev - 20, 0);
@@ -120,10 +147,13 @@ export const GameStateProvider = ({ children }) => {
   const executeCopingStrategy = (strategy) => {
     if (gameStatus !== 'playing' || !targetedThreat) return;
 
+    audioSynth.playClick(); // play input pop sound
+
     if (strategy.counteracts.includes(targetedThreat.type)) {
       handleSuccessfulCope(100, strategy.insight);
       removeThreat(targetedThreat.id);
     } else {
+      audioSynth.playFailure(); // play warning slide on incorrect cope
       const penalty = gameStage === 'late' ? 25 : 15;
       setConnection(prev => {
         const next = Math.max(prev - penalty, 0);
@@ -134,6 +164,7 @@ export const GameStateProvider = ({ children }) => {
   };
 
   const restartGame = () => {
+    audioSynth.playClick();
     setConnection(100);
     setLives(3);
     setScore(0);
@@ -147,19 +178,29 @@ export const GameStateProvider = ({ children }) => {
 
   const togglePause = () => {
     if (gameStatus === 'playing') {
+      audioSynth.playClick();
       setIsPaused(prev => !prev);
     }
   };
 
   const quitGame = () => {
+    audioSynth.playClick();
     setIsPaused(false);
     setGameStatus('quit');
   };
 
+  const toggleMute = () => {
+    setIsMuted(prev => !prev);
+  };
+
+  useEffect(() => {
+    audioSynth.setMuted(isMuted);
+  }, [isMuted]);
+
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, getStageModifiers
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused, isMuted,
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers
     }}>
       {children}
     </GameStateContext.Provider>
