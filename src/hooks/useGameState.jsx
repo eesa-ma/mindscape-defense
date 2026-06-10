@@ -1,39 +1,133 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+// src/hooks/useGameState.jsx
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const GameStateContext = createContext();
 
 export const GameStateProvider = ({ children }) => {
-  const [connection, setConnection] = useState(100); // Starts at 100% [cite: 39]
-  const [lives, setLives] = useState(3);             // Starts with 3 lives [cite: 44]
+  const [connection, setConnection] = useState(100); 
+  const [lives, setLives] = useState(3);             
   const [score, setScore] = useState(0);
-  const [gameStage, setGameStage] = useState('early'); // early, mid, late [cite: 64, 68, 72]
   const [activeInsight, setActiveInsight] = useState(null);
+  const [threats, setThreats] = useState([]);
+  const [targetedThreat, setTargetedThreat] = useState(null);
+  
+  const [gameStatus, setGameStatus] = useState('playing'); 
+  const [timer, setTimer] = useState(60); 
+  const [gameStage, setGameStage] = useState('early'); 
 
-  // Example handler when a player successfully copes [cite: 34]
+  // Difficulty scaling logic based on game plan stages
+  const getStageModifiers = useCallback(() => {
+    if (gameStage === 'mid') return { spawnRate: 3000, speedMultiplier: 1.5 }; 
+    if (gameStage === 'late') return { spawnRate: 1800, speedMultiplier: 2.2 }; 
+    return { spawnRate: 4500, speedMultiplier: 1.0 }; 
+  }, [gameStage]);
+
+  useEffect(() => {
+    if (gameStatus !== 'playing') return;
+
+    const clock = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          setGameStatus('won'); 
+          clearInterval(clock);
+          return 0;
+        }
+        
+        // Progression triggers
+        if (prev === 40) setGameStage('mid');
+        if (prev === 20) setGameStage('late');
+        
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(clock);
+  }, [gameStatus]);
+
   const handleSuccessfulCope = (points, insightText) => {
-    setScore(prev => prev + points);
-    setConnection(prev => Math.min(prev + 10, 100)); // Restore connection [cite: 41, 56]
-    
-    // Trigger the brief educational popup [cite: 86]
+    if (gameStatus !== 'playing') return;
+    setScore(prev => prev + points); 
+    setConnection(prev => Math.min(prev + 10, 100)); 
     setActiveInsight(insightText);
-    setTimeout(() => setActiveInsight(null), 3500); 
+    setTimeout(() => setActiveInsight(null), 3500);
   };
 
-  // Example handler when a challenge hits the player [cite: 35, 40]
-  const handlePlayerDamage = (impact) => {
-    setConnection(prev => {
-      const next = prev - impact;
-      if (next <= 0) {
-        // Handle Game Over [cite: 17, 42]
-      }
-      return Math.max(next, 0);
+  const spawnThreat = useCallback((type) => {
+    if (gameStatus !== 'playing') return;
+
+    const angle = Math.random() * Math.PI * 2;
+    const spawnDistance = 15;
+    const modifiers = getStageModifiers();
+    
+    const newThreat = {
+      id: Math.random().toString(36).substr(2, 9),
+      type: type,
+      position: [Math.cos(angle) * spawnDistance, 0, Math.sin(angle) * spawnDistance],
+      speed: (0.02 + Math.random() * 0.02) * modifiers.speedMultiplier,
+    };
+
+    setThreats(prev => {
+      const updated = [...prev];
+      if (updated.length === 0) setTargetedThreat(newThreat);
+      return [...updated, newThreat];
     });
+  }, [gameStatus, getStageModifiers]);
+
+  const removeThreat = (id) => {
+    setThreats(prev => {
+      const filtered = prev.filter(t => t.id !== id);
+      setTargetedThreat(filtered.length > 0 ? filtered[0] : null);
+      return filtered;
+    });
+  };
+
+  const handleThreatCollision = (id) => {
+    removeThreat(id);
+    
+    setConnection((prev) => {
+      const nextConnection = Math.max(prev - 20, 0);
+      if (nextConnection <= 0) setGameStatus('lost');
+      return nextConnection;
+    });
+
+    setLives((prevLives) => {
+      const nextLives = prevLives - 1;
+      if (nextLives <= 0) setGameStatus('lost');
+      return nextLives;
+    });
+  };
+
+  const executeCopingStrategy = (strategy) => {
+    if (gameStatus !== 'playing' || !targetedThreat) return;
+
+    if (strategy.counteracts === targetedThreat.type) {
+      handleSuccessfulCope(100, strategy.insight);
+      removeThreat(targetedThreat.id);
+    } else {
+      const penalty = gameStage === 'late' ? 25 : 15;
+      setConnection(prev => {
+        const next = Math.max(prev - penalty, 0);
+        if (next <= 0) setGameStatus('lost');
+        return next;
+      });
+    }
+  };
+
+  const restartGame = () => {
+    setConnection(100);
+    setLives(3);
+    setScore(0);
+    setThreats([]);
+    setTargetedThreat(null);
+    setGameStage('early');
+    setGameStatus('playing');
+    setTimer(60);
   };
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, gameStage, activeInsight,
-      handleSuccessfulCope, handlePlayerDamage
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage,
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, getStageModifiers
     }}>
       {children}
     </GameStateContext.Provider>
