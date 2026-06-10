@@ -12,6 +12,7 @@ export const GameStateProvider = ({ children }) => {
   const [targetedThreat, setTargetedThreat] = useState(null);
   
   const [gameStatus, setGameStatus] = useState('playing'); 
+  const [isPaused, setIsPaused] = useState(false);
   const [timer, setTimer] = useState(60); 
   const [gameStage, setGameStage] = useState('early'); 
   const [isPortrait, setIsPortrait] = useState(false);
@@ -42,7 +43,7 @@ export const GameStateProvider = ({ children }) => {
   }, [gameStage]);
 
   useEffect(() => {
-    if (gameStatus !== 'playing' || isPortrait) return;
+    if (gameStatus !== 'playing' || isPortrait || isPaused) return;
 
     const clock = setInterval(() => {
       setTimer((prev) => {
@@ -61,7 +62,7 @@ export const GameStateProvider = ({ children }) => {
     }, 1000);
 
     return () => clearInterval(clock);
-  }, [gameStatus, isPortrait]);
+  }, [gameStatus, isPortrait, isPaused]);
 
   const handleSuccessfulCope = (points, insightText) => {
     if (gameStatus !== 'playing') return;
@@ -72,7 +73,7 @@ export const GameStateProvider = ({ children }) => {
   };
 
   const spawnThreat = useCallback((type) => {
-    if (gameStatus !== 'playing') return;
+    if (gameStatus !== 'playing' || isPaused) return;
 
     const angle = Math.random() * Math.PI * 2;
     const spawnDistance = 15;
@@ -90,7 +91,7 @@ export const GameStateProvider = ({ children }) => {
       if (updated.length === 0) setTargetedThreat(newThreat);
       return [...updated, newThreat];
     });
-  }, [gameStatus, getStageModifiers]);
+  }, [gameStatus, isPaused, getStageModifiers]);
 
   const removeThreat = (id) => {
     setThreats(prev => {
@@ -141,12 +142,24 @@ export const GameStateProvider = ({ children }) => {
     setGameStage('early');
     setGameStatus('playing');
     setTimer(60);
+    setIsPaused(false);
+  };
+
+  const togglePause = () => {
+    if (gameStatus === 'playing') {
+      setIsPaused(prev => !prev);
+    }
+  };
+
+  const quitGame = () => {
+    setIsPaused(false);
+    setGameStatus('quit');
   };
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, getStageModifiers
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused,
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, getStageModifiers
     }}>
       {children}
     </GameStateContext.Provider>

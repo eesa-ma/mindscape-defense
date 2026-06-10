@@ -8,6 +8,7 @@ import InsightOverlay from './components/UI/InsightOverlay';
 import EndScreen from './components/UI/EndScreen'; // Import the overlay
 import OrientationGate from './components/UI/OrientationGate';
 import LoadingScreen from './components/UI/LoadingScreen';
+import PauseButton from './components/UI/PauseButton';
 
 function DynamicVignette() {
   const { connection } = useGameState();
@@ -156,6 +157,7 @@ function GameRunner() {
       </div>
       <DynamicVignette />
       <HUD />
+      <PauseButton />
       <InsightOverlay />
       <CopingDock />
       <EndScreen /> {/* Active endgame layer checks */}
