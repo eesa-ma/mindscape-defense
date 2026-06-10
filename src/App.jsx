@@ -28,7 +28,7 @@ function DynamicVignette() {
 }
 
 function HUD() {
-  const { connection, score, lives, timer, gameStage } = useGameState();
+  const { connection, score, lives, timer, gameStage, isMuted, toggleMute } = useGameState();
 
   return (
     <div className="hud-container absolute top-3 left-3 right-3 sm:top-6 sm:left-6 sm:right-6 z-50 flex justify-between items-center pointer-events-none select-none">
@@ -67,6 +67,10 @@ function HUD() {
             font-size: 1rem !important;
             line-height: 1.15 !important;
           }
+          .hud-mute-btn svg {
+            width: 1.125rem !important;
+            height: 1.125rem !important;
+          }
         }
         @media (max-height: 480px) {
           .hud-container {
@@ -98,6 +102,10 @@ function HUD() {
           .hud-timer-value {
             font-size: 0.85rem !important;
           }
+          .hud-mute-btn svg {
+            width: 0.95rem !important;
+            height: 0.95rem !important;
+          }
         }
       `}</style>
       
@@ -119,7 +127,23 @@ function HUD() {
         <span className="hud-timer-value text-sm sm:text-xl font-black text-slate-800">00:{timer < 10 ? `0${timer}` : timer}</span>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-2 sm:gap-3 items-center">
+        <button
+          onClick={toggleMute}
+          className="hud-card hud-mute-btn bg-white/75 backdrop-blur-md border border-white/50 p-2 sm:p-3 rounded-xl sm:rounded-2xl text-slate-600 hover:text-slate-900 pointer-events-auto shadow-lg shadow-slate-200/20 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
+          title={isMuted ? "Unmute Audio" : "Mute Audio"}
+        >
+          {isMuted ? (
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6H4.51c-.88 0-1.704.507-1.938 1.354A9.01 9.01 0 002.25 12c0 .83.112 1.633.322 2.396C2.806 15.244 3.63 15.75 4.51 15.75H6.75l4.72 4.72a.75.75 0 001.28-.53V3.06a.75.75 0 00-1.28-.53L6.75 7.25z" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+            </svg>
+          )}
+        </button>
+        
         <div className="hud-card bg-white/75 backdrop-blur-md border border-white/50 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl text-slate-800 text-right pointer-events-auto shadow-lg shadow-slate-200/20 transition-all duration-500">
           <span className="hud-card-title text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Score</span>
           <span className="hud-card-value text-lg sm:text-2xl font-black text-amber-600 drop-shadow-[0_1px_2px_rgba(217,119,6,0.1)]">
