@@ -7,16 +7,16 @@ export default function FogRing() {
   const groupRef = useRef();
   const { connection } = useGameState();
 
-  // Generate 12 large, overlapping cloud clusters in a wide perimeter ring
-  const cloudCount = 12;
+  // Generate 16 dense, overlapping cloud meshes to form a solid perimeter wall
+  const cloudCount = 16;
   const clouds = useMemo(() => {
     const data = [];
     for (let i = 0; i < cloudCount; i++) {
       const angle = (i / cloudCount) * Math.PI * 2;
       data.push({
         angle,
-        scale: [3 + Math.random() * 2, 2 + Math.random() * 1.5, 3 + Math.random() * 2],
-        rotationSpeed: 0.002 + Math.random() * 0.003,
+        scale: [3.5 + Math.random() * 2, 2.5 + Math.random() * 1.5, 3.5 + Math.random() * 2],
+        rotationSpeed: 0.003 + Math.random() * 0.003,
         phase: Math.random() * 100
       });
     }
@@ -26,38 +26,42 @@ export default function FogRing() {
   useFrame((state) => {
     if (!groupRef.current) return;
 
-    // Calculate how far the cloud banks should encroach toward the center player
-    // Max distance is 15 (safe outer rim), min distance is 5 (closing in on the human)
-    const compressionFactor = (100 - connection) / 100; 
-    const currentRadius = 15 - (compressionFactor * 8.5);
+    // PHYSICAL MOVEMENT LOGIC BASED ON YOUR GAME PLAN:
+    // When connection is 100, targetRadius is 16 (pushed far back)
+    // When connection drops toward 0, targetRadius drops toward 1.5 (swallowing the center)
+    const targetRadius = 1.5 + (connection / 100) * 14.5;
 
-    // Animate and update each cloud cluster's dynamic position matrix
+    // Smoothly interpolate (lerp) the cloud positions so they glide organically
     groupRef.current.children.forEach((child, i) => {
       const c = clouds[i];
       const time = state.clock.getElapsedTime();
       
+      // Let the clouds slowly swirl around the player
       const currentAngle = c.angle + (time * c.rotationSpeed);
       
-      child.position.x = Math.cos(currentAngle) * currentRadius;
-      child.position.z = Math.sin(currentAngle) * currentRadius;
+      const targetX = Math.cos(currentAngle) * targetRadius;
+      const targetZ = Math.sin(currentAngle) * targetRadius;
+
+      // Smooth transition easing (lerp) so the fog slides fluidly when values change
+      child.position.x += (targetX - child.position.x) * 0.05;
+      child.position.z += (targetZ - child.position.z) * 0.05;
       
-      // Gentle vertical billowing wave movement simulation
-      child.position.y = Math.sin(time * 0.5 + c.phase) * 0.25 + 0.5;
-      
-      child.rotation.y += 0.002;
+      // Billowing vertical wave animation
+      child.position.y = Math.sin(time * 0.4 + c.phase) * 0.3 + 0.5;
+      child.rotation.y += 0.001;
     });
   });
 
   return (
     <group ref={groupRef}>
       {clouds.map((c, i) => (
-        <mesh key={i}>
-          <dodecahedronGeometry args={[1, 1]} />
+        <mesh key={i} scale={c.scale}>
+          <dodecahedronGeometry args={[1.2, 1]} />
           <meshStandardMaterial
-            color="#1e293b" 
-            emissive="#0f172a"
+            color="#161925" // Dense, heavy dark shadow mist tone
+            emissive="#090b11"
             transparent={true}
-            opacity={0.65} 
+            opacity={0.75} // High opacity so overlapping clusters block out the screen
             flatShading
           />
         </mesh>
