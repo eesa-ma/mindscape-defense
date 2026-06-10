@@ -46,10 +46,10 @@ export default function LoadingScreen() {
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-rose-300/30 rounded-full filter blur-3xl animate-pulse" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-300/30 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
 
-          <div className="relative z-10 flex flex-col items-center max-w-sm px-6 text-center">
+          <div className="loading-screen-container relative z-10 flex flex-col items-center max-w-sm px-6 text-center h-sm:px-2">
             {/* Cute Smiling Cloud Illustration */}
-            <div className="relative mb-8 flex items-center justify-center">
-              <svg viewBox="0 0 120 80" className="w-32 h-24 animate-cloud-bob relative">
+            <div className="loading-screen-logo-wrapper relative mb-8 h-sm:mb-2 flex items-center justify-center">
+              <svg viewBox="0 0 120 80" className="w-32 h-24 animate-cloud-bob relative h-sm:w-20 h-sm:h-15 h-sm:mb-1.5">
                 {/* Cloud body shadow */}
                 <path 
                   d="M20,50 Q10,50 10,40 Q10,30 20,30 Q20,15 35,15 Q45,15 50,22 Q60,10 75,10 Q90,10 95,22 Q110,22 110,38 Q110,50 100,50 Z" 
@@ -97,15 +97,15 @@ export default function LoadingScreen() {
               </motion.div>
             </div>
 
-            <h1 className="text-3xl font-black text-slate-800 mb-1 tracking-wide">
+            <h1 className="text-3xl font-black text-slate-800 mb-1 tracking-wide h-sm:text-2xl h-sm:mb-0.5">
               Mindscape Defense
             </h1>
-            <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-500 mb-6">
-              ✨ Cultivating Resilience ✨
+            <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-500 mb-6 h-sm:text-[0.55rem] h-sm:mb-2">
+              🛡️ Cultivating Resilience 🛡️
             </p>
 
             {/* Bubbly Progress Bar */}
-            <div className="w-60 h-5 bg-white border-[3px] border-slate-800 rounded-full overflow-hidden p-0.5 shadow-[3px_3px_0px_rgba(30,41,59,1)] mb-3">
+            <div className="w-60 h-5 bg-white border-[3px] border-slate-800 rounded-full overflow-hidden p-0.5 shadow-[3px_3px_0px_rgba(30,41,59,1)] mb-3 h-sm:w-48 h-sm:h-3.5 h-sm:border-2 h-sm:mb-1">
               <motion.div
                 className="h-full bg-gradient-to-r from-pink-400 to-rose-400 rounded-full"
                 initial={{ width: 0 }}
@@ -113,7 +113,7 @@ export default function LoadingScreen() {
                 transition={{ duration: 0.1 }}
               />
             </div>
-            <span className="text-xs font-black text-rose-500 bg-rose-50 border-2 border-slate-800 px-3 py-0.5 rounded-full shadow-[1.5px_1.5px_0px_rgba(30,41,59,1)] mb-6">
+            <span className="text-xs font-black text-rose-500 bg-rose-50 border-2 border-slate-800 px-3 py-0.5 rounded-full shadow-[1.5px_1.5px_0px_rgba(30,41,59,1)] mb-6 h-sm:mb-2 h-sm:py-0.5 h-sm:px-2 h-sm:text-[0.55rem] h-sm:border-[1.5px]">
               {Math.round(progress)}%
             </span>
 
@@ -125,7 +125,7 @@ export default function LoadingScreen() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4 }}
-                className="text-xs font-bold text-slate-600 leading-relaxed min-h-10 px-4"
+                className="text-xs font-bold text-slate-600 leading-relaxed min-h-10 px-4 h-sm:text-[0.65rem] h-sm:leading-tight h-sm:min-h-6"
               >
                 {LOADING_TIPS[tipIndex]}
               </motion.p>

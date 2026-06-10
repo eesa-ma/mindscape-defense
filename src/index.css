@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@custom-variant h-sm (@media (max-height: 640px));
+@custom-variant h-xs (@media (max-height: 480px));
+
 @theme {
   --font-sans: "Fredoka", system-ui, sans-serif;
 }
