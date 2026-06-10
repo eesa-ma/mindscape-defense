@@ -103,7 +103,7 @@ export default function StartMenu() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4 }}
-            className="relative z-10 w-full bg-white border-4 border-slate-800 p-5 sm:p-7 rounded-3xl shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col h-sm:p-3 h-sm:rounded-3xl h-sm:w-[95%] h-sm:max-w-[34rem] h-sm:h-[92vh] h-xs:p-2 h-xs:rounded-[1.25rem]"
+            className="relative z-10 w-full max-w-4xl bg-white border-4 border-slate-800 p-5 sm:p-7 rounded-3xl shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col h-sm:p-3 h-sm:rounded-3xl h-sm:w-[95%] h-sm:max-w-[34rem] h-sm:h-[92vh] h-xs:p-2 h-xs:rounded-[1.25rem]"
           >
             {/* Header */}
             <div className="text-center mb-4 shrink-0 h-sm:mb-1.5">
@@ -118,20 +118,20 @@ export default function StartMenu() {
             {/* Content Body - Scrollable */}
             <div className="overflow-y-auto pr-1.5 flex-1 min-h-0 flex gap-4 text-slate-700 text-xs sm:text-sm leading-relaxed mb-4 scrollbar-thin h-sm:flex-col h-sm:gap-2.5 h-sm:mb-1.5 h-xs:gap-2">
               {/* Rules description */}
-              <div className="bg-sky-50 border-2 border-slate-800 p-3 rounded-2xl shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] w-1/2 h-sm:w-full h-sm:p-2.5 shrink-0">
-                <p className="font-extrabold text-sky-950 mb-1 h-sm:text-[0.65rem] h-sm:leading-[1.25]">🎮 Core Objective:</p>
-                <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-[1.25]">
+              <div className="bg-sky-50 border-2 border-slate-800 p-3 rounded-2xl shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] flex-1 h-sm:flex-none h-sm:w-full h-sm:p-2.5 h-sm:shrink-0">
+                <p className="font-extrabold text-sky-950 mb-1 h-sm:text-[0.65rem] h-sm:leading-tight">🎮 Core Objective:</p>
+                <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-tight">
                   Emotional threats (Burnout, Loneliness, Anxiety, etc.) will float in from the surrounding fog. If they reach your character in the center, your Connection decreases and you lose a life.
                 </p>
-                <p className="font-extrabold text-sky-950 mt-2.5 mb-1 h-sm:text-[0.65rem] h-sm:mt-1 h-sm:leading-[1.25]">🕹️ Controls:</p>
-                <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-[1.25]">
+                <p className="font-extrabold text-sky-950 mt-2.5 mb-1 h-sm:text-[0.65rem] h-sm:mt-1 h-sm:leading-tight">🕹️ Controls:</p>
+                <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-tight">
                   1. **Target**: The closest threat is automatically targeted! (Or click/tap any threat or its label bubble to target it manually).<br />
                   2. **Cope**: Click the matching coping button on the bottom dock (or press its corresponding key: **Q, W, E, R, A, S, D**).
                 </p>
               </div>
 
               {/* Cheat Sheet Table */}
-              <div className="border-2 border-slate-800 rounded-2xl overflow-hidden shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] bg-white w-1/2 h-sm:w-full shrink-0">
+              <div className="border-2 border-slate-800 rounded-2xl overflow-hidden shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] bg-white flex-1 h-sm:flex-none h-sm:w-full h-sm:shrink-0">
                 <div className="bg-purple-100 border-b-2 border-slate-800 p-2 text-center text-slate-800 font-black uppercase text-[10px] tracking-wider h-sm:p-1.5">
                   💡 Resilience Cheat Sheet
                 </div>
