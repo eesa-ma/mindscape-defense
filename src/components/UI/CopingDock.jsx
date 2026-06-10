@@ -36,17 +36,17 @@ export default function CopingDock() {
           <button
             key={mechanism.key}
             onClick={() => executeCopingStrategy(mechanism)}
-            className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl border-[3px] border-slate-800 flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] ${colorStyle} shadow-[3px_3px_0px_rgba(30,41,59,1)] shrink-0 h-sm:w-[5.75rem] h-sm:h-[3.75rem] h-sm:rounded-[0.85rem] h-sm:p-1 h-xs:w-[4.75rem] h-xs:h-[2.75rem] h-xs:rounded-[0.6rem] h-xs:p-0.5`}
+            className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl border-[3px] border-slate-800 flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] ${colorStyle} shadow-[3px_3px_0px_rgba(30,41,59,1)] shrink-0 h-sm:w-[5.75rem] h-sm:h-[3.75rem] h-sm:rounded-[0.85rem] h-sm:py-0.5 h-sm:px-1 h-xs:w-[4.75rem] h-xs:h-[2.75rem] h-xs:rounded-[0.6rem] h-xs:py-0 h-xs:px-0.5`}
           >
-            <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1">
-              <span className="text-base sm:text-lg md:text-xl lg:text-2xl transition-transform duration-200 group-hover:scale-110 h-sm:text-lg h-xs:text-base">
+            <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1 h-sm:mb-0 h-xs:mb-0">
+              <span className="text-base sm:text-lg md:text-xl lg:text-2xl transition-transform duration-200 group-hover:scale-110 h-sm:text-base h-xs:text-[13px]">
                 {EMOJI_MAP[mechanism.key]}
               </span>
-              <kbd className="text-[9px] sm:text-xs md:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 sm:px-1.5 sm:py-0.5 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:py-0.5 h-sm:px-1 h-xs:hidden">
+              <kbd className="text-[9px] sm:text-xs md:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 sm:px-1.5 sm:py-0.5 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[8px] h-sm:py-0 h-sm:px-0.5 h-xs:hidden">
                 {mechanism.key}
               </kbd>
             </div>
-            <span className="text-[7px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[0.6rem] h-sm:mt-0.5 h-sm:leading-[1.1] h-sm:normal-case h-xs:text-[0.55rem] h-xs:mt-0 h-xs:leading-[1.05]">
+            <span className="text-[7px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[8px] h-sm:mt-0 h-sm:leading-[1.0] h-sm:normal-case h-xs:text-[7px] h-xs:mt-0 h-xs:leading-[0.95]">
               {mechanism.label}
             </span>
           </button>
