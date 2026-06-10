@@ -5,60 +5,22 @@ export default function InsightOverlay() {
   const { activeInsight } = useGameState();
 
   return (
-    <div className="insight-overlay absolute right-6 top-24 w-80 z-50 pointer-events-none">
-      <style>{`
-        @media (max-height: 640px) {
-          .insight-overlay {
-            top: 4rem !important;
-            right: 0.5rem !important;
-            width: 15rem !important;
-          }
-          .insight-overlay-card {
-            padding: 0.75rem !important;
-            border-radius: 1rem !important;
-          }
-          .insight-overlay-title {
-            font-size: 0.65rem !important;
-          }
-          .insight-overlay-text {
-            font-size: 0.75rem !important;
-            line-height: 1.25 !important;
-          }
-        }
-        @media (max-height: 480px) {
-          .insight-overlay {
-            top: 3.25rem !important;
-            right: 0.375rem !important;
-            width: 13rem !important;
-          }
-          .insight-overlay-card {
-            padding: 0.5rem !important;
-            border-radius: 0.75rem !important;
-          }
-          .insight-overlay-title {
-            font-size: 0.55rem !important;
-          }
-          .insight-overlay-text {
-            font-size: 0.65rem !important;
-            line-height: 1.2 !important;
-          }
-        }
-      `}</style>
+    <div className="absolute right-6 top-24 w-80 z-50 pointer-events-none h-sm:top-16 h-sm:right-2 h-sm:w-60 h-xs:top-13 h-xs:right-1.5 h-xs:w-52">
       <AnimatePresence>
         {activeInsight && (
           <motion.div
-            initial={{ opacity: 0, x: 50, scale: 0.9 }}
+            initial={{ opacity: 0, x: 40, scale: 0.9 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 50, scale: 0.9 }}
-            className="insight-overlay-card bg-white/90 backdrop-blur-md border border-emerald-300 p-4 rounded-2xl shadow-xl shadow-slate-200/20"
+            exit={{ opacity: 0, x: 40, scale: 0.9 }}
+            className="bg-emerald-50 border-[3px] border-slate-800 p-4 rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] h-sm:p-3 h-sm:rounded-xl h-xs:p-2 h-xs:rounded-lg"
           >
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <p className="insight-overlay-title text-xs font-bold uppercase tracking-wider text-emerald-700 font-sans">
-                Mindscape Insight
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <span className="text-sm">⭐</span>
+              <p className="text-xs font-black uppercase tracking-wider text-emerald-700 h-sm:text-[0.65rem] h-xs:text-[0.55rem]">
+                Mascot Tip
               </p>
             </div>
-            <p className="insight-overlay-text text-sm text-slate-700 leading-relaxed font-sans font-medium">
+            <p className="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed h-sm:text-[0.75rem] h-sm:leading-[1.25] h-xs:text-[0.65rem] h-xs:leading-[1.2]">
               {activeInsight}
             </p>
           </motion.div>

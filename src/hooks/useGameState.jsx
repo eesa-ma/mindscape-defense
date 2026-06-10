@@ -12,7 +12,7 @@ export const GameStateProvider = ({ children }) => {
   const [threats, setThreats] = useState([]);
   const [targetedThreat, setTargetedThreat] = useState(null);
   
-  const [gameStatus, setGameStatus] = useState('playing'); 
+  const [gameStatus, setGameStatus] = useState('menu'); 
   const [isPaused, setIsPaused] = useState(false);
   const [timer, setTimer] = useState(60); 
   const [gameStage, setGameStage] = useState('early'); 
@@ -163,7 +163,7 @@ export const GameStateProvider = ({ children }) => {
     }
   };
 
-  const restartGame = () => {
+  const startGame = () => {
     audioSynth.playClick();
     setConnection(100);
     setLives(3);
@@ -176,6 +176,15 @@ export const GameStateProvider = ({ children }) => {
     setIsPaused(false);
   };
 
+  const restartGame = () => {
+    startGame();
+  };
+
+  const goToMenu = () => {
+    audioSynth.playClick();
+    setGameStatus('menu');
+  };
+
   const togglePause = () => {
     if (gameStatus === 'playing') {
       audioSynth.playClick();
@@ -186,7 +195,7 @@ export const GameStateProvider = ({ children }) => {
   const quitGame = () => {
     audioSynth.playClick();
     setIsPaused(false);
-    setGameStatus('quit');
+    setGameStatus('menu'); // Quit redirects back to main menu
   };
 
   const toggleMute = () => {
@@ -200,7 +209,7 @@ export const GameStateProvider = ({ children }) => {
   return (
     <GameStateContext.Provider value={{
       connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused, isMuted,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers, startGame, goToMenu
     }}>
       {children}
     </GameStateContext.Provider>

@@ -86,23 +86,33 @@ export default function Threat({ threatData }) {
   const specs = (() => {
     switch (threatData.type) {
       case 'Burnout': case 'Exhaustion': case 'Creative Block':
-        return { color: '#f59e0b', labelColor: 'text-amber-600 border-amber-300' };
+        return { color: '#fbbf24', labelColor: 'text-amber-950 border-slate-800 bg-amber-100' };
       case 'Academic Pressure': case 'Procrastination': case 'Overwhelm':
-        return { color: '#3b82f6', labelColor: 'text-blue-600 border-blue-300' };
+        return { color: '#60a5fa', labelColor: 'text-blue-950 border-slate-800 bg-blue-100' };
       case 'Social Rejection': case 'Loneliness': case 'Imposter Syndrome':
-        return { color: '#c084fc', labelColor: 'text-purple-600 border-purple-300' };
+        return { color: '#c084fc', labelColor: 'text-purple-950 border-slate-800 bg-purple-100' };
       case 'Negative Thoughts': case 'Self-Doubt': case 'Anxiety':
-        return { color: '#f43f5e', labelColor: 'text-rose-600 border-rose-300' };
+        return { color: '#f43f5e', labelColor: 'text-rose-950 border-slate-800 bg-rose-100' };
       case 'Isolation': case 'Ghosting': case 'Detachment':
-        return { color: '#6366f1', labelColor: 'text-indigo-600 border-indigo-300' };
+        return { color: '#818cf8', labelColor: 'text-indigo-950 border-slate-800 bg-indigo-100' };
       case 'Social Comparison': case 'FOMO': case 'Cyberbullying':
-        return { color: '#14b8a6', labelColor: 'text-teal-600 border-teal-300' };
+        return { color: '#2dd4bf', labelColor: 'text-teal-950 border-slate-800 bg-teal-100' };
       case 'Family Conflict': case 'Misunderstandings': case 'Peer Pressure':
-        return { color: '#ec4899', labelColor: 'text-pink-600 border-pink-300' };
+        return { color: '#f472b6', labelColor: 'text-pink-950 border-slate-800 bg-pink-100' };
       default:
-        return { color: '#94a3b8', labelColor: 'text-slate-600 border-slate-300' };
+        return { color: '#cbd5e1', labelColor: 'text-slate-900 border-slate-800 bg-slate-100' };
     }
   })();
+
+  const THREAT_EMOJIS = {
+    'Burnout': '🤯', 'Exhaustion': '😫', 'Creative Block': '🎨❌',
+    'Social Rejection': '🥺', 'Loneliness': '🥀', 'Imposter Syndrome': '🎭',
+    'Academic Pressure': '📚', 'Procrastination': '⏳', 'Overwhelm': '🌀',
+    'Negative Thoughts': '🌩️', 'Self-Doubt': '😰', 'Anxiety': '💭',
+    'Isolation': '🚪', 'Ghosting': '🔇', 'Detachment': '❄️',
+    'Social Comparison': '📱', 'FOMO': '👀', 'Cyberbullying': '💔',
+    'Family Conflict': '💥', 'Misunderstandings': '🗣️❌', 'Peer Pressure': '👥'
+  };
 
   // Hack to make executeCopingStrategy trigger this component's local animation
   // We check if the global threats array still has us; if it doesn't, we show particles for 20 frames before vanishing completely.
@@ -135,26 +145,35 @@ export default function Threat({ threatData }) {
         <>
           <Html
             distanceFactor={15}
-            position={[0, 1.0, 0]}
+            position={[0, 1.1, 0]}
             center
-            className="pointer-events-none select-none"
+            className="select-none"
           >
-            <div className={`whitespace-nowrap px-2.5 py-1 text-[10px] font-bold font-sans uppercase tracking-wider rounded-lg border bg-white/95 backdrop-blur-md transition-all duration-300 shadow-md ${specs.labelColor} ${
-              isTargeted ? 'scale-110 ring-2 ring-amber-400 border-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.3)]' : 'opacity-90'
-            }`}>
+            <div 
+              onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}
+              className={`pointer-events-auto cursor-pointer whitespace-nowrap px-3 py-1.5 text-[10px] font-extrabold rounded-2xl border-2 border-slate-800 transition-all duration-300 shadow-[2px_2px_0px_rgba(30,41,59,1)] ${specs.labelColor} ${
+                isTargeted ? 'scale-110 border-slate-800 shadow-[2.5px_2.5px_0px_rgba(245,158,11,1)]' : 'opacity-90'
+              }`}
+            >
+              <span className="mr-1">{THREAT_EMOJIS[threatData.type] || '⚠️'}</span>
               {threatData.type}
             </div>
           </Html>
 
           <group ref={visualGroupRef} onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}>
-            <mesh position={[0, 0.3, 0]}>
-              <coneGeometry args={[0.35, 0.7, 5]} />
-              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.2 : 0.6} flatShading fog={false} />
+            {/* Cute rotating candy gemstone */}
+            <mesh position={[0, 0, 0]}>
+              <dodecahedronGeometry args={[0.38, 1]} />
+              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.5 : 0.7} flatShading fog={false} />
             </mesh>
-            <mesh position={[0, -0.3, 0]} rotation={[Math.PI, 0, 0]}>
-              <coneGeometry args={[0.35, 0.7, 5]} />
-              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.2 : 0.6} flatShading fog={false} />
-            </mesh>
+            
+            {/* Bubbly white rotating halo ring when targeted */}
+            {isTargeted && (
+              <mesh position={[0, 0, 0]} rotation={[Math.PI / 3, 0, 0]}>
+                <torusGeometry args={[0.62, 0.045, 8, 24]} />
+                <meshBasicMaterial color="#ffffff" transparent opacity={0.75} fog={false} />
+              </mesh>
+            )}
           </group>
 
           {/* LAZER BEAM HINT: If targeted, show a subtle connecting line to player */}

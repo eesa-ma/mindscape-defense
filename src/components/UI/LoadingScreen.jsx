@@ -46,44 +46,74 @@ export default function LoadingScreen() {
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-rose-300/30 rounded-full filter blur-3xl animate-pulse" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-300/30 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
 
-          <div className="relative z-10 flex flex-col items-center max-w-sm px-6 text-center">
-            {/* Pulsating Brain / Lotus Icon */}
-            <div className="relative mb-6 w-20 h-20 flex items-center justify-center">
-              <div className="absolute inset-0 bg-white/40 rounded-full blur-md animate-ping" />
-              <div className="relative bg-white/80 p-4 rounded-full border border-white/60 shadow-lg text-indigo-500 shadow-slate-200/20">
-                <svg
-                  className="w-10 h-10 animate-pulse"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9m0 0a9.003 9.003 0 018.716 2.253M12 3a9.003 9.003 0 00-8.716 2.253"
-                  />
-                </svg>
-              </div>
+          <div className="loading-screen-container relative z-10 flex flex-col items-center max-w-sm px-6 text-center h-sm:px-2">
+            {/* Cute Smiling Cloud Illustration */}
+            <div className="loading-screen-logo-wrapper relative mb-8 h-sm:mb-2 flex items-center justify-center">
+              <svg viewBox="0 0 120 80" className="w-32 h-24 animate-cloud-bob relative h-sm:w-20 h-sm:h-15 h-sm:mb-1.5">
+                {/* Cloud body shadow */}
+                <path 
+                  d="M20,50 Q10,50 10,40 Q10,30 20,30 Q20,15 35,15 Q45,15 50,22 Q60,10 75,10 Q90,10 95,22 Q110,22 110,38 Q110,50 100,50 Z" 
+                  fill="#cbd5e1" 
+                  transform="translate(3, 4)"
+                  opacity="0.5"
+                />
+                {/* Cloud body */}
+                <path 
+                  d="M20,50 Q10,50 10,40 Q10,30 20,30 Q20,15 35,15 Q45,15 50,22 Q60,10 75,10 Q90,10 95,22 Q110,22 110,38 Q110,50 100,50 Z" 
+                  fill="white" 
+                  stroke="#1e293b"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {/* Cheeks */}
+                <circle cx="28" cy="38" r="5.5" fill="#f472b6" opacity="0.85" />
+                <circle cx="72" cy="38" r="5.5" fill="#f472b6" opacity="0.85" />
+                {/* Bubbly happy eyes */}
+                <path d="M23,32 Q26.5,28.5 30,32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" fill="none" />
+                <path d="M67,32 Q70.5,28.5 74,32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" fill="none" />
+                {/* Smile */}
+                <path d="M43,37.5 Q47.5,42.5 52,37.5" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" fill="none" />
+                {/* Tiny stars */}
+                <path d="M12,18 L14,20.5 L17,20.5 L15,22 L16,24.5 L13,23 L10,24.5 L11,22 L9,20.5 L12,20.5 Z" fill="#f59e0b" className="animate-pulse" />
+                <path d="M88,8 L90,10.5 L93,10.5 L91,12 L92,14.5 L89,13 L86,14.5 L87,12 L85,10.5 L88,10.5 Z" fill="#f59e0b" className="animate-pulse" style={{ animationDelay: '0.4s' }} />
+              </svg>
+              
+              {/* Floating Heart */}
+              <motion.div 
+                className="absolute -right-1 bottom-1 text-3xl"
+                animate={{ 
+                  y: [0, -8, 0],
+                  scale: [1, 1.15, 1],
+                  rotate: [0, 8, -8, 0]
+                }}
+                transition={{ 
+                  duration: 2.5, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                💖
+              </motion.div>
             </div>
 
-            <h1 className="text-2xl font-black font-sans uppercase tracking-widest text-slate-800 mb-1">
+            <h1 className="text-3xl font-black text-slate-800 mb-1 tracking-wide h-sm:text-2xl h-sm:mb-0.5">
               Mindscape Defense
             </h1>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6">
-              Cultivating Resilience
+            <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-500 mb-6 h-sm:text-[0.55rem] h-sm:mb-2">
+              🛡️ Cultivating Resilience 🛡️
             </p>
 
-            {/* Progress Bar */}
-            <div className="w-56 h-2 bg-white/50 rounded-full border border-white/40 overflow-hidden shadow-inner mb-3">
+            {/* Bubbly Progress Bar */}
+            <div className="w-60 h-5 bg-white border-[3px] border-slate-800 rounded-full overflow-hidden p-0.5 shadow-[3px_3px_0px_rgba(30,41,59,1)] mb-3 h-sm:w-48 h-sm:h-3.5 h-sm:border-2 h-sm:mb-1">
               <motion.div
-                className="h-full bg-linear-to-r from-cyan-400 to-indigo-500 rounded-full"
+                className="h-full bg-gradient-to-r from-pink-400 to-rose-400 rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.1 }}
               />
             </div>
-            <span className="text-xs font-bold font-mono text-indigo-600 mb-6">
+            <span className="text-xs font-black text-rose-500 bg-rose-50 border-2 border-slate-800 px-3 py-0.5 rounded-full shadow-[1.5px_1.5px_0px_rgba(30,41,59,1)] mb-6 h-sm:mb-2 h-sm:py-0.5 h-sm:px-2 h-sm:text-[0.55rem] h-sm:border-[1.5px]">
               {Math.round(progress)}%
             </span>
 
@@ -95,7 +125,7 @@ export default function LoadingScreen() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4 }}
-                className="text-xs font-semibold text-slate-600 leading-relaxed font-sans min-h-10"
+                className="text-xs font-bold text-slate-600 leading-relaxed min-h-10 px-4 h-sm:text-[0.65rem] h-sm:leading-tight h-sm:min-h-6"
               >
                 {LOADING_TIPS[tipIndex]}
               </motion.p>
