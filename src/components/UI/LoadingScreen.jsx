@@ -107,7 +107,7 @@ export default function LoadingScreen() {
             {/* Bubbly Progress Bar */}
             <div className="w-60 h-5 bg-white border-[3px] border-slate-800 rounded-full overflow-hidden p-0.5 shadow-[3px_3px_0px_rgba(30,41,59,1)] mb-3 h-sm:w-48 h-sm:h-3.5 h-sm:border-2 h-sm:mb-1">
               <motion.div
-                className="h-full bg-gradient-to-r from-pink-400 to-rose-400 rounded-full"
+                className="h-full bg-linear-to-r from-pink-400 to-rose-400 rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.1 }}

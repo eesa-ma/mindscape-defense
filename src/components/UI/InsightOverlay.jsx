@@ -20,7 +20,7 @@ export default function InsightOverlay() {
                 Mascot Tip
               </p>
             </div>
-            <p className="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed h-sm:text-[0.75rem] h-sm:leading-[1.25] h-xs:text-[0.65rem] h-xs:leading-[1.2]">
+            <p className="text-xs sm:text-sm font-bold text-slate-700 leading-relaxed h-sm:text-[0.75rem] h-sm:leading-tight h-xs:text-[0.65rem] h-xs:leading-[1.2]">
               {activeInsight}
             </p>
           </motion.div>

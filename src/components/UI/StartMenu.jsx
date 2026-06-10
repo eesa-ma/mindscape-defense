@@ -22,11 +22,11 @@ export default function StartMenu() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4 }}
-            className="relative z-10 max-w-sm sm:max-w-md w-full bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl text-center shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col items-center animate-cloud-bob h-sm:p-4 h-sm:rounded-3xl h-sm:max-h-[92vh] h-sm:w-[95%] h-sm:max-w-[21rem] h-xs:p-3 h-xs:max-w-[19rem]"
+            className="relative z-10 max-w-sm sm:max-w-md w-full bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl text-center shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col items-center animate-cloud-bob h-sm:p-4 h-sm:rounded-3xl h-sm:max-h-[92vh] h-sm:w-[95%] h-sm:max-w-84 h-xs:p-3 h-xs:max-w-76"
           >
             {/* Cute Mascot cloud illustration */}
             <div className="relative mb-6 h-sm:mb-4 flex items-center justify-center">
-              <svg viewBox="0 0 120 80" className="w-32 h-24 h-sm:w-[4.5rem] h-sm:h-[3.5rem] h-sm:mb-1 h-xs:w-[3.75rem] h-xs:h-[2.75rem] relative">
+              <svg viewBox="0 0 120 80" className="w-32 h-24 h-sm:w-18 h-sm:h-14 h-sm:mb-1 h-xs:w-15 h-xs:h-11 relative">
                 {/* Shadow */}
                 <path
                   d="M20,50 Q10,50 10,40 Q10,30 20,30 Q20,15 35,15 Q45,15 50,22 Q60,10 75,10 Q90,10 95,22 Q110,22 110,38 Q110,50 100,50 Z"
@@ -83,14 +83,14 @@ export default function StartMenu() {
             <div className="flex flex-col gap-4 w-full h-sm:gap-2.5 h-xs:gap-2">
               <button
                 onClick={startGame}
-                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 🎮 Start Game
               </button>
 
               <button
                 onClick={() => setShowInstructions(true)}
-                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 📖 How to Play
               </button>
@@ -103,7 +103,7 @@ export default function StartMenu() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4 }}
-            className="relative z-10 w-full max-w-4xl bg-white border-4 border-slate-800 p-5 sm:p-7 rounded-3xl shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col h-sm:p-3 h-sm:rounded-3xl h-sm:w-[95%] h-sm:max-w-[34rem] h-sm:h-[92vh] h-xs:p-2 h-xs:rounded-[1.25rem]"
+            className="relative z-10 w-full max-w-4xl bg-white border-4 border-slate-800 p-5 sm:p-7 rounded-3xl shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col h-sm:p-3 h-sm:rounded-3xl h-sm:w-[95%] h-sm:max-w-136 h-sm:h-[92vh] h-xs:p-2 h-xs:rounded-[1.25rem]"
           >
             {/* Header */}
             <div className="text-center mb-4 shrink-0 h-sm:mb-1.5">
@@ -189,7 +189,7 @@ export default function StartMenu() {
             {/* Back Button */}
             <button
               onClick={() => setShowInstructions(false)}
-              className="w-full shrink-0 py-3 h-sm:py-2 h-sm:text-[0.75rem] h-sm:rounded-[0.85rem] h-sm:border-[2.5px] bg-pink-200 hover:bg-pink-300 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer text-center"
+              className="w-full shrink-0 py-3 h-sm:py-2 h-sm:text-[0.75rem] h-sm:rounded-[0.85rem] h-sm:border-[2.5px] bg-pink-200 hover:bg-pink-300 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer text-center"
             >
               ⬅️ Back to Menu
             </button>

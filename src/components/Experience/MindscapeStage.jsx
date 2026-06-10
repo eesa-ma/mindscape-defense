@@ -63,6 +63,116 @@ function Sparkles() {
   );
 }
 
+function GuideRings() {
+  return (
+    <group rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
+      {/* Outer boundary indicator */}
+      <mesh>
+        <ringGeometry args={[9.5, 9.6, 64]} />
+        <meshBasicMaterial color="#a78bfa" transparent opacity={0.15} side={2} fog={false} />
+      </mesh>
+      {/* Middle indicator */}
+      <mesh>
+        <ringGeometry args={[6.5, 6.6, 64]} />
+        <meshBasicMaterial color="#f472b6" transparent opacity={0.2} side={2} fog={false} />
+      </mesh>
+      {/* Warning/Target zone indicator */}
+      <mesh>
+        <ringGeometry args={[3.5, 3.6, 64]} />
+        <meshBasicMaterial color="#fda4af" transparent opacity={0.25} side={2} fog={false} />
+      </mesh>
+    </group>
+  );
+}
+
+function FloraItem({ x, z, scale, type, color, phase }) {
+  const meshRef = useRef();
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      const time = state.clock.getElapsedTime();
+      meshRef.current.rotation.z = Math.sin(time * 1.5 + phase) * 0.08;
+      meshRef.current.rotation.x = Math.cos(time * 1.2 + phase) * 0.08;
+    }
+  });
+
+  if (type === 'flower') {
+    return (
+      <group ref={meshRef} position={[x, 0, z]} scale={scale}>
+        {/* Stem */}
+        <mesh position={[0, 0.15, 0]}>
+          <cylinderGeometry args={[0.02, 0.02, 0.3, 6]} />
+          <meshStandardMaterial color="#86efac" />
+        </mesh>
+        {/* Flower Head */}
+        <group position={[0, 0.3, 0]}>
+          {/* Center */}
+          <mesh>
+            <sphereGeometry args={[0.08, 8, 8]} />
+            <meshStandardMaterial color="#fef08a" roughness={0.6} />
+          </mesh>
+          {/* Petals */}
+          {[0, 1, 2, 3, 4].map((i) => {
+            const angle = (i * Math.PI * 2) / 5;
+            const px = Math.cos(angle) * 0.11;
+            const py = Math.sin(angle) * 0.11;
+            return (
+              <mesh key={i} position={[px, py, 0]}>
+                <sphereGeometry args={[0.06, 6, 6]} />
+                <meshStandardMaterial color={color} roughness={0.5} />
+              </mesh>
+            );
+          })}
+        </group>
+      </group>
+    );
+  }
+
+  // Grass patch
+  return (
+    <group ref={meshRef} position={[x, 0, z]} scale={scale}>
+      <mesh position={[-0.04, 0.12, 0]} rotation={[0, 0, 0.2]}>
+        <cylinderGeometry args={[0.005, 0.015, 0.25, 4]} />
+        <meshStandardMaterial color="#4ade80" />
+      </mesh>
+      <mesh position={[0, 0.15, 0]}>
+        <cylinderGeometry args={[0.005, 0.015, 0.3, 4]} />
+        <meshStandardMaterial color="#22c55e" />
+      </mesh>
+      <mesh position={[0.04, 0.12, 0]} rotation={[0, 0, -0.2]}>
+        <cylinderGeometry args={[0.005, 0.015, 0.22, 4]} />
+        <meshStandardMaterial color="#4ade80" />
+      </mesh>
+    </group>
+  );
+}
+
+function DecorativeFlora() {
+  const floraItems = useMemo(() => {
+    const items = [];
+    const flowerColors = ['#f472b6', '#f43f5e', '#a78bfa', '#60a5fa', '#34d399', '#fbbf24'];
+    for (let i = 0; i < 35; i++) {
+      const r = 2.2 + Math.random() * 11.3;
+      const theta = Math.random() * Math.PI * 2;
+      const x = Math.cos(theta) * r;
+      const z = Math.sin(theta) * r;
+      const scale = 0.5 + Math.random() * 0.7;
+      const type = Math.random() > 0.4 ? 'flower' : 'grass';
+      const color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+      items.push({ id: i, x, z, scale, type, color, phase: Math.random() * Math.PI * 2 });
+    }
+    return items;
+  }, []);
+
+  return (
+    <group>
+      {floraItems.map((item) => (
+        <FloraItem key={item.id} {...item} />
+      ))}
+    </group>
+  );
+}
+
 function Environment() {
   const { connection, threats, spawnThreat, gameStatus, getStageModifiers, isPortrait, isPaused } = useGameState();
   const fogDensity = 0.03 + (100 - connection) * 0.003;
@@ -103,6 +213,8 @@ function Environment() {
       <fogExp2 attach="fog" color={fogColor} density={fogDensity} />
 
       <FogRing />
+      <GuideRings />
+      <DecorativeFlora />
 
       {/* The Central Player Anchor - Now a Real Human Avatar */}
       <group position={[0, 0, 0]} scale={1.6}>

@@ -26,21 +26,21 @@ export default function EndScreen() {
           <div className="flex flex-col gap-4 h-sm:gap-2.5 h-xs:gap-2">
             <button
               onClick={togglePause}
-              className="w-full py-3 sm:py-3.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
+              className="w-full py-3 sm:py-3.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
             >
               Resume Play
             </button>
             
             <button
               onClick={restartGame}
-              className="w-full py-3 sm:py-3.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
+              className="w-full py-3 sm:py-3.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
             >
               Restart
             </button>
             
             <button
               onClick={quitGame}
-              className="w-full py-3 sm:py-3.5 bg-rose-300 hover:bg-rose-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
+              className="w-full py-3 sm:py-3.5 bg-rose-300 hover:bg-rose-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
             >
               Quit Game
             </button>
@@ -78,7 +78,7 @@ export default function EndScreen() {
 
           <button
             onClick={restartGame}
-            className="w-full py-3 sm:py-3.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
+            className="w-full py-3 sm:py-3.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
           >
             Re-Enter Mindscape
           </button>
