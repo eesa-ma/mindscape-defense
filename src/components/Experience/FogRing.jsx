@@ -5,7 +5,7 @@ import { useGameState } from '../../hooks/useGameState';
 
 export default function FogRing() {
   const groupRef = useRef();
-  const { connection } = useGameState();
+  const { connection, gameStatus } = useGameState();
 
   // Generate 16 dense, overlapping cloud meshes to form a solid perimeter wall
   const cloudCount = 16;
@@ -27,9 +27,9 @@ export default function FogRing() {
     if (!groupRef.current) return;
 
     // PHYSICAL MOVEMENT LOGIC BASED ON YOUR GAME PLAN:
-    // When connection is 100, targetRadius is 16 (pushed far back)
-    // When connection drops toward 0, targetRadius drops toward 1.5 (swallowing the center)
-    const targetRadius = 1.5 + (connection / 100) * 14.5;
+    // When in menu, keep fog close (1.5) so that it pushes outward when the game starts
+    // When playing: connection = 100 -> targetRadius = 16 (far back), connection = 0 -> targetRadius = 1.5
+    const targetRadius = gameStatus === 'menu' ? 1.5 : (1.5 + (connection / 100) * 14.5);
 
     // Smoothly interpolate (lerp) the cloud positions so they glide organically
     groupRef.current.children.forEach((child, i) => {

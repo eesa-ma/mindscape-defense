@@ -22,15 +22,14 @@ export default function PauseButton() {
 
   return (
     <motion.button
-      whileHover={{ scale: 1.15 }}
-      whileTap={{ scale: 0.9 }}
+      whileHover={{ scale: 1.12, y: -2 }}
+      whileTap={{ scale: 0.95, y: 1 }}
       onClick={togglePause}
-      className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 p-2.5 sm:p-3.5 bg-gradient-to-br from-violet-400/90 to-purple-500/90 hover:from-violet-500/95 hover:to-purple-600/95 text-white rounded-full shadow-lg shadow-purple-500/30 transition-all backdrop-blur-md border border-white/20"
+      className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 p-3 bg-pink-100 border-[3px] border-slate-800 text-slate-800 rounded-full shadow-[3px_3px_0px_rgba(30,41,59,1)] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center"
       title="Pause Game (P)"
     >
       <svg 
-        className="w-6 h-6 sm:w-7 sm:h-7" 
-        fill="currentColor"
+        className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 fill-slate-800" 
         viewBox="0 0 24 24"
       >
         <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />

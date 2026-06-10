@@ -1,1 +1,50 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Fredoka", system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #ffd3b6;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Custom animations for cute effects */
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+.animate-heart-pulse {
+  animation: heartPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes cloudBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-cloud-bob {
+  animation: cloudBob 4s ease-in-out infinite;
+}
+
+/* Cute thin scrollbar styling for guides */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 9999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 9999px;
+  border: 2px solid #f8fafc;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
