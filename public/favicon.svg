@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Soft white circular background -->
+  <circle cx="50" cy="50" r="46" fill="#ffffff" />
+  
+  <!-- Interlocking periwinkle curves -->
+  <g stroke="#818cf8" stroke-width="6.5" stroke-linecap="round" fill="none">
+    <!-- Left-bowing curve -->
+    <path d="M 64,32 C 24,32 24,68 64,68" />
+    <!-- Right-bowing curve -->
+    <path d="M 36,32 C 76,32 76,68 36,68" />
+  </g>
+</svg>

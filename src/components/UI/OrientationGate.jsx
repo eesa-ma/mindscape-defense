@@ -62,7 +62,7 @@ export default function OrientationGate() {
         </svg>
       </div>
 
-      <h2 className="text-2xl font-black font-sans uppercase tracking-wider mb-3 bg-gradient-to-r from-cyan-400 via-indigo-300 to-rose-400 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(6,182,212,0.15)]">
+      <h2 className="text-2xl font-black font-sans uppercase tracking-wider mb-3 bg-linear-to-r from-cyan-400 via-indigo-300 to-rose-400 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(6,182,212,0.15)]">
         Landscape Mode Required
       </h2>
       <p className="max-w-xs text-sm text-slate-300 leading-relaxed font-sans font-medium">
