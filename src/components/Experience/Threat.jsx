@@ -85,14 +85,22 @@ export default function Threat({ threatData }) {
   // To link this flawlessly, we update the removal sequence to trigger local destruction first
   const specs = (() => {
     switch (threatData.type) {
-      case 'Burnout': return { color: '#f59e0b', labelColor: 'text-amber-600 border-amber-300' };
-      case 'Academic Pressure': return { color: '#3b82f6', labelColor: 'text-blue-600 border-blue-300' };
-      case 'Social Rejection': return { color: '#c084fc', labelColor: 'text-purple-600 border-purple-300' };
-      case 'Negative Thoughts': return { color: '#f43f5e', labelColor: 'text-rose-600 border-rose-300' };
-      case 'Isolation': return { color: '#6366f1', labelColor: 'text-indigo-600 border-indigo-300' };
-      case 'Social Comparison': return { color: '#14b8a6', labelColor: 'text-teal-600 border-teal-300' };
-      case 'Family Conflict': return { color: '#ec4899', labelColor: 'text-pink-600 border-pink-300' };
-      default: return { color: '#94a3b8', labelColor: 'text-slate-600 border-slate-300' };
+      case 'Burnout': case 'Exhaustion': case 'Creative Block':
+        return { color: '#f59e0b', labelColor: 'text-amber-600 border-amber-300' };
+      case 'Academic Pressure': case 'Procrastination': case 'Overwhelm':
+        return { color: '#3b82f6', labelColor: 'text-blue-600 border-blue-300' };
+      case 'Social Rejection': case 'Loneliness': case 'Imposter Syndrome':
+        return { color: '#c084fc', labelColor: 'text-purple-600 border-purple-300' };
+      case 'Negative Thoughts': case 'Self-Doubt': case 'Anxiety':
+        return { color: '#f43f5e', labelColor: 'text-rose-600 border-rose-300' };
+      case 'Isolation': case 'Ghosting': case 'Detachment':
+        return { color: '#6366f1', labelColor: 'text-indigo-600 border-indigo-300' };
+      case 'Social Comparison': case 'FOMO': case 'Cyberbullying':
+        return { color: '#14b8a6', labelColor: 'text-teal-600 border-teal-300' };
+      case 'Family Conflict': case 'Misunderstandings': case 'Peer Pressure':
+        return { color: '#ec4899', labelColor: 'text-pink-600 border-pink-300' };
+      default:
+        return { color: '#94a3b8', labelColor: 'text-slate-600 border-slate-300' };
     }
   })();
 
