@@ -15,28 +15,28 @@ export default function EndScreen() {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-md w-full bg-white/95 backdrop-blur-xl border border-white/60 p-8 rounded-3xl text-center shadow-2xl shadow-slate-300/40"
+        className="max-w-xs sm:max-w-md w-full bg-white/95 backdrop-blur-xl border border-white/60 p-4 sm:p-8 rounded-3xl text-center shadow-2xl shadow-slate-300/40 max-h-[95vh] sm:max-h-none overflow-y-auto"
       >
-        <h2 className={`text-3xl font-black font-sans uppercase tracking-tight mb-2 ${
+        <h2 className={`text-xl sm:text-3xl font-black font-sans uppercase tracking-tight mb-1 sm:mb-2 ${
           isVictory ? 'text-emerald-600' : 'text-rose-600'
         }`}>
           {isVictory ? 'Mindscape Restored' : 'Mindscape Overwhelmed'}
         </h2>
         
-        <p className="text-slate-600 text-sm mb-6 leading-relaxed font-sans font-medium">
+        <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-6 leading-relaxed font-sans font-medium">
           {isVictory 
             ? 'Splendid! You maintained mental resilience and successfully managed your connections.'
             : 'The fog became too thick, but remember: emotional health is an ongoing practice. Every storm passes.'}
         </p>
 
-        <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl mb-6 shadow-inner">
-          <span className="text-xs font-bold font-sans uppercase tracking-wider text-slate-400 block mb-1">Final Score Summary</span>
-          <span className="text-3xl font-black font-mono text-amber-600">{score}</span>
+        <div className="bg-slate-50 border border-slate-200/80 p-2 sm:p-4 rounded-2xl mb-3 sm:mb-6 shadow-inner">
+          <span className="text-[10px] sm:text-xs font-bold font-sans uppercase tracking-wider text-slate-400 block mb-0.5 sm:mb-1">Final Score Summary</span>
+          <span className="text-xl sm:text-3xl font-black font-mono text-amber-600">{score}</span>
         </div>
 
         <button
           onClick={restartGame}
-          className="w-full py-3.5 bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-[0.98] text-white font-bold font-sans uppercase tracking-wider rounded-2xl transition-all shadow-md cursor-pointer"
+          className="w-full py-2.5 sm:py-3.5 bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 active:scale-[0.98] text-white font-bold font-sans uppercase tracking-wider rounded-2xl transition-all shadow-md cursor-pointer"
         >
           Re-Enter Mindscape
         </button>

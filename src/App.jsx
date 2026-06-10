@@ -6,6 +6,7 @@ import MindscapeStage from './components/Experience/MindscapeStage';
 import CopingDock from './components/UI/CopingDock';
 import InsightOverlay from './components/UI/InsightOverlay';
 import EndScreen from './components/UI/EndScreen'; // Import the overlay
+import OrientationGate from './components/UI/OrientationGate';
 
 function DynamicVignette() {
   const { connection } = useGameState();
@@ -28,13 +29,13 @@ function HUD() {
   const { connection, score, lives, timer, gameStage } = useGameState();
 
   return (
-    <div className="absolute top-6 left-6 right-6 z-50 flex justify-between items-center pointer-events-none select-none">
-      <div className="flex flex-col gap-2">
-        <div className="bg-white/75 backdrop-blur-md border border-white/50 px-4 py-2.5 rounded-2xl text-slate-800 pointer-events-auto shadow-lg shadow-slate-200/20 transition-all duration-500">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Connection Meter</span>
-          <span className="text-2xl font-black text-cyan-600 drop-shadow-[0_1px_2px_rgba(8,145,178,0.1)]">{connection}%</span>
+    <div className="absolute top-3 left-3 right-3 sm:top-6 sm:left-6 sm:right-6 z-50 flex justify-between items-center pointer-events-none select-none">
+      <div className="flex flex-col gap-1 sm:gap-2">
+        <div className="bg-white/75 backdrop-blur-md border border-white/50 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl text-slate-800 pointer-events-auto shadow-lg shadow-slate-200/20 transition-all duration-500">
+          <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Connection Meter</span>
+          <span className="text-lg sm:text-2xl font-black text-cyan-600 drop-shadow-[0_1px_2px_rgba(8,145,178,0.1)]">{connection}%</span>
         </div>
-        <div className="flex gap-1.5 text-rose-500 text-xl drop-shadow-[0_2px_8px_rgba(244,63,94,0.35)] pl-1">
+        <div className="flex gap-1 text-rose-500 text-sm sm:text-xl drop-shadow-[0_2px_8px_rgba(244,63,94,0.35)] pl-1">
           {Array.from({ length: lives }).map((_, i) => (
             <span key={i}>♥</span>
           ))}
@@ -42,15 +43,15 @@ function HUD() {
       </div>
 
       {/* Real-time Countdown Timer & Stage Tracking Display */}
-      <div className="flex flex-col items-center bg-white/60 border border-white/50 px-6 py-2 rounded-full backdrop-blur-md shadow-md shadow-slate-200/10 text-center">
-        <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Stage: {gameStage}</span>
-        <span className="text-xl font-black text-slate-800">00:{timer < 10 ? `0${timer}` : timer}</span>
+      <div className="flex flex-col items-center bg-white/60 border border-white/50 px-3 py-1 sm:px-6 sm:py-2 rounded-full backdrop-blur-md shadow-md shadow-slate-200/10 text-center">
+        <span className="text-[7px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-500">Stage: {gameStage}</span>
+        <span className="text-sm sm:text-xl font-black text-slate-800">00:{timer < 10 ? `0${timer}` : timer}</span>
       </div>
 
       <div className="flex gap-4">
-        <div className="bg-white/75 backdrop-blur-md border border-white/50 px-4 py-2.5 rounded-2xl text-slate-800 text-right pointer-events-auto shadow-lg shadow-slate-200/20 transition-all duration-500">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Score</span>
-          <span className="text-2xl font-black text-amber-600 drop-shadow-[0_1px_2px_rgba(217,119,6,0.1)]">
+        <div className="bg-white/75 backdrop-blur-md border border-white/50 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl text-slate-800 text-right pointer-events-auto shadow-lg shadow-slate-200/20 transition-all duration-500">
+          <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Score</span>
+          <span className="text-lg sm:text-2xl font-black text-amber-600 drop-shadow-[0_1px_2px_rgba(217,119,6,0.1)]">
             {score.toLocaleString('en-US', { minimumIntegerDigits: 5, useGrouping: false })}
           </span>
         </div>
@@ -88,6 +89,7 @@ function GameRunner() {
       <InsightOverlay />
       <CopingDock />
       <EndScreen /> {/* Active endgame layer checks */}
+      <OrientationGate />
     </div>
   );
 }
