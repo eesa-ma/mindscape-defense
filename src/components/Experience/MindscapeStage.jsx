@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGameState } from '../../hooks/useGameState';
 import Threat from './Threat';
 import FogRing from './FogRing';
+import PlayerModel from './PlayerModel';
 
 const interpolateColor = (color1, color2, factor) => {
   const r1 = parseInt(color1.substring(1, 3), 16);
@@ -95,16 +96,18 @@ function Environment() {
 
       <FogRing />
 
-      {/* The Central Player Anchor - Stylized Consciousness Sanctuary */}
-      <group position={[0, 0, 0]}>
-        <mesh position={[0, 1.4, 0]}>
-          <sphereGeometry args={[0.25, 16, 16]} />
-          <meshStandardMaterial color="#fffbeb" emissive="#f59e0b" emissiveIntensity={1.5} fog={false} />
-        </mesh>
-        <mesh position={[0, 0.65, 0]}>
-          <cylinderGeometry args={[0.2, 0.35, 1.0, 8]} />
-          <meshStandardMaterial color="#0ea5e9" emissive="#0ea5e9" emissiveIntensity={0.6} flatShading fog={false} />
-        </mesh>
+      {/* The Central Player Anchor - Now a Real Human Avatar */}
+      <group position={[0, 0, 0]} scale={1.6}>
+        <Suspense fallback={
+          <mesh position={[0, 0.65, 0]}>
+            <cylinderGeometry args={[0.2, 0.35, 1.0, 8]} />
+            <meshStandardMaterial color="#0ea5e9" wireframe fog={false} />
+          </mesh>
+        }>
+          <PlayerModel position={[0, 0, 0]} />
+        </Suspense>
+
+        {/* Keep the awesome aura ring at the feet! */}
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[0.6, 0.7, 32]} />
           <meshBasicMaterial color="#38bdf8" transparent opacity={0.5} side={2} fog={false} />

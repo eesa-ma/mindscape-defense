@@ -18,19 +18,13 @@ export default function CopingDock() {
   return (
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-4 bg-white/75 backdrop-blur-xl border border-white/50 p-4 rounded-2xl shadow-xl shadow-slate-200/30">
       {Object.values(COPING_MECHANISMS).map((mechanism) => {
-        // Subtle hint: Highlight the button border if it is the correct counter to the current threat[cite: 1]
-        const isCorrectCounter = targetedThreat?.type === mechanism.counteracts;
         const colorStyle = STYLE_MAP[mechanism.key] || 'bg-slate-50 border-slate-200 text-slate-900';
 
         return (
           <button
             key={mechanism.key}
             onClick={() => executeCopingStrategy(mechanism)}
-            className={`w-24 h-24 rounded-xl border flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 ${colorStyle} ${
-              isCorrectCounter 
-                ? 'ring-2 ring-amber-400 border-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.25)] opacity-100' 
-                : 'opacity-80 hover:opacity-100'
-            }`}
+            className={`w-24 h-24 rounded-xl border flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 ${colorStyle} opacity-80 hover:opacity-100`}
           >
             <kbd className="text-xl font-black font-mono tracking-wider bg-white/90 px-2.5 py-0.5 rounded-lg border border-slate-200 text-slate-700 shadow-sm group-hover:text-slate-900 transition-colors">
               {mechanism.key}

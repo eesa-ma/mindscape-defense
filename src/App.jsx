@@ -72,11 +72,11 @@ function GameRunner() {
     <div className="relative w-screen h-screen overflow-hidden select-none font-sans">
       {/* Dynamic Background Gradient Layers */}
       <div 
-        className="absolute inset-0 bg-gradient-to-tr from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] transition-opacity duration-1000 ease-in-out z-0"
+        className="absolute inset-0 bg-linear-to-tr from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] transition-opacity duration-1000 ease-in-out z-0"
         style={{ opacity: 1 - factor }}
       />
       <div 
-        className="absolute inset-0 bg-gradient-to-tr from-[#e0e7ff] via-[#e2e8f0] to-[#ddd6fe] transition-opacity duration-1000 ease-in-out z-0"
+        className="absolute inset-0 bg-linear-to-tr from-[#e0e7ff] via-[#e2e8f0] to-[#ddd6fe] transition-opacity duration-1000 ease-in-out z-0"
         style={{ opacity: factor }}
       />
 
