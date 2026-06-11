@@ -50,33 +50,21 @@ export default function LoadingScreen() {
             {/* Cute Smiling Cloud Illustration */}
             <div className="loading-screen-logo-wrapper relative mb-8 h-sm:mb-2 flex items-center justify-center">
               <svg viewBox="0 0 120 80" className="w-32 h-24 animate-cloud-bob relative h-sm:w-20 h-sm:h-15 h-sm:mb-1.5">
-                {/* Cloud body shadow */}
-                <path 
-                  d="M20,50 Q10,50 10,40 Q10,30 20,30 Q20,15 35,15 Q45,15 50,22 Q60,10 75,10 Q90,10 95,22 Q110,22 110,38 Q110,50 100,50 Z" 
-                  fill="#cbd5e1" 
-                  transform="translate(3, 4)"
-                  opacity="0.5"
-                />
-                {/* Cloud body */}
-                <path 
-                  d="M20,50 Q10,50 10,40 Q10,30 20,30 Q20,15 35,15 Q45,15 50,22 Q60,10 75,10 Q90,10 95,22 Q110,22 110,38 Q110,50 100,50 Z" 
-                  fill="white" 
-                  stroke="#1e293b"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                {/* Cheeks */}
-                <circle cx="28" cy="38" r="5.5" fill="#f472b6" opacity="0.85" />
-                <circle cx="72" cy="38" r="5.5" fill="#f472b6" opacity="0.85" />
-                {/* Bubbly happy eyes */}
-                <path d="M23,32 Q26.5,28.5 30,32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" fill="none" />
-                <path d="M67,32 Q70.5,28.5 74,32" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" fill="none" />
-                {/* Smile */}
-                <path d="M43,37.5 Q47.5,42.5 52,37.5" stroke="#1e293b" strokeWidth="3" strokeLinecap="round" fill="none" />
-                {/* Tiny stars */}
-                <path d="M12,18 L14,20.5 L17,20.5 L15,22 L16,24.5 L13,23 L10,24.5 L11,22 L9,20.5 L12,20.5 Z" fill="#f59e0b" className="animate-pulse" />
-                <path d="M88,8 L90,10.5 L93,10.5 L91,12 L92,14.5 L89,13 L86,14.5 L87,12 L85,10.5 L88,10.5 Z" fill="#f59e0b" className="animate-pulse" style={{ animationDelay: '0.4s' }} />
+                {/* Shield shadow */}
+                <ellipse cx="60" cy="72" rx="30" ry="6" fill="#cbd5e1" opacity="0.6" />
+                
+                {/* Outer Shield Border */}
+                <path d="M 60 10 L 95 20 C 95 45 80 65 60 75 C 40 65 25 45 25 20 Z" fill="#e0e7ff" stroke="#818cf8" strokeWidth="4" strokeLinejoin="round" />
+                
+                {/* Inner Shield Body */}
+                <path d="M 60 18 L 85 26 C 85 43 75 57 60 65 C 45 57 35 43 35 26 Z" fill="#8b5cf6" />
+                
+                {/* Mind Core / Star */}
+                <path d="M 60 25 L 63 35 L 73 38 L 63 41 L 60 51 L 57 41 L 47 38 L 57 35 Z" fill="#fde047" className="animate-pulse" />
+                
+                {/* Floating Sparks */}
+                <path d="M 45 25 L 47 30 L 52 32 L 47 34 L 45 39 L 43 34 L 38 32 L 43 30 Z" fill="#fde047" opacity="0.8" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+                <path d="M 75 45 L 76.5 49 L 81 50.5 L 76.5 52 L 75 56 L 73.5 52 L 69 50.5 L 73.5 49 Z" fill="#fde047" opacity="0.8" className="animate-pulse" style={{ animationDelay: '1s' }} />
               </svg>
               
               {/* Floating Heart */}

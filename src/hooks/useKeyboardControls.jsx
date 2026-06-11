@@ -4,13 +4,11 @@ import { COPING_MECHANISMS } from '../config/gameData';
 export const useKeyboardControls = (onCopeExecuted) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
-      // Prevent standard browser keys from scrolling or behaving weirdly during game
-      if (['Q', 'W', 'E', 'R'].includes(event.key.toUpperCase())) {
-        event.preventDefault();
-      }
-
       const key = event.key.toUpperCase();
-      if (COPING_MECHANISMS[key]) {
+      
+      // Prevent standard browser keys from scrolling or behaving weirdly during game
+      if (Object.keys(COPING_MECHANISMS).includes(key)) {
+        event.preventDefault();
         onCopeExecuted(COPING_MECHANISMS[key]);
       }
     };
