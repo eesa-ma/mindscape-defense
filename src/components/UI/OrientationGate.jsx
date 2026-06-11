@@ -1,12 +1,15 @@
-// src/components/UI/OrientationGate.jsx
 import React from 'react';
 
 export default function OrientationGate() {
   return (
     <div 
-      className="fixed inset-0 flex flex-col items-center justify-center bg-linear-to-br from-indigo-950/95 via-slate-900/95 to-purple-950/95 backdrop-blur-2xl text-white p-6 text-center select-none pointer-events-auto transition-opacity duration-500 orientation-portrait-only"
+      className="fixed inset-0 flex flex-col items-center justify-center bg-linear-to-br from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] backdrop-blur-2xl p-6 text-center select-none pointer-events-auto transition-opacity duration-500 orientation-portrait-only"
       style={{ zIndex: 9999 }}
     >
+      {/* Dynamic Aura Background */}
+      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-rose-300/40 rounded-full filter blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-300/40 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
+
       <style>{`
         @media (orientation: landscape) {
           .orientation-portrait-only {
@@ -30,14 +33,14 @@ export default function OrientationGate() {
       `}</style>
       
       {/* Animated Rotation Device */}
-      <div className="relative w-28 h-28 mb-8 flex items-center justify-center">
+      <div className="relative z-10 w-28 h-28 mb-8 flex items-center justify-center">
         {/* Outer glowing halo */}
-        <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-xl animate-pulse" />
+        <div className="absolute inset-0 bg-white/50 rounded-full blur-xl animate-pulse" />
         
         {/* SVG Phone Graphic */}
         <svg
-          className="w-16 h-16 text-cyan-400 animate-phone-rotation drop-shadow-[0_0_15px_rgba(34,211,238,0.4)]"
-          fill="none"
+          className="w-16 h-16 text-slate-800 animate-phone-rotation drop-shadow-[4px_4px_0px_rgba(30,41,59,0.15)]"
+          fill="white"
           stroke="currentColor"
           strokeWidth="1.5"
           viewBox="0 0 24 24"
@@ -48,10 +51,10 @@ export default function OrientationGate() {
         
         {/* Rotation Arrow */}
         <svg
-          className="absolute w-20 h-20 text-indigo-400 opacity-65"
+          className="absolute w-20 h-20 text-pink-400 opacity-90 drop-shadow-[2px_2px_0px_rgba(255,255,255,0.8)]"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.5"
+          strokeWidth="2.5"
           viewBox="0 0 24 24"
         >
           <path
@@ -62,12 +65,14 @@ export default function OrientationGate() {
         </svg>
       </div>
 
-      <h2 className="text-2xl font-black font-sans uppercase tracking-wider mb-3 bg-linear-to-r from-cyan-400 via-indigo-300 to-rose-400 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(6,182,212,0.15)]">
-        Landscape Mode Required
-      </h2>
-      <p className="max-w-xs text-sm text-slate-300 leading-relaxed font-sans font-medium">
-        Please rotate your device to landscape orientation. Mindscape Defense is optimized to shield your focus in widescreen format.
-      </p>
+      <div className="relative z-10 bg-white/80 border-4 border-slate-800 p-6 rounded-3xl shadow-[6px_6px_0px_rgba(30,41,59,1)]">
+        <h2 className="text-2xl font-black font-sans uppercase tracking-widest text-slate-800 mb-2">
+          Landscape Mode
+        </h2>
+        <p className="max-w-xs text-sm font-extrabold text-indigo-500 uppercase tracking-wider leading-relaxed">
+          Please rotate your device. Mindscape Defense is optimized to shield your focus in widescreen format.
+        </p>
+      </div>
     </div>
   );
 }

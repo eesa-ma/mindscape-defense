@@ -1,12 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Soft white circular background -->
-  <circle cx="50" cy="50" r="46" fill="#ffffff" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 5 80 80">
+  <!-- Shield shadow -->
+  <ellipse cx="60" cy="72" rx="30" ry="6" fill="#cbd5e1" opacity="0.6" />
   
-  <!-- Interlocking periwinkle curves -->
-  <g stroke="#818cf8" stroke-width="6.5" stroke-linecap="round" fill="none">
-    <!-- Left-bowing curve -->
-    <path d="M 64,32 C 24,32 24,68 64,68" />
-    <!-- Right-bowing curve -->
-    <path d="M 36,32 C 76,32 76,68 36,68" />
-  </g>
+  <!-- Outer Shield Border -->
+  <path d="M 60 10 L 95 20 C 95 45 80 65 60 75 C 40 65 25 45 25 20 Z" fill="#e0e7ff" stroke="#818cf8" stroke-width="4" stroke-linejoin="round" />
+  
+  <!-- Inner Shield Body -->
+  <path d="M 60 18 L 85 26 C 85 43 75 57 60 65 C 45 57 35 43 35 26 Z" fill="#8b5cf6" />
+  
+  <!-- Mind Core / Star -->
+  <path d="M 60 25 L 63 35 L 73 38 L 63 41 L 60 51 L 57 41 L 47 38 L 57 35 Z" fill="#fde047" />
+  
+  <!-- Floating Sparks -->
+  <path d="M 45 25 L 47 30 L 52 32 L 47 34 L 45 39 L 43 34 L 38 32 L 43 30 Z" fill="#fde047" opacity="0.8" />
+  <path d="M 75 45 L 76.5 49 L 81 50.5 L 76.5 52 L 75 56 L 73.5 52 L 69 50.5 L 73.5 49 Z" fill="#fde047" opacity="0.8" />
 </svg>

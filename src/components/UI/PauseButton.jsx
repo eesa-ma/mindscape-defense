@@ -1,4 +1,3 @@
-// src/components/UI/PauseButton.jsx
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';

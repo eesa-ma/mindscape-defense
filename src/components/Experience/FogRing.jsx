@@ -1,4 +1,3 @@
-// src/components/Experience/FogRing.jsx
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGameState } from '../../hooks/useGameState';

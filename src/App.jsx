@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { GameStateProvider, useGameState } from './hooks/useGameState';
 import { useKeyboardControls } from './hooks/useKeyboardControls';
@@ -141,7 +140,7 @@ function HUD() {
       <div className="flex gap-2 sm:gap-3 items-center">
         <button
           onClick={toggleMute}
-          className="hud-card hud-mute-btn bg-pink-100 border-[3px] border-slate-800 p-2 sm:p-2.5 rounded-2xl text-slate-700 hover:text-slate-900 pointer-events-auto shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-105 active:scale-95 active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center"
+          className="hud-card hud-mute-btn bg-pink-100 border-[3px] border-slate-800 p-2 sm:p-2.5 rounded-2xl text-slate-700 hover:text-slate-900 pointer-events-auto shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-105 active:scale-95 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center"
           title={isMuted ? "Unmute Audio" : "Mute Audio"}
         >
           {isMuted ? (

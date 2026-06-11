@@ -1,4 +1,3 @@
-// src/hooks/useGameState.jsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { audioSynth } from '../utils/audioSynth';
 
