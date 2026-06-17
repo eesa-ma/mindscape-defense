@@ -205,7 +205,7 @@ function GameRunner() {
   });
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden select-none font-sans bg-[#0f172a] game-shake-target">
+    <div className="fixed inset-0 overflow-hidden select-none font-sans bg-[#0f172a] game-shake-target">
       
       {/* 8. Parallax wrapper (slightly larger than screen to hide edges) */}
       <div 

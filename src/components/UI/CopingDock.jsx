@@ -60,7 +60,7 @@ export default function CopingDock() {
   };
 
   return (
-    <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 w-full px-2 sm:px-4 md:px-8 z-50 flex justify-between items-end pointer-events-none">
+    <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 h-sm:bottom-2 h-xs:bottom-1 w-full px-2 sm:px-4 md:px-8 z-50 flex justify-between items-end pointer-events-none">
       {/* Left side controls */}
       <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-3 pointer-events-auto bg-pink-50/95 border-[3px] border-slate-800 p-1.5 sm:p-2 md:p-3 rounded-2xl sm:rounded-3xl shadow-[4px_4px_0px_rgba(30,41,59,1)] max-w-[48%]">
         {leftMechanisms.map(renderMechanism)}
