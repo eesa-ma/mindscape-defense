@@ -1,4 +1,6 @@
 import { useGameState } from '../../hooks/useGameState';
+import { motion } from 'framer-motion';
+import { Lock } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
 import { requestFullscreen } from '../../utils/fullscreen';
 
@@ -44,7 +46,7 @@ export default function LevelSelectScreen() {
               >
                 {!isUnlocked && (
                   <div className="absolute top-2 right-2 text-xl sm:text-2xl h-sm:top-1.5 h-sm:right-1.5 h-sm:text-lg">
-                    🔒
+                    <Lock className="w-4 h-4 sm:w-6 sm:h-6 text-slate-300 mx-auto opacity-75" />
                   </div>
                 )}
                 

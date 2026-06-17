@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
 import { requestFullscreen } from '../../utils/fullscreen';
+import { Heart, Cloud, Star } from 'lucide-react';
 
 export default function OnboardingScreen() {
   const { gameStatus, completeOnboarding } = useGameState();
@@ -45,9 +46,9 @@ export default function OnboardingScreen() {
           </p>
           
           <ul className="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-3 sm:p-4 text-xs sm:text-sm font-bold text-indigo-900 flex flex-col gap-2 h-sm:text-[0.65rem] h-sm:p-2 h-xs:text-[0.6rem]">
-            <li className="flex items-center gap-2"><span>❤️</span> Keep your Connection Meter above zero</li>
-            <li className="flex items-center gap-2"><span>🌫️</span> Prevent loneliness from consuming the Mindscape</li>
-            <li className="flex items-center gap-2"><span>⭐</span> Earn points by making healthy choices</li>
+            <li className="flex items-center"><Heart className="inline w-4 h-4 text-rose-500 mr-2" fill="currentColor" /> Keep your Connection Meter above zero</li>
+            <li className="flex items-center"><Cloud className="inline w-4 h-4 text-slate-400 mr-2" /> Prevent loneliness from consuming the Mindscape</li>
+            <li className="flex items-center"><Star className="inline w-4 h-4 text-amber-500 mr-2" fill="currentColor" /> Earn points by making healthy choices</li>
           </ul>
 
           <p className="text-center italic font-bold text-slate-500 mt-2 text-xs sm:text-sm h-sm:text-[0.65rem] h-sm:mt-0">
@@ -79,7 +80,7 @@ export default function OnboardingScreen() {
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-rose-300/20 rounded-full filter blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-blue-300/20 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
 
-      <div className="relative z-10 w-full max-w-2xl bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl shadow-[8px_8px_0px_rgba(30,41,59,1)] flex flex-col items-center max-h-[95vh] h-sm:max-h-[92vh] h-sm:p-4 h-sm:w-[95%] h-xs:p-3 overflow-y-auto scrollbar-thin">
+      <div className="relative z-10 w-full max-w-2xl bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl shadow-[8px_8px_0px_rgba(30,41,59,1)] flex flex-col items-center max-h-[95vh] h-sm:max-h-[92vh] h-sm:p-4 h-sm:w-[95%] h-xs:p-3 overflow-hidden">
         
         {/* Progress Dots */}
         <div className="flex gap-2 mb-6 h-sm:mb-3">
@@ -92,7 +93,7 @@ export default function OnboardingScreen() {
         </div>
 
         {/* Carousel Content */}
-        <div className="w-full shrink-0 flex flex-col items-center">
+        <div className="w-full flex-1 flex flex-col items-center justify-center min-h-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
@@ -100,14 +101,14 @@ export default function OnboardingScreen() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col items-center w-full"
+              className="flex flex-col items-center w-full min-h-0"
             >
-              <div className="w-full max-w-70 sm:max-w-85 mb-4 sm:mb-6 h-sm:max-w-35 h-sm:mb-3 h-xs:max-w-25 animate-cloud-bob relative">
+              <div className="w-full max-w-48 sm:max-w-64 mb-4 sm:mb-6 h-sm:max-w-32 h-sm:mb-3 h-xs:max-w-24 animate-cloud-bob relative shrink min-h-0 flex justify-center">
                 <div className="absolute inset-4 bg-indigo-200/50 rounded-full filter blur-xl animate-pulse"></div>
                 <img 
                   src={slides[currentSlide].image} 
                   alt={slides[currentSlide].title}
-                  className="w-full h-auto drop-shadow-2xl relative z-10 hover:scale-105 transition-transform duration-500 ease-out mix-blend-multiply rounded-3xl"
+                  className="w-full h-full object-contain max-h-[30vh] drop-shadow-2xl relative z-10 hover:scale-105 transition-transform duration-500 ease-out mix-blend-multiply rounded-3xl"
                   style={{ maskImage: 'radial-gradient(circle at center, black 50%, transparent 100%)', WebkitMaskImage: 'radial-gradient(circle at center, black 50%, transparent 100%)' }}
                 />
               </div>

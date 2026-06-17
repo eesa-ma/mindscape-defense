@@ -28,12 +28,17 @@ export default function SplashScreen() {
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-300/30 rounded-full filter blur-3xl animate-pulse pointer-events-none" style={{ animationDelay: '1.5s' }} />
       
       <div className="relative z-10 flex flex-col items-center animate-cloud-bob">
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-slate-800 mb-8 tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] text-center px-4">
+        <img 
+          src="/logo.jpeg" 
+          alt="Brand Logo" 
+          className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] border-4 border-white mb-6 bg-white h-sm:w-16 h-sm:h-16 h-sm:mb-3 h-xs:w-12 h-xs:h-12 h-xs:mb-2" 
+        />
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-slate-800 mb-8 tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] text-center px-4 h-sm:text-3xl h-sm:mb-4 h-xs:text-2xl h-xs:mb-2">
           Mindscape Defense
         </h1>
         
-        <div className="animate-pulse bg-white/80 backdrop-blur-md border-[3px] border-indigo-200 px-6 py-3 sm:px-8 sm:py-4 rounded-full shadow-[0_8px_30px_rgba(99,102,241,0.3)] hover:scale-105 transition-transform duration-300">
-          <p className="text-indigo-600 font-extrabold text-sm sm:text-lg tracking-widest uppercase drop-shadow-sm">
+        <div className="animate-pulse bg-white/80 backdrop-blur-md border-[3px] border-indigo-200 px-6 py-3 sm:px-8 sm:py-4 rounded-full shadow-[0_8px_30px_rgba(99,102,241,0.3)] hover:scale-105 transition-transform duration-300 h-sm:py-2 h-sm:px-4 h-xs:py-1.5 h-xs:px-3">
+          <p className="text-indigo-600 font-extrabold text-sm sm:text-lg tracking-widest uppercase drop-shadow-sm h-sm:text-xs h-xs:text-[10px]">
             Tap anywhere to enter
           </p>
         </div>

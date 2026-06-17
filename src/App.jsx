@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Volume2, VolumeX, Maximize, Minimize, Heart, Star } from 'lucide-react';
+import './index.css';
 import { GameStateProvider, useGameState } from './hooks/useGameState';
 import { useKeyboardControls } from './hooks/useKeyboardControls';
 import { toggleFullscreen, isFullscreen } from './utils/fullscreen';
@@ -14,6 +16,7 @@ import FailureOverlay from './components/UI/FailureOverlay';
 import LevelSelectScreen from './components/UI/LevelSelectScreen';
 import OnboardingScreen from './components/UI/OnboardingScreen';
 import SplashScreen from './components/UI/SplashScreen';
+import NamePromptScreen from './components/UI/NamePromptScreen';
 
 function MenuFullscreenToggle() {
   const { gameStatus } = useGameState();
@@ -40,13 +43,9 @@ function MenuFullscreenToggle() {
       title="Toggle Fullscreen"
     >
       {fullscreen ? (
-        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M15 9V4.5M15 9h4.5M9 15v4.5M9 15H4.5M15 15v4.5M15 15h4.5" />
-        </svg>
+        <Minimize className="w-5 h-5 sm:w-6 sm:h-6" />
       ) : (
-        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-        </svg>
+        <Maximize className="w-5 h-5 sm:w-6 sm:h-6" />
       )}
     </button>
   );
@@ -152,7 +151,7 @@ function HUD() {
       <div className="flex flex-col gap-1 sm:gap-2">
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="hud-card bg-cyan-100 border-[3px] border-slate-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl sm:rounded-3xl text-slate-800 pointer-events-auto shadow-[3px_3px_0px_rgba(30,41,59,1)] transition-all duration-500">
-            <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-cyan-800 block">💖 Connection Meter</span>
+            <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-cyan-800 flex items-center gap-1"><Heart className="w-3 h-3" fill="currentColor" /> Connection Meter</span>
             <span className="hud-card-value text-lg sm:text-2xl font-black text-cyan-600">{connection}%</span>
           </div>
           <button
@@ -170,13 +169,8 @@ function HUD() {
         </div>
         <div className="hud-lives flex gap-1.5 text-lg sm:text-2xl pl-1">
           {Array.from({ length: 3 }).map((_, i) => (
-            <span
-              key={i}
-              className={`inline-block transition-transform duration-500 ${i < lives ? 'scale-100 animate-heart-pulse text-rose-500' : 'scale-95 text-slate-400 opacity-40'
-                }`}
-              style={{ animationDelay: `${i * 0.15}s` }}
-            >
-              ❤️
+            <span key={i} className="text-[12px] sm:text-[16px] filter drop-shadow-md transition-all duration-300 flex items-center justify-center">
+              {i < lives ? <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" fill="currentColor" /> : <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-slate-300 opacity-50" fill="currentColor" />}
             </span>
           ))}
         </div>
@@ -184,7 +178,7 @@ function HUD() {
 
       {/* Level & Progress Display */}
       <div className="hud-timer flex flex-col items-center bg-purple-100 border-[3px] border-slate-800 px-4 py-1.5 sm:px-6 sm:py-2.5 rounded-3xl text-center shadow-[3px_3px_0px_rgba(30,41,59,1)] pointer-events-auto">
-        <span className="hud-timer-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-widest text-purple-800">⭐ LEVEL {level}</span>
+        <span className="hud-timer-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-widest text-purple-800 flex items-center justify-center gap-1"><Star className="w-3 h-3" fill="currentColor" /> LEVEL {level}</span>
         <span className="hud-timer-value text-sm sm:text-xl font-black text-purple-950">
           {level < 6 ? `${enemiesDefeatedThisLevel} / ${level * 5}` : 'MAX'}
         </span>
@@ -224,7 +218,7 @@ function HUD() {
         </button>
 
         <div className="hud-card bg-amber-100 border-[3px] border-slate-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl sm:rounded-3xl text-slate-800 text-right pointer-events-auto shadow-[3px_3px_0px_rgba(30,41,59,1)] transition-all duration-500">
-          <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-amber-800 block">⭐ Score</span>
+          <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-amber-800 flex items-center justify-end gap-1"><Star className="w-3 h-3" fill="currentColor" /> Score</span>
           <span className="hud-card-value text-lg sm:text-2xl font-black text-amber-600">
             {score.toLocaleString('en-US', { minimumIntegerDigits: 5, useGrouping: false })}
           </span>
@@ -238,23 +232,60 @@ const CracksOverlay = ({ connection }) => {
   // Cracks only appear when connection is below 50%, reaching full opacity at 0%
   const opacity = connection < 50 ? (50 - connection) / 50 : 0;
   return (
-    <div 
-      className="absolute inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out mix-blend-multiply" 
+    <div
+      className="absolute inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out mix-blend-multiply"
       style={{ opacity }}
     >
       <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,0 L15,20 L10,40 L25,60 L20,80" stroke="#0f172a" strokeWidth="0.4" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M100,20 L80,30 L85,50 L70,80 L80,100" stroke="#0f172a" strokeWidth="0.6" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M40,100 L45,80 L35,60 L50,40" stroke="#0f172a" strokeWidth="0.5" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M0,60 L15,70 L10,90" stroke="#0f172a" strokeWidth="0.3" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M60,0 L65,20 L55,40" stroke="#0f172a" strokeWidth="0.7" fill="none" vectorEffect="non-scaling-stroke"/>
+        <path d="M0,0 L15,20 L10,40 L25,60 L20,80" stroke="#0f172a" strokeWidth="0.4" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M100,20 L80,30 L85,50 L70,80 L80,100" stroke="#0f172a" strokeWidth="0.6" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M40,100 L45,80 L35,60 L50,40" stroke="#0f172a" strokeWidth="0.5" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M0,60 L15,70 L10,90" stroke="#0f172a" strokeWidth="0.3" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M60,0 L65,20 L55,40" stroke="#0f172a" strokeWidth="0.7" fill="none" vectorEffect="non-scaling-stroke" />
       </svg>
     </div>
   );
 };
 
+function BackgroundMusic() {
+  const { gameStatus, isMuted } = useGameState();
+  const audioRef = React.useRef(null);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    const playAudio = async () => {
+      try {
+        if (audioRef.current.paused) {
+          await audioRef.current.play();
+        }
+      } catch (err) {
+        // Autoplay might be blocked until user interacts
+      }
+    };
+
+    if (gameStatus !== 'splash') {
+      playAudio();
+    }
+  }, [gameStatus]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = isMuted;
+  }, [isMuted]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    // Lower volume for menus, higher for gameplay
+    const targetVolume = gameStatus === 'playing' ? 0.6 : 0.2;
+    audioRef.current.volume = targetVolume;
+  }, [gameStatus]);
+
+  return <audio ref={audioRef} src="/bg-music.mpeg" loop />;
+}
+
 function GameRunner() {
-  const { executeCopingStrategy, connection, gameStatus } = useGameState();
+  const { executeCopingStrategy, connection, gameStatus, level } = useGameState();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   // 8. Slight Parallax Movement
@@ -272,23 +303,44 @@ function GameRunner() {
     executeCopingStrategy(strategy);
   });
 
+  const getBackgroundImage = (lvl) => {
+    switch(lvl) {
+      case 1: return "url('/mindscape-bg.png')";
+      case 2: return "url('/bg-2.png')";
+      case 3: return "url('/bg-3.png')";
+      case 4: return "url('/bg-4.png')";
+      case 5: return "url('/bg-5.png')";
+      case 6: return "url('/bg-6.png')";
+      default: return "url('/mindscape-bg.png')";
+    }
+  };
+
   return (
     <div className="fixed inset-0 overflow-hidden select-none font-sans bg-[#0f172a] game-shake-target">
-      
+
+      {/* Preload images to prevent flickering on level up */}
+      <div className="hidden">
+        <img src="/bg-2.png" alt="preload" />
+        <img src="/bg-3.png" alt="preload" />
+        <img src="/bg-4.png" alt="preload" />
+        <img src="/bg-5.png" alt="preload" />
+        <img src="/bg-6.png" alt="preload" />
+      </div>
+
       {/* 8. Parallax wrapper (slightly larger than screen to hide edges) */}
-      <div 
-         className="absolute inset-[-5%] z-0 transition-transform duration-100 ease-out" 
-         style={{ transform: `translate(${-mousePos.x}px, ${-mousePos.y}px)` }}
+      <div
+        className="absolute inset-[-5%] z-0 transition-transform duration-100 ease-out"
+        style={{ transform: `translate(${-mousePos.x}px, ${-mousePos.y}px)` }}
       >
         {/* 9. Slow breathing animation */}
         <div className="absolute inset-0 animate-breathing origin-center">
-          
+
           {/* 1 & 2 & 10. Dynamic Background Image with Smooth Transition */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out" 
-            style={{ 
-              backgroundImage: "url('/mindscape-bg.png')",
-              filter: gameStatus === 'playing' ? `grayscale(${100 - connection}%) brightness(${0.5 + (connection/200)})` : 'none',
+          <div
+            className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
+            style={{
+              backgroundImage: getBackgroundImage(level),
+              filter: gameStatus === 'playing' ? `grayscale(${100 - connection}%) brightness(${0.5 + (connection / 200)})` : 'none',
               opacity: 0.95
             }}
           />
@@ -297,9 +349,9 @@ function GameRunner() {
           <CracksOverlay connection={gameStatus === 'playing' ? connection : 100} />
 
           {/* 3. Radial Vignette */}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out"
-            style={{ 
+            style={{
               background: 'radial-gradient(ellipse at center, transparent 30%, rgba(15,23,42,0.95) 100%)',
               opacity: gameStatus === 'playing' ? 1 - (connection / 100) : 0
             }}
@@ -318,11 +370,13 @@ function GameRunner() {
       <EndScreen /> {/* Active endgame layer checks */}
       <OnboardingScreen />
       <SplashScreen />
+      <NamePromptScreen />
       <StartMenu />
       <LevelSelectScreen />
       <OrientationGate />
       <LoadingScreen />
-      
+      <BackgroundMusic />
+
       {/* Menu controls (hidden during gameplay) */}
       <MenuFullscreenToggle />
     </div>

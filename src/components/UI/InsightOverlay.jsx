@@ -1,11 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { Star } from 'lucide-react';
 import { useGameState } from '../../hooks/useGameState';
 
 export default function InsightOverlay() {
   const { activeInsight } = useGameState();
 
   return (
-    <div className="absolute right-6 top-24 w-80 z-50 pointer-events-none h-sm:top-16 h-sm:right-2 h-sm:w-60 h-xs:top-13 h-xs:right-1.5 h-xs:w-52">
+    <div className="absolute right-6 top-36 sm:top-44 md:top-48 w-80 z-50 pointer-events-none h-sm:top-24 h-sm:right-4 h-sm:w-60 h-xs:top-20 h-xs:right-2 h-xs:w-52">
       <AnimatePresence>
         {activeInsight && (
           <motion.div
@@ -15,7 +16,7 @@ export default function InsightOverlay() {
             className="bg-emerald-50 border-[3px] border-slate-800 p-4 rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] h-sm:p-3 h-sm:rounded-xl h-xs:p-2 h-xs:rounded-lg"
           >
             <div className="flex items-center gap-1.5 mb-1.5">
-              <span className="text-sm">⭐</span>
+              <Star className="inline w-3 h-3 sm:w-4 sm:h-4 text-amber-400 mr-1" fill="currentColor" />
               <p className="text-xs font-black uppercase tracking-wider text-emerald-700 h-sm:text-[0.65rem] h-xs:text-[0.55rem]">
                 Mascot Tip
               </p>

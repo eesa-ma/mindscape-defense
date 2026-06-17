@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
+import { Trophy, HeartCrack, ListFilter } from 'lucide-react';
 
 export default function EndScreen() {
   const { gameStatus, score, level, restartLevel, startLevel, returnToLevelSelect, togglePause, isPaused, goToMenu } = useGameState();
@@ -15,11 +16,11 @@ export default function EndScreen() {
           className="max-w-xs sm:max-w-md w-full bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl text-center shadow-[5px_5px_0px_rgba(30,41,59,1)] h-sm:max-h-[92vh] h-sm:overflow-y-auto h-sm:p-4 h-sm:rounded-2xl h-xs:p-3 h-xs:max-w-xs"
         >
           <h2 className="text-3xl sm:text-4xl font-black text-slate-800 mb-2 tracking-tight h-sm:text-xl h-sm:mb-1 h-xs:text-lg">
-            😴 Game Paused 😴
+            Game Paused
           </h2>
           
           <p className="text-slate-500 text-xs sm:text-sm mb-6 sm:mb-8 font-extrabold uppercase tracking-wide h-sm:text-[0.6rem] h-sm:mb-3 h-xs:mb-2">
-            🌟 Take a moment to breathe 🌟
+            Take a moment to breathe
           </p>
           
           <div className="flex flex-col gap-4 h-sm:gap-2.5 h-xs:gap-2">
@@ -61,7 +62,7 @@ export default function EndScreen() {
           className="max-w-xs sm:max-w-md w-full bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl text-center shadow-[5px_5px_0px_rgba(30,41,59,1)] max-h-[95vh] sm:max-h-none overflow-y-auto h-sm:max-h-[92vh] h-sm:p-4 h-sm:rounded-2xl h-xs:p-3 h-xs:max-w-xs"
         >
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-2 text-slate-800 h-sm:text-xl h-sm:mb-1 h-xs:text-lg">
-            {isVictory ? '🎉 Mindscape Restored 🌈' : '💔 Mindscape Overwhelmed 🌧️'}
+            {isVictory ? <><Trophy className="inline w-6 h-6 sm:w-8 sm:h-8 mr-2" /> Mindscape Restored</> : <><HeartCrack className="inline w-6 h-6 sm:w-8 sm:h-8 mr-2" /> Mindscape Overwhelmed</>}
           </h2>
           
           <p className="text-slate-500 text-xs sm:text-sm mb-4 sm:mb-6 leading-relaxed font-bold h-sm:text-[0.65rem] h-sm:mb-2.5 h-sm:leading-snug h-xs:text-[0.55rem] h-xs:mb-1.5">
@@ -71,7 +72,7 @@ export default function EndScreen() {
           </p>
 
           <div className="bg-yellow-50 border-[3px] border-slate-800 p-3 sm:p-4 rounded-2xl mb-4 sm:mb-6 shadow-[3px_3px_0px_rgba(30,41,59,1)] h-sm:p-2 h-sm:rounded-xl h-sm:mb-3 h-sm:border-2 h-xs:p-1.5 h-xs:mb-2">
-            <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-500 block mb-0.5 sm:mb-1 h-sm:text-[8px] h-sm:mb-0">⭐ Final Score Summary ⭐</span>
+            <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-500 block mb-0.5 sm:mb-1 h-sm:text-[8px] h-sm:mb-0"><ListFilter className="inline w-4 h-4 mr-1" /> Final Score Summary</span>
             <span className="text-2xl sm:text-3xl font-black text-amber-500 h-sm:text-xl">{score}</span>
           </div>
 
