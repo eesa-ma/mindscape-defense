@@ -84,26 +84,13 @@ export default function Threat({ threatData }) {
 
   // Expose a way for the engine to shatter this crystal smoothly
   // To link this flawlessly, we update the removal sequence to trigger local destruction first
-  const specs = (() => {
-    switch (threatData.type) {
-      case 'Burnout': case 'Exhaustion': case 'Creative Block':
-        return { color: '#fbbf24', labelColor: 'text-amber-950 border-slate-800 bg-amber-100' };
-      case 'Academic Pressure': case 'Procrastination': case 'Overwhelm':
-        return { color: '#60a5fa', labelColor: 'text-blue-950 border-slate-800 bg-blue-100' };
-      case 'Social Rejection': case 'Loneliness': case 'Imposter Syndrome':
-        return { color: '#c084fc', labelColor: 'text-purple-950 border-slate-800 bg-purple-100' };
-      case 'Negative Thoughts': case 'Self-Doubt': case 'Anxiety':
-        return { color: '#f43f5e', labelColor: 'text-rose-950 border-slate-800 bg-rose-100' };
-      case 'Isolation': case 'Ghosting': case 'Detachment':
-        return { color: '#818cf8', labelColor: 'text-indigo-950 border-slate-800 bg-indigo-100' };
-      case 'Social Comparison': case 'FOMO': case 'Cyberbullying':
-        return { color: '#2dd4bf', labelColor: 'text-teal-950 border-slate-800 bg-teal-100' };
-      case 'Family Conflict': case 'Misunderstandings': case 'Peer Pressure':
-        return { color: '#f472b6', labelColor: 'text-pink-950 border-slate-800 bg-pink-100' };
-      default:
-        return { color: '#cbd5e1', labelColor: 'text-slate-900 border-slate-800 bg-slate-100' };
-    }
-  })();
+  // To prevent the game from being a simple "color-matching" puzzle,
+  // ALL threats share the same neutral, dreamy visual style. 
+  // It shouldn't look overly dark or negative, just like a neutral floating thought.
+  const specs = {
+    color: '#f8fafc', // Very light, frosty slate/white for the crystal
+    labelColor: 'text-slate-700 border-slate-300 bg-white/95 backdrop-blur-sm' // Clean, bright UI label
+  };
 
   const THREAT_EMOJIS = {
     'Burnout': '🤯', 'Exhaustion': '😫', 'Creative Block': '🎨❌',
@@ -145,17 +132,17 @@ export default function Threat({ threatData }) {
         // ACTIVE CRYSTAL SHARD
         <>
           <Html
-            distanceFactor={15}
+            transform
+            sprite
+            distanceFactor={8}
             position={[0, 1.1, 0]}
-            center
             className="select-none"
           >
             <div
               onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}
-              className={`pointer-events-auto cursor-pointer whitespace-nowrap px-3 py-1.5 text-[10px] font-extrabold rounded-2xl border-2 border-slate-800 transition-all duration-300 shadow-[2px_2px_0px_rgba(30,41,59,1)] ${specs.labelColor} ${isTargeted ? 'scale-110 border-slate-800 shadow-[2.5px_2.5px_0px_rgba(245,158,11,1)]' : 'opacity-90'
+              className={`pointer-events-auto cursor-pointer whitespace-nowrap px-4 py-2 text-base sm:text-lg font-black rounded-3xl border-[3px] border-slate-800 transition-all duration-300 shadow-[3px_3px_0px_rgba(30,41,59,1)] ${specs.labelColor} ${isTargeted ? 'scale-110 border-slate-800 shadow-[4px_4px_0px_rgba(245,158,11,1)]' : 'opacity-95'
                 }`}
             >
-              <span className="mr-1">{THREAT_EMOJIS[threatData.type] || '⚠️'}</span>
               {threatData.type}
             </div>
           </Html>
@@ -174,7 +161,7 @@ export default function Threat({ threatData }) {
                 <meshBasicMaterial color="#ffffff" transparent opacity={0.75} fog={false} />
               </mesh>
             )}
-            
+
             {/* Shadowy loneliness aura */}
             <Sparkles count={20} scale={1.5} size={2} speed={0.4} color="#1e293b" opacity={0.6} />
             <Sparkles count={10} scale={2} size={1} speed={0.2} color="#475569" opacity={0.4} />
