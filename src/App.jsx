@@ -232,16 +232,16 @@ const CracksOverlay = ({ connection }) => {
   // Cracks only appear when connection is below 50%, reaching full opacity at 0%
   const opacity = connection < 50 ? (50 - connection) / 50 : 0;
   return (
-    <div 
-      className="absolute inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out mix-blend-multiply" 
+    <div
+      className="absolute inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out mix-blend-multiply"
       style={{ opacity }}
     >
       <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,0 L15,20 L10,40 L25,60 L20,80" stroke="#0f172a" strokeWidth="0.4" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M100,20 L80,30 L85,50 L70,80 L80,100" stroke="#0f172a" strokeWidth="0.6" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M40,100 L45,80 L35,60 L50,40" stroke="#0f172a" strokeWidth="0.5" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M0,60 L15,70 L10,90" stroke="#0f172a" strokeWidth="0.3" fill="none" vectorEffect="non-scaling-stroke"/>
-        <path d="M60,0 L65,20 L55,40" stroke="#0f172a" strokeWidth="0.7" fill="none" vectorEffect="non-scaling-stroke"/>
+        <path d="M0,0 L15,20 L10,40 L25,60 L20,80" stroke="#0f172a" strokeWidth="0.4" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M100,20 L80,30 L85,50 L70,80 L80,100" stroke="#0f172a" strokeWidth="0.6" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M40,100 L45,80 L35,60 L50,40" stroke="#0f172a" strokeWidth="0.5" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M0,60 L15,70 L10,90" stroke="#0f172a" strokeWidth="0.3" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M60,0 L65,20 L55,40" stroke="#0f172a" strokeWidth="0.7" fill="none" vectorEffect="non-scaling-stroke" />
       </svg>
     </div>
   );
@@ -253,7 +253,7 @@ function BackgroundMusic() {
 
   useEffect(() => {
     if (!audioRef.current) return;
-    
+
     const playAudio = async () => {
       try {
         if (audioRef.current.paused) {
@@ -263,7 +263,7 @@ function BackgroundMusic() {
         // Autoplay might be blocked until user interacts
       }
     };
-    
+
     if (gameStatus !== 'splash') {
       playAudio();
     }
@@ -285,7 +285,7 @@ function BackgroundMusic() {
 }
 
 function GameRunner() {
-  const { executeCopingStrategy, connection, gameStatus } = useGameState();
+  const { executeCopingStrategy, connection, gameStatus, level } = useGameState();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   // 8. Slight Parallax Movement
@@ -303,23 +303,44 @@ function GameRunner() {
     executeCopingStrategy(strategy);
   });
 
+  const getBackgroundImage = (lvl) => {
+    switch(lvl) {
+      case 1: return "url('/mindscape-bg.png')";
+      case 2: return "url('/bg-2.png')";
+      case 3: return "url('/bg-3.png')";
+      case 4: return "url('/bg-4.png')";
+      case 5: return "url('/bg-5.png')";
+      case 6: return "url('/bg-6.png')";
+      default: return "url('/mindscape-bg.png')";
+    }
+  };
+
   return (
     <div className="fixed inset-0 overflow-hidden select-none font-sans bg-[#0f172a] game-shake-target">
-      
+
+      {/* Preload images to prevent flickering on level up */}
+      <div className="hidden">
+        <img src="/bg-2.png" alt="preload" />
+        <img src="/bg-3.png" alt="preload" />
+        <img src="/bg-4.png" alt="preload" />
+        <img src="/bg-5.png" alt="preload" />
+        <img src="/bg-6.png" alt="preload" />
+      </div>
+
       {/* 8. Parallax wrapper (slightly larger than screen to hide edges) */}
-      <div 
-         className="absolute inset-[-5%] z-0 transition-transform duration-100 ease-out" 
-         style={{ transform: `translate(${-mousePos.x}px, ${-mousePos.y}px)` }}
+      <div
+        className="absolute inset-[-5%] z-0 transition-transform duration-100 ease-out"
+        style={{ transform: `translate(${-mousePos.x}px, ${-mousePos.y}px)` }}
       >
         {/* 9. Slow breathing animation */}
         <div className="absolute inset-0 animate-breathing origin-center">
-          
+
           {/* 1 & 2 & 10. Dynamic Background Image with Smooth Transition */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out" 
-            style={{ 
-              backgroundImage: "url('/mindscape-bg.png')",
-              filter: gameStatus === 'playing' ? `grayscale(${100 - connection}%) brightness(${0.5 + (connection/200)})` : 'none',
+          <div
+            className="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
+            style={{
+              backgroundImage: getBackgroundImage(level),
+              filter: gameStatus === 'playing' ? `grayscale(${100 - connection}%) brightness(${0.5 + (connection / 200)})` : 'none',
               opacity: 0.95
             }}
           />
@@ -328,9 +349,9 @@ function GameRunner() {
           <CracksOverlay connection={gameStatus === 'playing' ? connection : 100} />
 
           {/* 3. Radial Vignette */}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out"
-            style={{ 
+            style={{
               background: 'radial-gradient(ellipse at center, transparent 30%, rgba(15,23,42,0.95) 100%)',
               opacity: gameStatus === 'playing' ? 1 - (connection / 100) : 0
             }}
@@ -355,7 +376,7 @@ function GameRunner() {
       <OrientationGate />
       <LoadingScreen />
       <BackgroundMusic />
-      
+
       {/* Menu controls (hidden during gameplay) */}
       <MenuFullscreenToggle />
     </div>

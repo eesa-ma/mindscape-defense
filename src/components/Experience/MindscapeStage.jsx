@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Sparkles, Float, Sphere, Html } from '@react-three/drei';
+import { Sparkles, Float, Sphere, Html, useTexture } from '@react-three/drei';
 import { useGameState } from '../../hooks/useGameState';
 import Threat from './Threat';
 import ScreenSmoke from './ScreenSmoke';
@@ -140,6 +140,62 @@ function DecorativeFlora() {
 
 
 
+function MagicCarpet({ connection }) {
+  return (
+    <Float speed={2.5} rotationIntensity={0.15} floatIntensity={0.15}>
+      <group position={[0, -0.05, 0]}>
+        {/* Main carpet fabric (flat plane) */}
+        <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[4.5, 3.0]} />
+          <meshStandardMaterial color="#881337" metalness={0.1} roughness={0.9} side={2} />
+        </mesh>
+        
+        {/* Inner gold border */}
+        <mesh position={[0, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[4.1, 2.6]} />
+          <meshStandardMaterial color="#fcd34d" metalness={0.6} roughness={0.3} side={2} />
+        </mesh>
+
+        {/* Inner blue center */}
+        <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[3.7, 2.2]} />
+          <meshStandardMaterial color="#1e3a8a" metalness={0.2} roughness={0.8} side={2} />
+        </mesh>
+
+        {/* Center Gold Star/Diamond */}
+        <mesh position={[0, 0.03, 0]} rotation={[-Math.PI / 2, 0, Math.PI / 4]}>
+          <planeGeometry args={[1.0, 1.0]} />
+          <meshStandardMaterial color="#fcd34d" metalness={0.6} roughness={0.3} side={2} />
+        </mesh>
+
+        {/* Glowing magic aura under the carpet */}
+        <mesh position={[0, -0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[5.0, 3.5]} />
+          <meshBasicMaterial color="#38bdf8" transparent opacity={0.3 * (connection/100)} side={2} fog={false} />
+        </mesh>
+
+        {/* Gold tassels at corners */}
+        <mesh position={[2.25, -0.1, 1.5]}>
+          <cylinderGeometry args={[0.05, 0.02, 0.4, 8]} />
+          <meshBasicMaterial color="#fcd34d" />
+        </mesh>
+        <mesh position={[-2.25, -0.1, 1.5]}>
+          <cylinderGeometry args={[0.05, 0.02, 0.4, 8]} />
+          <meshBasicMaterial color="#fcd34d" />
+        </mesh>
+        <mesh position={[2.25, -0.1, -1.5]}>
+          <cylinderGeometry args={[0.05, 0.02, 0.4, 8]} />
+          <meshBasicMaterial color="#fcd34d" />
+        </mesh>
+        <mesh position={[-2.25, -0.1, -1.5]}>
+          <cylinderGeometry args={[0.05, 0.02, 0.4, 8]} />
+          <meshBasicMaterial color="#fcd34d" />
+        </mesh>
+      </group>
+    </Float>
+  );
+}
+
 function Environment() {
   const { connection, threats, spawnThreat, gameStatus, getStageModifiers, isPortrait, isPaused, playerName } = useGameState();
   
@@ -200,16 +256,10 @@ function Environment() {
           </div>
         </Html>
 
-        {/* Glowing aura ring at feet */}
-        <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.7, 0.85, 64]} />
-          <meshBasicMaterial color="#38bdf8" transparent opacity={0.7} side={2} fog={false} />
-        </mesh>
-        {/* Outer soft glow ring */}
-        <mesh position={[0, 0.03, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.85, 1.4, 64]} />
-          <meshBasicMaterial color="#0ea5e9" transparent opacity={0.15 * (connection/100)} side={2} fog={false} />
-        </mesh>
+        {/* Magic Flying Carpet with Texture */}
+        <Suspense fallback={null}>
+          <MagicCarpet connection={connection} />
+        </Suspense>
       </group>
 
       {/* 5. Dynamic Floating Particles */}
