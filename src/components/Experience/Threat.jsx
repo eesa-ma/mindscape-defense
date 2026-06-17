@@ -7,39 +7,38 @@ export default function Threat({ threatData }) {
   const meshRef = useRef();
   const visualGroupRef = useRef();
   const particlesRef = useRef();
-  
+  // Stable base X so sway oscillates around the spawn X
+  const baseX = useRef(threatData.position[0]);
+
   const { handleThreatCollision, targetedThreat, setTargetedThreat, isPortrait, isPaused } = useGameState();
   const isTargeted = targetedThreat?.id === threatData.id;
 
-  // New states for the destruction animation
   const [isDestroyed, setIsDestroyed] = useState(false);
   const [explodeTime, setExplodeTime] = useState(0);
 
-  // Generate random velocities for 30 explosion particles
   const particleCount = 30;
   const pVelocities = React.useMemo(() => {
     const v = [];
     for (let i = 0; i < particleCount; i++) {
       v.push([
-        (Math.random() - 0.5) * 0.2, // x velocity
-        (Math.random() - 0.5) * 0.2, // y velocity
-        (Math.random() - 0.5) * 0.2  // z velocity
+        (Math.random() - 0.5) * 0.22,
+        (Math.random() - 0.5) * 0.22,
+        (Math.random() - 0.5) * 0.22,
       ]);
     }
     return v;
   }, []);
 
   useFrame((state) => {
-    // If screen is in portrait mode, freeze frame logic
     if (isPortrait || isPaused) return;
 
-    // If destroyed, animate the explosion particles breaking outward
+    // Explosion particle animation
     if (isDestroyed) {
       setExplodeTime((prev) => prev + 1);
       if (particlesRef.current) {
         const positions = particlesRef.current.geometry.attributes.position.array;
         for (let i = 0; i < particleCount; i++) {
-          positions[i * 3] += pVelocities[i][0];
+          positions[i * 3]     += pVelocities[i][0];
           positions[i * 3 + 1] += pVelocities[i][1];
           positions[i * 3 + 2] += pVelocities[i][2];
         }
@@ -50,57 +49,50 @@ export default function Threat({ threatData }) {
 
     if (!meshRef.current) return;
 
-    // 1. Move closer to center [0, 0, 0]
-    meshRef.current.position.x -= Math.sign(meshRef.current.position.x) * threatData.speed;
-    meshRef.current.position.z -= Math.sign(meshRef.current.position.z) * threatData.speed;
+    // ── Vertical fall ──
+    meshRef.current.position.y -= threatData.speed * 1.2;
 
-    // 2. Y-axis organic bobbing wave
-    meshRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 2 + threatData.speed * 100) * 0.2;
+    // ── Gentle X sway (like wind-driven rain) ──
+    meshRef.current.position.x =
+      baseX.current +
+      Math.sin(state.clock.getElapsedTime() * 1.5 + threatData.speed * 100) * 0.38;
 
-    // 3. Spin crystal shard geometry
+    // ── Spin the gem ──
     if (visualGroupRef.current) {
-      visualGroupRef.current.rotation.y += 0.02;
+      visualGroupRef.current.rotation.y += 0.028;
+      visualGroupRef.current.rotation.z += 0.009;
     }
 
-    // 4. Collision threshold check
-    const distance = Math.sqrt(
-      meshRef.current.position.x ** 2 + meshRef.current.position.z ** 2
-    );
-
-    if (distance < 1.3) {
+    // ── Collision: threat reached player level at bottom ──
+    if (meshRef.current.position.y < -3.5) {
       handleThreatCollision(threatData.id);
     }
   });
 
-  // Intercept the removal to play our animation first
+  // Unused effect kept for structural parity
   React.useEffect(() => {
-    // If this threat was targeted but is suddenly missing from global state, it means it was successfully countered!
-    if (!isDestroyed && targetedThreat?.id !== threatData.id && meshRef.current === undefined) {
-      // Small trick: state updates happen instantly, we can listen to parent changes if needed, 
-      // but to make it foolproof we will let the executeCopingStrategy trigger a local switch.
-    }
+    if (!isDestroyed && targetedThreat?.id !== threatData.id && meshRef.current === undefined) {}
   }, [targetedThreat, threatData.id, isDestroyed]);
 
-  // Expose a way for the engine to shatter this crystal smoothly
-  // To link this flawlessly, we update the removal sequence to trigger local destruction first
+  // Color spec per threat category (dark-storm palette)
   const specs = (() => {
     switch (threatData.type) {
       case 'Burnout': case 'Exhaustion': case 'Creative Block':
-        return { color: '#fbbf24', labelColor: 'text-amber-950 border-slate-800 bg-amber-100' };
+        return { color: '#f59e0b', labelColor: 'text-amber-900 border-amber-500 bg-amber-100/95' };
       case 'Academic Pressure': case 'Procrastination': case 'Overwhelm':
-        return { color: '#60a5fa', labelColor: 'text-blue-950 border-slate-800 bg-blue-100' };
+        return { color: '#3b82f6', labelColor: 'text-blue-900 border-blue-500 bg-blue-100/95' };
       case 'Social Rejection': case 'Loneliness': case 'Imposter Syndrome':
-        return { color: '#c084fc', labelColor: 'text-purple-950 border-slate-800 bg-purple-100' };
+        return { color: '#a855f7', labelColor: 'text-purple-900 border-purple-500 bg-purple-100/95' };
       case 'Negative Thoughts': case 'Self-Doubt': case 'Anxiety':
-        return { color: '#f43f5e', labelColor: 'text-rose-950 border-slate-800 bg-rose-100' };
+        return { color: '#ef4444', labelColor: 'text-rose-900 border-rose-500 bg-rose-100/95' };
       case 'Isolation': case 'Ghosting': case 'Detachment':
-        return { color: '#818cf8', labelColor: 'text-indigo-950 border-slate-800 bg-indigo-100' };
+        return { color: '#6366f1', labelColor: 'text-indigo-900 border-indigo-500 bg-indigo-100/95' };
       case 'Social Comparison': case 'FOMO': case 'Cyberbullying':
-        return { color: '#2dd4bf', labelColor: 'text-teal-950 border-slate-800 bg-teal-100' };
+        return { color: '#14b8a6', labelColor: 'text-teal-900 border-teal-500 bg-teal-100/95' };
       case 'Family Conflict': case 'Misunderstandings': case 'Peer Pressure':
-        return { color: '#f472b6', labelColor: 'text-pink-950 border-slate-800 bg-pink-100' };
+        return { color: '#ec4899', labelColor: 'text-pink-900 border-pink-500 bg-pink-100/95' };
       default:
-        return { color: '#cbd5e1', labelColor: 'text-slate-900 border-slate-800 bg-slate-100' };
+        return { color: '#64748b', labelColor: 'text-slate-900 border-slate-400 bg-slate-100/95' };
     }
   })();
 
@@ -111,26 +103,24 @@ export default function Threat({ threatData }) {
     'Negative Thoughts': '🌩️', 'Self-Doubt': '😰', 'Anxiety': '💭',
     'Isolation': '🚪', 'Ghosting': '🔇', 'Detachment': '❄️',
     'Social Comparison': '📱', 'FOMO': '👀', 'Cyberbullying': '💔',
-    'Family Conflict': '💥', 'Misunderstandings': '🗣️❌', 'Peer Pressure': '👥'
+    'Family Conflict': '💥', 'Misunderstandings': '🗣️❌', 'Peer Pressure': '👥',
   };
 
-  // Hack to make executeCopingStrategy trigger this component's local animation
-  // We check if the global threats array still has us; if it doesn't, we show particles for 20 frames before vanishing completely.
   const { threats } = useGameState();
-  const stillExists = threats.some(t => t.id === threatData.id);
+  const stillExists = threats.some((t) => t.id === threatData.id);
 
   if (!stillExists && !isDestroyed) {
     setIsDestroyed(true);
   }
 
   if (isDestroyed && explodeTime > 25) {
-    return null; // completely kill component once animation completes
+    return null;
   }
 
   return (
     <group ref={meshRef} position={threatData.position}>
       {isDestroyed ? (
-        // EXPLOSION PARTICLES
+        // ── Burst particles ──
         <points ref={particlesRef}>
           <bufferGeometry>
             <bufferAttribute
@@ -138,54 +128,89 @@ export default function Threat({ threatData }) {
               args={[new Float32Array(particleCount * 3), 3]}
             />
           </bufferGeometry>
-          <pointsMaterial color={specs.color} size={0.3} transparent opacity={1 - explodeTime / 25} />
+          <pointsMaterial
+            color={specs.color}
+            size={0.28}
+            transparent
+            opacity={1 - explodeTime / 25}
+          />
         </points>
       ) : (
-        // ACTIVE CRYSTAL SHARD
         <>
-          <Html
-            distanceFactor={15}
-            position={[0, 1.1, 0]}
-            center
-            className="select-none"
-          >
-            <div 
+          {/* ── Threat label (floats above gem) ── */}
+          <Html distanceFactor={10} position={[0, 1.15, 0]} center className="select-none">
+            <div
               onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}
-              className={`pointer-events-auto cursor-pointer whitespace-nowrap px-3 py-1.5 text-[10px] font-extrabold rounded-2xl border-2 border-slate-800 transition-all duration-300 shadow-[2px_2px_0px_rgba(30,41,59,1)] ${specs.labelColor} ${
-                isTargeted ? 'scale-110 border-slate-800 shadow-[2.5px_2.5px_0px_rgba(245,158,11,1)]' : 'opacity-90'
+              className={`pointer-events-auto cursor-pointer whitespace-nowrap px-4 py-2.5 text-lg font-extrabold rounded-2xl border-[3px] transition-all duration-300 backdrop-blur-sm ${specs.labelColor} ${
+                isTargeted
+                  ? 'scale-110 border-yellow-500 shadow-[0_0_16px_rgba(234,179,8,0.6)]'
+                  : 'shadow-[2px_3px_0px_rgba(30,41,59,0.35)] opacity-95'
               }`}
             >
-              <span className="mr-1">{THREAT_EMOJIS[threatData.type] || '⚠️'}</span>
+              <span className="mr-1.5 text-base">{THREAT_EMOJIS[threatData.type] || '⚠️'}</span>
               {threatData.type}
             </div>
           </Html>
 
-          <group ref={visualGroupRef} onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}>
-            {/* Cute rotating candy gemstone */}
-            <mesh position={[0, 0, 0]}>
+          {/* ── Storm raindrop gem ── */}
+          <group
+            ref={visualGroupRef}
+            onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}
+          >
+            {/* Elongated gem body */}
+            <mesh position={[0, 0, 0]} scale={[0.82, 1.28, 0.82]}>
               <dodecahedronGeometry args={[0.38, 1]} />
-              <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.5 : 0.7} flatShading fog={false} />
+              <meshStandardMaterial
+                color={specs.color}
+                emissive={specs.color}
+                emissiveIntensity={isTargeted ? 2.8 : 1.1}
+                flatShading
+                fog={false}
+                transparent
+                opacity={0.92}
+              />
             </mesh>
-            
-            {/* Bubbly white rotating halo ring when targeted */}
+
+            {/* Teardrop tail pointing downward */}
+            <mesh position={[0, -0.52, 0]} rotation={[0, 0, Math.PI]}>
+              <coneGeometry args={[0.11, 0.38, 6]} />
+              <meshStandardMaterial
+                color={specs.color}
+                emissive={specs.color}
+                emissiveIntensity={isTargeted ? 1.6 : 0.55}
+                transparent
+                opacity={0.72}
+                fog={false}
+              />
+            </mesh>
+
+            {/* Gold targeting ring when selected */}
             {isTargeted && (
               <mesh position={[0, 0, 0]} rotation={[Math.PI / 3, 0, 0]}>
-                <torusGeometry args={[0.62, 0.045, 8, 24]} />
-                <meshBasicMaterial color="#ffffff" transparent opacity={0.75} fog={false} />
+                <torusGeometry args={[0.72, 0.052, 8, 24]} />
+                <meshBasicMaterial color="#facc15" transparent opacity={0.88} fog={false} />
               </mesh>
             )}
           </group>
 
-          {/* LAZER BEAM HINT: If targeted, show a subtle connecting line to player */}
+          {/* Thin beam hinting at the targeted threat */}
           {isTargeted && (
             <line>
               <bufferGeometry>
                 <bufferAttribute
                   attach="attributes-position"
-                  args={[new Float32Array([0, 0, 0, -threatData.position[0], -threatData.position[1], -threatData.position[2]]), 3]}
+                  args={[
+                    new Float32Array([
+                      0, 0, 0,
+                      -threatData.position[0],
+                      -threatData.position[1],
+                      -threatData.position[2],
+                    ]),
+                    3,
+                  ]}
                 />
               </bufferGeometry>
-              <lineBasicMaterial color="#38bdf8" transparent opacity={0.35} linewidth={2} fog={false} />
+              <lineBasicMaterial color="#facc15" transparent opacity={0.22} linewidth={2} fog={false} />
             </line>
           )}
         </>

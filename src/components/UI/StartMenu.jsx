@@ -68,21 +68,60 @@ export default function StartMenu() {
               🛡️ Shield Your Focus, Cultivate Resilience 🛡️
             </p>
 
-            <div className="flex flex-col gap-4 w-full h-sm:gap-2.5 h-xs:gap-2">
+            <div className="flex flex-col gap-3 w-full h-sm:gap-2 h-xs:gap-1.5">
+              {/* Difficulty label */}
+              <p className="text-[10px] sm:text-xs font-extrabold text-slate-500 uppercase tracking-widest text-center h-sm:text-[0.55rem]">
+                🎯 Choose Your Level
+              </p>
+
+              {/* Easy */}
               <button
-                onClick={startGame}
-                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
+                onClick={() => startGame('easy')}
+                className="w-full py-3 sm:py-3.5 h-sm:py-2 h-xs:py-1.5 bg-emerald-200 hover:bg-emerald-300 border-[3px] border-slate-800 text-slate-800 font-extrabold rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-[1.02] active:scale-[0.98] active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-between px-4 gap-2 h-sm:rounded-[0.85rem] h-sm:border-[2.5px] h-sm:text-[0.75rem] h-sm:px-3"
               >
-                🎮 Start Game
+                <span className="text-lg h-sm:text-base">🌱</span>
+                <span className="flex-1 text-left">
+                  <span className="block text-sm sm:text-base font-black h-sm:text-[0.75rem]">Easy</span>
+                  <span className="block text-[10px] sm:text-xs font-bold text-emerald-800 h-sm:text-[0.6rem]">2 coping options · Slow spawn</span>
+                </span>
+                <span className="text-xs sm:text-sm font-black text-emerald-700 bg-white/60 px-2 py-0.5 rounded-xl border border-emerald-400 h-sm:text-[0.6rem] h-sm:px-1.5">Q · W</span>
               </button>
 
+              {/* Medium */}
+              <button
+                onClick={() => startGame('medium')}
+                className="w-full py-3 sm:py-3.5 h-sm:py-2 h-xs:py-1.5 bg-amber-200 hover:bg-amber-300 border-[3px] border-slate-800 text-slate-800 font-extrabold rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-[1.02] active:scale-[0.98] active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-between px-4 gap-2 h-sm:rounded-[0.85rem] h-sm:border-[2.5px] h-sm:text-[0.75rem] h-sm:px-3"
+              >
+                <span className="text-lg h-sm:text-base">⚡</span>
+                <span className="flex-1 text-left">
+                  <span className="block text-sm sm:text-base font-black h-sm:text-[0.75rem]">Medium</span>
+                  <span className="block text-[10px] sm:text-xs font-bold text-amber-800 h-sm:text-[0.6rem]">4 coping options · Medium spawn</span>
+                </span>
+                <span className="text-xs sm:text-sm font-black text-amber-700 bg-white/60 px-2 py-0.5 rounded-xl border border-amber-400 h-sm:text-[0.6rem] h-sm:px-1.5">Q·W·E·R</span>
+              </button>
+
+              {/* Hard */}
+              <button
+                onClick={() => startGame('hard')}
+                className="w-full py-3 sm:py-3.5 h-sm:py-2 h-xs:py-1.5 bg-rose-200 hover:bg-rose-300 border-[3px] border-slate-800 text-slate-800 font-extrabold rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-[1.02] active:scale-[0.98] active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-between px-4 gap-2 h-sm:rounded-[0.85rem] h-sm:border-[2.5px] h-sm:text-[0.75rem] h-sm:px-3"
+              >
+                <span className="text-lg h-sm:text-base">🔥</span>
+                <span className="flex-1 text-left">
+                  <span className="block text-sm sm:text-base font-black h-sm:text-[0.75rem]">Hard</span>
+                  <span className="block text-[10px] sm:text-xs font-bold text-rose-800 h-sm:text-[0.6rem]">6 coping options · Fast spawn</span>
+                </span>
+                <span className="text-xs sm:text-sm font-black text-rose-700 bg-white/60 px-2 py-0.5 rounded-xl border border-rose-400 h-sm:text-[0.6rem] h-sm:px-1.5">Q·W·E·R·A·S</span>
+              </button>
+
+              {/* How to Play */}
               <button
                 onClick={() => setShowInstructions(true)}
-                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 sm:py-3.5 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-200 hover:bg-violet-300 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-[1.02] active:scale-[0.98] active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 📖 How to Play
               </button>
             </div>
+
           </motion.div>
         ) : (
           <motion.div

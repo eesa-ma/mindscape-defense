@@ -13,40 +13,46 @@ const STYLE_MAP = {
 };
 
 const EMOJI_MAP = {
-  Q: '😴',
-  W: '🫂',
-  E: '⏰',
-  R: '✨',
-  A: '💌',
-  S: '📵',
-  D: '💬',
+  Q: '😴', W: '🫂', E: '⏰', R: '✨', A: '💌', S: '📵', D: '💬',
+};
+
+// Which coping keys are available per difficulty
+const DIFFICULTY_KEYS = {
+  easy:   ['Q', 'W'],
+  medium: ['Q', 'W', 'E', 'R'],
+  hard:   ['Q', 'W', 'E', 'R', 'A', 'S'],
 };
 
 export default function CopingDock() {
-  const { executeCopingStrategy, gameStatus } = useGameState();
+  const { executeCopingStrategy, gameStatus, difficulty } = useGameState();
 
   if (gameStatus !== 'playing') return null;
 
+  const activeKeys = DIFFICULTY_KEYS[difficulty] || DIFFICULTY_KEYS.easy;
+  const activeMechanisms = Object.values(COPING_MECHANISMS).filter(m =>
+    activeKeys.includes(m.key)
+  );
+
   return (
-    <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-2 sm:gap-3 md:gap-4 bg-pink-50/95 border-[3px] border-slate-800 p-2 sm:p-3.5 rounded-3xl shadow-[4px_4px_0px_rgba(30,41,59,1)] w-[95%] sm:w-auto max-w-[95vw] sm:max-w-none overflow-x-auto sm:overflow-x-visible pointer-events-auto h-sm:p-2 h-sm:gap-1.5 h-sm:bottom-2 h-sm:rounded-2xl h-xs:p-1.5 h-xs:gap-1 h-xs:bottom-1.5">
-      {Object.values(COPING_MECHANISMS).map((mechanism) => {
+    <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-2 sm:gap-3 md:gap-4 bg-white/80 backdrop-blur-sm border-[3px] border-slate-700 p-2 sm:p-3.5 rounded-3xl shadow-[4px_4px_0px_rgba(30,41,59,0.7)] w-[95%] sm:w-auto max-w-[95vw] sm:max-w-none overflow-x-auto sm:overflow-x-visible pointer-events-auto h-sm:p-2 h-sm:gap-1.5 h-sm:bottom-2 h-sm:rounded-2xl h-xs:p-1.5 h-xs:gap-1 h-xs:bottom-1.5">
+      {activeMechanisms.map((mechanism) => {
         const colorStyle = STYLE_MAP[mechanism.key] || 'bg-slate-50 border-slate-200 text-slate-900';
 
         return (
           <button
             key={mechanism.key}
             onClick={() => executeCopingStrategy(mechanism)}
-            className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl border-[3px] border-slate-800 flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] ${colorStyle} shadow-[3px_3px_0px_rgba(30,41,59,1)] shrink-0 h-sm:w-23 h-sm:h-15 h-sm:rounded-[0.85rem] h-sm:py-0.5 h-sm:px-1 h-xs:w-19 h-xs:h-11 h-xs:rounded-[0.6rem] h-xs:py-0 h-xs:px-0.5`}
+            className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl border-[3px] border-slate-700 flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,0.7)] ${colorStyle} shadow-[3px_3px_0px_rgba(30,41,59,0.7)] shrink-0 h-sm:w-23 h-sm:h-15 h-sm:rounded-[0.85rem] h-sm:py-0.5 h-sm:px-1 h-xs:w-19 h-xs:h-11 h-xs:rounded-[0.6rem] h-xs:py-0 h-xs:px-0.5`}
           >
             <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1 h-sm:mb-0 h-xs:mb-0">
               <span className="text-base sm:text-lg md:text-xl lg:text-2xl transition-transform duration-200 group-hover:scale-110 h-sm:text-base h-xs:text-[13px]">
                 {EMOJI_MAP[mechanism.key]}
               </span>
-              <kbd className="text-[9px] sm:text-xs md:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 sm:px-1.5 sm:py-0.5 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[8px] h-sm:py-0 h-sm:px-0.5 h-xs:hidden">
+              <kbd className="text-[9px] sm:text-xs md:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 sm:px-1.5 sm:py-0.5 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,0.5)] h-sm:text-[8px] h-sm:py-0 h-sm:px-0.5 h-xs:hidden">
                 {mechanism.key}
               </kbd>
             </div>
-            <span className="text-[7px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[8px] h-sm:mt-0 h-sm:leading-none h-sm:normal-case h-xs:text-[7px] h-xs:mt-0 h-xs:leading-[0.95]">
+            <span className="text-[7px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[8px] h-sm:mt-0 h-sm:leading-none h-xs:text-[7px]">
               {mechanism.label}
             </span>
           </button>

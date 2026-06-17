@@ -11,9 +11,10 @@ export default function PlayerModel(props) {
   const { nodes, materials } = useGraph(clone)
   const { actions } = useAnimations(animations, group)
 
-  const { score, connection, isPortrait } = useGameState()
+  const { score, connection, lives, isPortrait } = useGameState()
   const prevScoreRef = useRef(score)
   const prevConnectionRef = useRef(connection)
+  const prevLivesRef = useRef(lives)
 
   const [reaction, setReaction] = useState(null) // 'success' | 'failure' | null
   const originalEmissive = useRef(null)
@@ -62,6 +63,20 @@ export default function PlayerModel(props) {
     }
     prevConnectionRef.current = connection
   }, [connection])
+
+  // Track lightning hit (lives decrease) -> same shudder + red flash
+  useEffect(() => {
+    if (lives < prevLivesRef.current) {
+      setReaction('failure')
+
+      const timer = setTimeout(() => {
+        setReaction(null)
+      }, 800)
+
+      return () => clearTimeout(timer)
+    }
+    prevLivesRef.current = lives
+  }, [lives])
 
   // Frame loop for dynamic, responsive movements
   useFrame((state) => {

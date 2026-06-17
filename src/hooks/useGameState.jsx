@@ -10,7 +10,9 @@ export const GameStateProvider = ({ children }) => {
   const [activeInsight, setActiveInsight] = useState(null);
   const [threats, setThreats] = useState([]);
   const [targetedThreat, setTargetedThreat] = useState(null);
-  
+  const [lightningActive, setLightningActive] = useState(false);
+  const [difficulty, setDifficulty] = useState('easy'); // 'easy' | 'medium' | 'hard'
+
   const [gameStatus, setGameStatus] = useState('menu'); 
   const [isPaused, setIsPaused] = useState(false);
   const [timer, setTimer] = useState(60); 
@@ -36,12 +38,15 @@ export const GameStateProvider = ({ children }) => {
     }
   }, []);
 
-  // Difficulty scaling logic based on game plan stages
+  // Spawn rate scales with stage + difficulty; speed NEVER changes (always 1.0)
   const getStageModifiers = useCallback(() => {
-    if (gameStage === 'mid') return { spawnRate: 3000, speedMultiplier: 1.5 }; 
-    if (gameStage === 'late') return { spawnRate: 1800, speedMultiplier: 2.2 }; 
-    return { spawnRate: 4500, speedMultiplier: 1.0 }; 
-  }, [gameStage]);
+    const baseRate =
+      difficulty === 'hard'   ? 2800 :
+      difficulty === 'medium' ? 4000 : 5500;
+    if (gameStage === 'mid')  return { spawnRate: Math.round(baseRate * 0.75), speedMultiplier: 1.0 };
+    if (gameStage === 'late') return { spawnRate: Math.round(baseRate * 0.55), speedMultiplier: 1.0 };
+    return { spawnRate: baseRate, speedMultiplier: 1.0 };
+  }, [gameStage, difficulty]);
 
   useEffect(() => {
     if (gameStatus !== 'playing' || isPortrait || isPaused) return;
@@ -100,15 +105,16 @@ export const GameStateProvider = ({ children }) => {
   const spawnThreat = useCallback((type) => {
     if (gameStatus !== 'playing' || isPaused) return;
 
-    const angle = Math.random() * Math.PI * 2;
-    const spawnDistance = 15;
+    // Front-facing scene: threats fall from top (high Y), random X spread
+    const randomX = (Math.random() - 0.5) * 18;      // −9 … +9
+    const topY    = 5.0 + Math.random() * 2.0;        // 5.0 … 7.0 (below clouds)
     const modifiers = getStageModifiers();
-    
+
     const newThreat = {
       id: Math.random().toString(36).substr(2, 9),
       type: type,
-      position: [Math.cos(angle) * spawnDistance, 0, Math.sin(angle) * spawnDistance],
-      speed: (0.02 + Math.random() * 0.02) * modifiers.speedMultiplier,
+      position: [randomX, topY, 0],
+      speed: (0.006 + Math.random() * 0.005) * modifiers.speedMultiplier,
     };
 
     setThreats(prev => {
@@ -149,21 +155,25 @@ export const GameStateProvider = ({ children }) => {
     audioSynth.playClick(); // play input pop sound
 
     if (strategy.counteracts.includes(targetedThreat.type)) {
+      // ✅ Correct coping — rain lightens, connection grows
       handleSuccessfulCope(100, strategy.insight);
       removeThreat(targetedThreat.id);
     } else {
-      audioSynth.playFailure(); // play warning slide on incorrect cope
-      const penalty = gameStage === 'late' ? 25 : 15;
-      setConnection(prev => {
-        const next = Math.max(prev - penalty, 0);
+      // ⚡ Wrong coping — lightning strike, lose a life
+      audioSynth.playFailure();
+      setLightningActive(true);
+      setTimeout(() => setLightningActive(false), 750);
+      setLives(prev => {
+        const next = Math.max(prev - 1, 0);
         if (next <= 0) setGameStatus('lost');
         return next;
       });
     }
   };
 
-  const startGame = () => {
+  const startGame = (diff = 'easy') => {
     audioSynth.playClick();
+    setDifficulty(diff);
     setConnection(100);
     setLives(3);
     setScore(0);
@@ -207,8 +217,10 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused, isMuted,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers, startGame, goToMenu
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage,
+      isPortrait, isPaused, isMuted, lightningActive, difficulty,
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy,
+      restartGame, togglePause, quitGame, toggleMute, getStageModifiers, startGame, goToMenu
     }}>
       {children}
     </GameStateContext.Provider>
