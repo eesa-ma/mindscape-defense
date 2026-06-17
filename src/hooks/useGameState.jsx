@@ -14,6 +14,7 @@ export const GameStateProvider = ({ children }) => {
   const [gameStatus, setGameStatus] = useState('splash');
   const [isPaused, setIsPaused] = useState(false);
   const [isCelebrating, setIsCelebrating] = useState(false);
+  const [isMistake, setIsMistake] = useState(false);
   const [level, setLevel] = useState(1);
   const [maxUnlockedLevel, setMaxUnlockedLevel] = useState(() => {
     const saved = localStorage.getItem('mindscapeMaxLevel');
@@ -213,6 +214,8 @@ export const GameStateProvider = ({ children }) => {
     } else {
       audioSynth.playFailure(); // play warning slide on incorrect cope
       setWrongAnswerCount(prev => prev + 1);
+      setIsMistake(true);
+      setTimeout(() => setIsMistake(false), 2000);
       const penalty = level >= 4 ? 25 : 15;
       setConnection(prev => {
         const next = Math.max(prev - penalty, 0);
@@ -290,7 +293,7 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount, playerName, hasSetPlayerName, isCelebrating,
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount, playerName, hasSetPlayerName, isCelebrating, isMistake,
       setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, enterGame, startGame, startLevel, returnToLevelSelect, goToMenu, resetProgress, updatePlayerName
     }}>
       {children}
