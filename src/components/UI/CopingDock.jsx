@@ -27,31 +27,45 @@ export default function CopingDock() {
 
   if (gameStatus !== 'playing') return null;
 
-  return (
-    <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-2 sm:gap-3 md:gap-4 bg-pink-50/95 border-[3px] border-slate-800 p-2 sm:p-3.5 rounded-3xl shadow-[4px_4px_0px_rgba(30,41,59,1)] w-[95%] sm:w-auto max-w-[95vw] sm:max-w-none overflow-x-auto sm:overflow-x-visible pointer-events-auto h-sm:p-2 h-sm:gap-1.5 h-sm:bottom-2 h-sm:rounded-2xl h-xs:p-1.5 h-xs:gap-1 h-xs:bottom-1.5">
-      {Object.values(COPING_MECHANISMS).map((mechanism) => {
-        const colorStyle = STYLE_MAP[mechanism.key] || 'bg-slate-50 border-slate-200 text-slate-900';
+  const allMechanisms = Object.values(COPING_MECHANISMS);
+  const leftMechanisms = allMechanisms.slice(0, 3);
+  const rightMechanisms = allMechanisms.slice(3);
 
-        return (
-          <button
-            key={mechanism.key}
-            onClick={() => executeCopingStrategy(mechanism)}
-            className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl border-[3px] border-slate-800 flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] ${colorStyle} shadow-[3px_3px_0px_rgba(30,41,59,1)] shrink-0 h-sm:w-23 h-sm:h-15 h-sm:rounded-[0.85rem] h-sm:py-0.5 h-sm:px-1 h-xs:w-19 h-xs:h-11 h-xs:rounded-[0.6rem] h-xs:py-0 h-xs:px-0.5`}
-          >
-            <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1 h-sm:mb-0 h-xs:mb-0">
-              <span className="text-base sm:text-lg md:text-xl lg:text-2xl transition-transform duration-200 group-hover:scale-110 h-sm:text-base h-xs:text-[13px]">
-                {EMOJI_MAP[mechanism.key]}
-              </span>
-              <kbd className="text-[9px] sm:text-xs md:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 sm:px-1.5 sm:py-0.5 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[8px] h-sm:py-0 h-sm:px-0.5 h-xs:hidden">
-                {mechanism.key}
-              </kbd>
-            </div>
-            <span className="text-[7px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[8px] h-sm:mt-0 h-sm:leading-none h-sm:normal-case h-xs:text-[7px] h-xs:mt-0 h-xs:leading-[0.95]">
-              {mechanism.label}
-            </span>
-          </button>
-        );
-      })}
+  const renderMechanism = (mechanism) => {
+    const colorStyle = STYLE_MAP[mechanism.key] || 'bg-slate-50 border-slate-200 text-slate-900';
+
+    return (
+      <button
+        key={mechanism.key}
+        onClick={() => executeCopingStrategy(mechanism)}
+        className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl border-[3px] border-slate-800 flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] ${colorStyle} shadow-[3px_3px_0px_rgba(30,41,59,1)] shrink-0 h-sm:w-20 h-sm:h-14 h-sm:rounded-[0.85rem] h-xs:w-16 h-xs:h-10 h-xs:rounded-[0.6rem]`}
+      >
+        <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 h-sm:mb-0 h-xs:mb-0">
+          <span className="text-sm sm:text-base md:text-lg lg:text-2xl transition-transform duration-200 group-hover:scale-110 h-sm:text-sm h-xs:text-[11px]">
+            {EMOJI_MAP[mechanism.key]}
+          </span>
+          <kbd className="text-[8px] sm:text-[10px] md:text-xs lg:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[8px] h-xs:hidden">
+            {mechanism.key}
+          </kbd>
+        </div>
+        <span className="text-[6px] sm:text-[7px] md:text-[9px] lg:text-[11px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[7px] h-sm:leading-none h-xs:text-[6px] h-xs:leading-[0.95]">
+          {mechanism.label}
+        </span>
+      </button>
+    );
+  };
+
+  return (
+    <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 w-full px-2 sm:px-4 md:px-8 z-50 flex justify-between items-end pointer-events-none">
+      {/* Left side controls */}
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-3 pointer-events-auto bg-pink-50/95 border-[3px] border-slate-800 p-1.5 sm:p-2 md:p-3 rounded-2xl sm:rounded-3xl shadow-[4px_4px_0px_rgba(30,41,59,1)] max-w-[48%]">
+        {leftMechanisms.map(renderMechanism)}
+      </div>
+
+      {/* Right side controls */}
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-3 pointer-events-auto bg-pink-50/95 border-[3px] border-slate-800 p-1.5 sm:p-2 md:p-3 rounded-2xl sm:rounded-3xl shadow-[4px_4px_0px_rgba(30,41,59,1)] max-w-[48%] justify-end">
+        {rightMechanisms.map(renderMechanism)}
+      </div>
     </div>
   );
 }

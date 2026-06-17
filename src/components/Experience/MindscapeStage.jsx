@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { Sparkles, Float, Sphere } from '@react-three/drei';
 import { useGameState } from '../../hooks/useGameState';
 import Threat from './Threat';
 import FogRing from './FogRing';
-import PlayerModel from './PlayerModel';
+import ScreenSmoke from './ScreenSmoke';
+import ManModel from './ManModel';
 
 const interpolateColor = (color1, color2, factor) => {
   const r1 = parseInt(color1.substring(1, 3), 16);
@@ -25,47 +27,11 @@ const interpolateColor = (color1, color2, factor) => {
   return `#${rs}${gs}${bs}`;
 };
 
-function Sparkles() {
-  const pointsRef = useRef();
-  const particleCount = 25;
-  const positions = useMemo(() => {
-    const pos = [];
-    for (let i = 0; i < particleCount; i++) {
-      const radius = 0.5 + Math.random() * 0.9;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos((Math.random() * 2) - 1);
-      pos.push(
-        radius * Math.sin(phi) * Math.cos(theta),
-        0.5 + radius * Math.sin(phi) * Math.sin(theta),
-        radius * Math.cos(phi)
-      );
-    }
-    return new Float32Array(pos);
-  }, []);
 
-  useFrame((state) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
-      pointsRef.current.rotation.x = state.clock.getElapsedTime() * 0.08;
-    }
-  });
 
+function GuideRings({ position = [0, 0, 0] }) {
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
-      </bufferGeometry>
-      <pointsMaterial color="#fef08a" size={0.12} transparent opacity={0.8} />
-    </points>
-  );
-}
-
-function GuideRings() {
-  return (
-    <group rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
+    <group rotation={[-Math.PI / 2, 0, 0]} position={[position[0], position[1] + 0.02, position[2]]}>
       {/* Outer boundary indicator */}
       <mesh>
         <ringGeometry args={[9.5, 9.6, 64]} />
@@ -173,11 +139,22 @@ function DecorativeFlora() {
   );
 }
 
+
+
 function Environment() {
   const { connection, threats, spawnThreat, gameStatus, getStageModifiers, isPortrait, isPaused } = useGameState();
-  const fogDensity = 0.03 + (100 - connection) * 0.003;
+  
+  // 4. Fog Thickens exponentially at low connection
+  const fogDensity = 0.005 + Math.pow((100 - connection) / 100, 2.5) * 0.12;
   const factor = (100 - connection) / 100;
-  const fogColor = interpolateColor('#ffd3b6', '#e0e7ff', factor);
+  
+  // Transition from warm pastel to cool lonely gray fog
+  const fogColor = interpolateColor('#ffd3b6', '#cbd5e1', factor);
+  
+  const ambientIntensity = 0.85 - (factor * 0.4); 
+  const ambientColor = interpolateColor('#fff1f2', '#e2e8f0', factor);
+  const dirIntensity = 2.2 - (factor * 1.0); 
+  const dirColor = interpolateColor('#fffbeb', '#94a3b8', factor);
 
   useEffect(() => {
     if (gameStatus !== 'playing' || isPortrait || isPaused) return;
@@ -205,35 +182,53 @@ function Environment() {
 
   return (
     <>
-      {/* Warm ambient and golden sun directional light */}
-      <ambientLight intensity={0.75} color="#fff1f2" />
-      <directionalLight position={[5, 12, 5]} intensity={2.2} color="#fffbeb" />
+      {/* Dynamic ambient and directional light */}
+      <ambientLight intensity={ambientIntensity} color={ambientColor} />
+      <directionalLight position={[5, 12, 5]} intensity={dirIntensity} color={dirColor} />
 
       {/* Dynamic warm pastel environmental mist */}
       <fogExp2 attach="fog" color={fogColor} density={fogDensity} />
 
-      <FogRing />
-      <GuideRings />
-      <DecorativeFlora />
+      {/* Volumetric Smoke covering the screen */}
+      <ScreenSmoke />
 
-      {/* The Central Player Anchor - Now a Real Human Avatar */}
-      <group position={[0, 0, 0]} scale={1.6}>
+      {/* The Central Player Anchor */}
+      <group position={[0, 0, 6]} scale={0.4}>
         <Suspense fallback={
           <mesh position={[0, 0.65, 0]}>
             <cylinderGeometry args={[0.2, 0.35, 1.0, 8]} />
             <meshStandardMaterial color="#0ea5e9" wireframe fog={false} />
           </mesh>
         }>
-          <PlayerModel position={[0, 0, 0]} />
+          <group rotation={[0, Math.PI, 0]}>
+            <ManModel position={[0, 0, 0]} />
+          </group>
         </Suspense>
 
-        {/* Keep the awesome aura ring at the feet! */}
+        {/* Glowing aura ring at feet */}
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.6, 0.7, 32]} />
-          <meshBasicMaterial color="#38bdf8" transparent opacity={0.5} side={2} fog={false} />
+          <ringGeometry args={[0.7, 0.85, 64]} />
+          <meshBasicMaterial color="#38bdf8" transparent opacity={0.7} side={2} fog={false} />
         </mesh>
-        <Sparkles />
+        {/* Outer soft glow ring */}
+        <mesh position={[0, 0.03, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.85, 1.4, 64]} />
+          <meshBasicMaterial color="#0ea5e9" transparent opacity={0.15 * (connection/100)} side={2} fog={false} />
+        </mesh>
       </group>
+
+      {/* 5. Dynamic Floating Particles */}
+      <Sparkles 
+        count={Math.max(10, Math.floor(connection * 2))} 
+        opacity={connection / 100} 
+        scale={25} 
+        size={5} 
+        speed={0.4} 
+        color="#fde047" 
+        position={[0, 2, 6]} 
+      />
+
+
 
       {threats.map((threat) => (
         <Threat key={threat.id} threatData={threat} />

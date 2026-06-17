@@ -34,17 +34,17 @@ export default function FogRing() {
     groupRef.current.children.forEach((child, i) => {
       const c = clouds[i];
       const time = state.clock.getElapsedTime();
-      
+
       // Let the clouds slowly swirl around the player
       const currentAngle = c.angle + (time * c.rotationSpeed);
-      
+
       const targetX = Math.cos(currentAngle) * targetRadius;
       const targetZ = Math.sin(currentAngle) * targetRadius;
 
       // Smooth transition easing (lerp) so the fog slides fluidly when values change
       child.position.x += (targetX - child.position.x) * 0.05;
       child.position.z += (targetZ - child.position.z) * 0.05;
-      
+
       // Billowing vertical wave animation
       child.position.y = Math.sin(time * 0.4 + c.phase) * 0.3 + 0.5;
       child.rotation.y += 0.001;

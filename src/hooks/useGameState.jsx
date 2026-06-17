@@ -17,6 +17,7 @@ export const GameStateProvider = ({ children }) => {
   const [gameStage, setGameStage] = useState('early'); 
   const [isPortrait, setIsPortrait] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
 
   // Monitor orientation matches in sync with CSS
   useEffect(() => {
@@ -100,14 +101,34 @@ export const GameStateProvider = ({ children }) => {
   const spawnThreat = useCallback((type) => {
     if (gameStatus !== 'playing' || isPaused) return;
 
-    const angle = Math.random() * Math.PI * 2;
     const spawnDistance = 15;
     const modifiers = getStageModifiers();
-    
+
+    // Threats come from: top, left (upper half), right (upper half)
+    // In 3D: camera is behind (positive Z), so:
+    //   top    = negative Z (far from camera)
+    //   left   = negative X, upper half = Z from -spawnDistance to 0
+    //   right  = positive X, upper half = Z from -spawnDistance to 0
+    const zone = Math.floor(Math.random() * 3); // 0=top, 1=left, 2=right
+    let spawnX, spawnZ;
+    if (zone === 0) {
+      // Top: spread across X, far negative Z
+      spawnX = (Math.random() - 0.5) * spawnDistance * 1.5;
+      spawnZ = -spawnDistance;
+    } else if (zone === 1) {
+      // Left upper half
+      spawnX = -spawnDistance;
+      spawnZ = -spawnDistance + Math.random() * spawnDistance;
+    } else {
+      // Right upper half
+      spawnX = spawnDistance;
+      spawnZ = -spawnDistance + Math.random() * spawnDistance;
+    }
+
     const newThreat = {
       id: Math.random().toString(36).substr(2, 9),
       type: type,
-      position: [Math.cos(angle) * spawnDistance, 0, Math.sin(angle) * spawnDistance],
+      position: [spawnX, 0, spawnZ],
       speed: (0.02 + Math.random() * 0.02) * modifiers.speedMultiplier,
     };
 
@@ -153,6 +174,7 @@ export const GameStateProvider = ({ children }) => {
       removeThreat(targetedThreat.id);
     } else {
       audioSynth.playFailure(); // play warning slide on incorrect cope
+      setWrongAnswerCount(prev => prev + 1);
       const penalty = gameStage === 'late' ? 25 : 15;
       setConnection(prev => {
         const next = Math.max(prev - penalty, 0);
@@ -173,6 +195,7 @@ export const GameStateProvider = ({ children }) => {
     setGameStatus('playing');
     setTimer(60);
     setIsPaused(false);
+    setWrongAnswerCount(0);
   };
 
   const restartGame = () => {
@@ -207,7 +230,7 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused, isMuted,
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused, isMuted, wrongAnswerCount,
       setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers, startGame, goToMenu
     }}>
       {children}

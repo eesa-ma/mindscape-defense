@@ -24,15 +24,16 @@ export default function PauseButton() {
       whileHover={{ scale: 1.12, y: -2 }}
       whileTap={{ scale: 0.95, y: 1 }}
       onClick={togglePause}
-      className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 p-3 bg-pink-100 border-[3px] border-slate-800 text-slate-800 rounded-full shadow-[3px_3px_0px_rgba(30,41,59,1)] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center h-sm:bottom-2 h-sm:left-2 h-sm:p-2 h-xs:bottom-1.5 h-xs:left-1.5 h-xs:p-1.5"
+      className="fixed top-22 left-3 sm:top-24 sm:left-6 z-50 p-2 sm:p-2.5 bg-pink-100 border-[3px] border-slate-800 text-slate-800 rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-1.5"
       title="Pause Game (P)"
     >
       <svg 
-        className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 fill-slate-800 h-sm:w-4.5 h-sm:h-4.5 h-xs:w-4 h-xs:h-4" 
+        className="w-4 h-4 sm:w-5 sm:h-5 fill-slate-800" 
         viewBox="0 0 24 24"
       >
         <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
       </svg>
+      <span className="text-[10px] font-extrabold text-slate-800 uppercase tracking-wide hidden sm:inline">Pause</span>
     </motion.button>
   );
 }
