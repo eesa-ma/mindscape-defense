@@ -3,23 +3,23 @@ import { COPING_MECHANISMS } from '../../config/gameData';
 import { useGameState } from '../../hooks/useGameState';
 
 const STYLE_MAP = {
-  Q: 'bg-amber-100 border-amber-400 text-amber-900 hover:bg-amber-200',
-  W: 'bg-purple-100 border-purple-400 text-purple-900 hover:bg-purple-200',
-  E: 'bg-sky-100 border-sky-400 text-sky-900 hover:bg-sky-200',
-  R: 'bg-emerald-100 border-emerald-400 text-emerald-900 hover:bg-emerald-200',
-  A: 'bg-indigo-100 border-indigo-400 text-indigo-900 hover:bg-indigo-200',
-  S: 'bg-teal-100 border-teal-400 text-teal-900 hover:bg-teal-200',
-  D: 'bg-pink-100 border-pink-400 text-pink-900 hover:bg-pink-200',
+  '1': 'bg-amber-100 border-amber-400 text-amber-900 hover:bg-amber-200',
+  '2': 'bg-purple-100 border-purple-400 text-purple-900 hover:bg-purple-200',
+  '3': 'bg-sky-100 border-sky-400 text-sky-900 hover:bg-sky-200',
+  '4': 'bg-emerald-100 border-emerald-400 text-emerald-900 hover:bg-emerald-200',
+  '5': 'bg-indigo-100 border-indigo-400 text-indigo-900 hover:bg-indigo-200',
+  '6': 'bg-teal-100 border-teal-400 text-teal-900 hover:bg-teal-200',
+  '7': 'bg-pink-100 border-pink-400 text-pink-900 hover:bg-pink-200',
 };
 
 const EMOJI_MAP = {
-  Q: '😴',
-  W: '🫂',
-  E: '⏰',
-  R: '✨',
-  A: '💌',
-  S: '📵',
-  D: '💬',
+  '1': '😴',
+  '2': '🫂',
+  '3': '⏰',
+  '4': '✨',
+  '5': '💌',
+  '6': '📵',
+  '7': '💬',
 };
 
 export default function CopingDock() {
