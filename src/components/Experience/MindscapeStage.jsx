@@ -3,7 +3,6 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Sparkles, Float, Sphere } from '@react-three/drei';
 import { useGameState } from '../../hooks/useGameState';
 import Threat from './Threat';
-import FogRing from './FogRing';
 import ScreenSmoke from './ScreenSmoke';
 import ManModel from './ManModel';
 
