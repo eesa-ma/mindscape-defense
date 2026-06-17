@@ -3,7 +3,7 @@ import { audioSynth } from '../../utils/audioSynth';
 import { requestFullscreen } from '../../utils/fullscreen';
 
 export default function LevelSelectScreen() {
-  const { gameStatus, maxUnlockedLevel, startLevel, goToMenu } = useGameState();
+  const { gameStatus, maxUnlockedLevel, startLevel, goToMenu, resetProgress } = useGameState();
 
   if (gameStatus !== 'levelSelect') return null;
 
@@ -69,6 +69,13 @@ export default function LevelSelectScreen() {
           Back to Menu
         </button>
 
+        {/* Reset Data Button */}
+        <button
+          onClick={resetProgress}
+          className="mt-6 text-xs sm:text-sm font-bold text-slate-400 hover:text-red-400 transition-colors underline decoration-dotted underline-offset-4"
+        >
+          Reset Game Data
+        </button>
       </div>
     </div>
   );

@@ -254,6 +254,16 @@ export const GameStateProvider = ({ children }) => {
     setIsMuted(prev => !prev);
   };
 
+  const resetProgress = useCallback(() => {
+    if (window.confirm("Are you sure you want to completely wipe your progress and start over? This cannot be undone.")) {
+      localStorage.removeItem('mindscapeOnboardingCompleted');
+      localStorage.removeItem('mindscapeMaxLevel');
+      setMaxUnlockedLevel(1);
+      setLevel(1);
+      setGameStatus('splash');
+    }
+  }, []);
+
   useEffect(() => {
     audioSynth.setMuted(isMuted);
   }, [isMuted]);
@@ -261,7 +271,7 @@ export const GameStateProvider = ({ children }) => {
   return (
     <GameStateContext.Provider value={{
       connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, enterGame, startGame, startLevel, returnToLevelSelect, goToMenu
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, enterGame, startGame, startLevel, returnToLevelSelect, goToMenu, resetProgress
     }}>
       {children}
     </GameStateContext.Provider>
