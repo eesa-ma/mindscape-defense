@@ -7,6 +7,7 @@ import { requestFullscreen } from '../../utils/fullscreen';
 export default function StartMenu() {
   const { gameStatus, startGame } = useGameState();
   const [showInstructions, setShowInstructions] = useState(false);
+  const [instructionTab, setInstructionTab] = useState('rules'); // 'rules' or 'cheatsheet'
 
   if (gameStatus !== 'menu') return null;
 
@@ -110,75 +111,110 @@ export default function StartMenu() {
               </p>
             </div>
 
+            {/* Tabs */}
+            <div className="flex gap-2 mb-4 justify-center shrink-0">
+              <button 
+                onClick={() => setInstructionTab('rules')} 
+                className={`flex-1 py-2 px-4 rounded-xl font-extrabold uppercase tracking-wider text-xs sm:text-sm transition-all border-2 ${instructionTab === 'rules' ? 'bg-indigo-100 border-indigo-500 text-indigo-900 shadow-[2px_2px_0px_rgba(99,102,241,1)]' : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'}`}
+              >
+                🎮 Rules & Controls
+              </button>
+              <button 
+                onClick={() => setInstructionTab('cheatsheet')} 
+                className={`flex-1 py-2 px-4 rounded-xl font-extrabold uppercase tracking-wider text-xs sm:text-sm transition-all border-2 ${instructionTab === 'cheatsheet' ? 'bg-purple-100 border-purple-500 text-purple-900 shadow-[2px_2px_0px_rgba(168,85,247,1)]' : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'}`}
+              >
+                💡 Cheat Sheet
+              </button>
+            </div>
+
             {/* Content Body - Scrollable */}
-            <div className="overflow-y-auto pr-1.5 flex-1 min-h-0 flex gap-4 text-slate-700 text-xs sm:text-sm leading-relaxed mb-4 scrollbar-thin h-sm:flex-col h-sm:gap-2.5 h-sm:mb-1.5 h-xs:gap-2">
+            <div className="overflow-y-auto pr-1.5 flex-1 min-h-0 flex flex-col gap-4 text-slate-700 text-xs sm:text-sm leading-relaxed mb-4 scrollbar-thin h-sm:gap-2.5 h-sm:mb-1.5 h-xs:gap-2">
               {/* Rules description */}
-              <div className="bg-sky-50 border-2 border-slate-800 p-3 rounded-2xl shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] flex-1 h-sm:flex-none h-sm:w-full h-sm:p-2.5 h-sm:shrink-0">
-                <p className="font-extrabold text-sky-950 mb-1 h-sm:text-[0.65rem] h-sm:leading-tight"><Gamepad2 className="inline w-4 h-4 mr-1" /> Core Objective:</p>
-                <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-tight">
-                  Emotional threats (Burnout, Loneliness, Anxiety, etc.) will float in from the surrounding fog. If they reach your character in the center, your Connection decreases and you lose a life.
-                </p>
-                <p className="font-extrabold text-sky-950 mt-2.5 mb-1 h-sm:text-[0.65rem] h-sm:mt-1 h-sm:leading-tight"><Joystick className="inline w-4 h-4 mr-1" /> Controls:</p>
-                <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-tight">
-                  1. **Target**: The closest threat is automatically targeted! (Or click/tap any threat or its label bubble to target it manually).<br />
-                  2. **Cope**: Click the matching coping button on the bottom dock (or press its corresponding key: **1, 2, 3, 4, 5, 6, 7**).
-                </p>
-              </div>
+              {instructionTab === 'rules' && (
+                <motion.div 
+                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} 
+                  className="bg-sky-50 border-2 border-slate-800 p-4 sm:p-5 rounded-2xl shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] flex-1 h-sm:p-2.5"
+                >
+                  <p className="font-extrabold text-sky-950 text-base sm:text-lg mb-2 h-sm:text-sm h-sm:mb-1"><Gamepad2 className="inline w-5 h-5 mr-2" /> Core Objective</p>
+                  <p className="font-medium text-slate-600 mb-4 h-sm:text-[0.7rem] h-sm:mb-2 h-sm:leading-tight">
+                    Emotional threats (Burnout, Loneliness, Anxiety, etc.) will float in from the surrounding fog. If they reach your character in the center, your Connection decreases and you lose a life.
+                  </p>
+                  
+                  <div className="h-px bg-sky-200 my-4" />
+
+                  <p className="font-extrabold text-sky-950 text-base sm:text-lg mb-2 h-sm:text-sm h-sm:mb-1"><Joystick className="inline w-5 h-5 mr-2" /> Controls</p>
+                  <ul className="font-medium text-slate-600 space-y-2 h-sm:text-[0.7rem] h-sm:leading-tight">
+                    <li className="flex gap-2">
+                      <span className="font-black text-sky-800">1.</span> 
+                      <span><strong>Target</strong>: The closest threat is automatically targeted! (Or click/tap any threat or its label bubble to target it manually).</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="font-black text-sky-800">2.</span> 
+                      <span><strong>Cope</strong>: Click the matching coping button on the bottom dock (or press its corresponding key: <strong>1, 2, 3, 4, 5, 6, 7</strong>).</span>
+                    </li>
+                  </ul>
+                </motion.div>
+              )}
 
               {/* Cheat Sheet Table */}
-              <div className="border-2 border-slate-800 rounded-2xl overflow-hidden shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] bg-white flex-1 h-sm:flex-none h-sm:w-full h-sm:shrink-0">
-                <div className="bg-purple-100 border-b-2 border-slate-800 p-2 text-center text-slate-800 font-black uppercase text-[10px] tracking-wider h-sm:p-1.5">
-                  <Lightbulb className="inline w-5 h-5 mr-2" /> Resilience Cheat Sheet
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse text-[10px] sm:text-xs">
-                    <thead>
-                      <tr className="bg-slate-50 border-b border-slate-300 font-extrabold text-slate-600">
-                        <th className="p-2 w-12 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Key</th>
-                        <th className="p-2 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Coping Strategy</th>
-                        <th className="p-2 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Threats Counteracted</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 font-bold">
-                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-amber-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">1</kbd></td>
-                        <td className="p-2 text-amber-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><BatteryCharging className="inline w-4 h-4 mr-1"/> Rest & Recharge</td>
-                        <td className="p-2 text-amber-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Burnout, Exhaustion</td>
-                      </tr>
-                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-purple-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">2</kbd></td>
-                        <td className="p-2 text-purple-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><Users className="inline w-4 h-4 mr-1"/> Seek Support</td>
-                        <td className="p-2 text-purple-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Loneliness, Imposter Syndrome</td>
-                      </tr>
-                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-sky-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">3</kbd></td>
-                        <td className="p-2 text-sky-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><Clock className="inline w-4 h-4 mr-1"/> Time Management</td>
-                        <td className="p-2 text-sky-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Academic Pressure, Overwhelm</td>
-                      </tr>
-                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-emerald-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">4</kbd></td>
-                        <td className="p-2 text-emerald-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><Sparkles className="inline w-4 h-4 mr-1"/> Reflection</td>
-                        <td className="p-2 text-emerald-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Negative Thoughts, Anxiety</td>
-                      </tr>
-                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-indigo-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">5</kbd></td>
-                        <td className="p-2 text-indigo-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><MessageSquare className="inline w-4 h-4 mr-1"/> Reach Out</td>
-                        <td className="p-2 text-indigo-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Isolation, Ghosting</td>
-                      </tr>
-                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-teal-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">6</kbd></td>
-                        <td className="p-2 text-teal-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><PhoneOff className="inline w-4 h-4 mr-1"/> Digital Detox</td>
-                        <td className="p-2 text-teal-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Social Comparison, FOMO</td>
-                      </tr>
-                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-pink-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">7</kbd></td>
-                        <td className="p-2 text-pink-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><MessageCircle className="inline w-4 h-4 mr-1"/> Communication</td>
-                        <td className="p-2 text-pink-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Family Conflict, Peer Pressure</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              {instructionTab === 'cheatsheet' && (
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
+                  className="border-2 border-slate-800 rounded-2xl overflow-hidden shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] bg-white flex-1 flex flex-col"
+                >
+                  <div className="bg-purple-100 border-b-2 border-slate-800 p-3 sm:p-4 text-center text-slate-800 font-black uppercase text-xs sm:text-sm tracking-wider h-sm:p-2">
+                    <Lightbulb className="inline w-5 h-5 mr-2" /> Resilience Cheat Sheet
+                  </div>
+                  <div className="overflow-x-auto flex-1 p-2">
+                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-300 font-extrabold text-slate-600">
+                          <th className="p-2 sm:p-3 w-12 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs">Key</th>
+                          <th className="p-2 sm:p-3 h-sm:p-1 h-sm:px-2 h-sm:text-xs">Coping Strategy</th>
+                          <th className="p-2 sm:p-3 h-sm:p-1 h-sm:px-2 h-sm:text-xs">Threats Counteracted</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-bold">
+                        <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
+                          <td className="p-2 sm:p-3 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs"><kbd className="bg-amber-100 border border-slate-400 px-1.5 py-0.5 rounded font-mono shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:px-1 h-sm:py-0">1</kbd></td>
+                          <td className="p-2 sm:p-3 text-amber-900 h-sm:p-1 h-sm:px-2 h-sm:text-xs"><BatteryCharging className="inline w-4 h-4 mr-1"/> Rest & Recharge</td>
+                          <td className="p-2 sm:p-3 text-amber-800 text-sm h-sm:p-1 h-sm:px-2 h-sm:text-xs leading-tight">Burnout, Exhaustion</td>
+                        </tr>
+                        <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
+                          <td className="p-2 sm:p-3 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs"><kbd className="bg-purple-100 border border-slate-400 px-1.5 py-0.5 rounded font-mono shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:px-1 h-sm:py-0">2</kbd></td>
+                          <td className="p-2 sm:p-3 text-purple-900 h-sm:p-1 h-sm:px-2 h-sm:text-xs"><Users className="inline w-4 h-4 mr-1"/> Seek Support</td>
+                          <td className="p-2 sm:p-3 text-purple-800 text-sm h-sm:p-1 h-sm:px-2 h-sm:text-xs leading-tight">Loneliness, Imposter Syndrome</td>
+                        </tr>
+                        <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
+                          <td className="p-2 sm:p-3 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs"><kbd className="bg-sky-100 border border-slate-400 px-1.5 py-0.5 rounded font-mono shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:px-1 h-sm:py-0">3</kbd></td>
+                          <td className="p-2 sm:p-3 text-sky-900 h-sm:p-1 h-sm:px-2 h-sm:text-xs"><Clock className="inline w-4 h-4 mr-1"/> Time Management</td>
+                          <td className="p-2 sm:p-3 text-sky-800 text-sm h-sm:p-1 h-sm:px-2 h-sm:text-xs leading-tight">Academic Pressure, Overwhelm</td>
+                        </tr>
+                        <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
+                          <td className="p-2 sm:p-3 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs"><kbd className="bg-emerald-100 border border-slate-400 px-1.5 py-0.5 rounded font-mono shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:px-1 h-sm:py-0">4</kbd></td>
+                          <td className="p-2 sm:p-3 text-emerald-900 h-sm:p-1 h-sm:px-2 h-sm:text-xs"><Sparkles className="inline w-4 h-4 mr-1"/> Reflection</td>
+                          <td className="p-2 sm:p-3 text-emerald-800 text-sm h-sm:p-1 h-sm:px-2 h-sm:text-xs leading-tight">Negative Thoughts, Anxiety</td>
+                        </tr>
+                        <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
+                          <td className="p-2 sm:p-3 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs"><kbd className="bg-indigo-100 border border-slate-400 px-1.5 py-0.5 rounded font-mono shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:px-1 h-sm:py-0">5</kbd></td>
+                          <td className="p-2 sm:p-3 text-indigo-900 h-sm:p-1 h-sm:px-2 h-sm:text-xs"><MessageSquare className="inline w-4 h-4 mr-1"/> Reach Out</td>
+                          <td className="p-2 sm:p-3 text-indigo-800 text-sm h-sm:p-1 h-sm:px-2 h-sm:text-xs leading-tight">Isolation, Ghosting</td>
+                        </tr>
+                        <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
+                          <td className="p-2 sm:p-3 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs"><kbd className="bg-teal-100 border border-slate-400 px-1.5 py-0.5 rounded font-mono shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:px-1 h-sm:py-0">6</kbd></td>
+                          <td className="p-2 sm:p-3 text-teal-900 h-sm:p-1 h-sm:px-2 h-sm:text-xs"><PhoneOff className="inline w-4 h-4 mr-1"/> Digital Detox</td>
+                          <td className="p-2 sm:p-3 text-teal-800 text-sm h-sm:p-1 h-sm:px-2 h-sm:text-xs leading-tight">Social Comparison, FOMO</td>
+                        </tr>
+                        <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
+                          <td className="p-2 sm:p-3 text-center h-sm:p-1 h-sm:px-2 h-sm:text-xs"><kbd className="bg-pink-100 border border-slate-400 px-1.5 py-0.5 rounded font-mono shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[0.65rem] h-sm:px-1 h-sm:py-0">7</kbd></td>
+                          <td className="p-2 sm:p-3 text-pink-900 h-sm:p-1 h-sm:px-2 h-sm:text-xs"><MessageCircle className="inline w-4 h-4 mr-1"/> Communication</td>
+                          <td className="p-2 sm:p-3 text-pink-800 text-sm h-sm:p-1 h-sm:px-2 h-sm:text-xs leading-tight">Family Conflict, Peer Pressure</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {/* Back Button */}
