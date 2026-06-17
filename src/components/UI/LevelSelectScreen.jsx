@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGameState } from '../../hooks/useGameState';
 import { audioSynth } from '../../utils/audioSynth';
+import { requestMobileFullscreen } from '../../utils/fullscreen';
 
 export default function LevelSelectScreen() {
   const { gameStatus, maxUnlockedLevel, startLevel, goToMenu } = useGameState();
@@ -8,6 +9,7 @@ export default function LevelSelectScreen() {
   if (gameStatus !== 'levelSelect') return null;
 
   const handleLevelSelect = (lvl) => {
+    requestMobileFullscreen();
     if (lvl <= maxUnlockedLevel) {
       audioSynth.playSuccess();
       startLevel(lvl);
@@ -18,7 +20,7 @@ export default function LevelSelectScreen() {
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center p-4 overflow-hidden bg-slate-900/40 backdrop-blur-sm pointer-events-auto">
-      <div className="bg-white/95 border-[4px] border-slate-800 p-6 sm:p-8 rounded-[2rem] shadow-[8px_8px_0px_rgba(30,41,59,1)] w-full max-w-2xl flex flex-col items-center">
+      <div className="bg-white/95 border-4 border-slate-800 p-6 sm:p-8 rounded-4xl shadow-[8px_8px_0px_rgba(30,41,59,1)] w-full max-w-2xl flex flex-col items-center">
         
         <h1 className="text-3xl sm:text-5xl font-black text-slate-800 mb-2 uppercase tracking-tight text-center">
           Select Level

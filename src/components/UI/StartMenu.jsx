@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
+import { requestMobileFullscreen } from '../../utils/fullscreen';
 
 export default function StartMenu() {
   const { gameStatus, startGame } = useGameState();
   const [showInstructions, setShowInstructions] = useState(false);
 
   if (gameStatus !== 'menu') return null;
+
+  const handleStartGame = () => {
+    requestMobileFullscreen();
+    startGame();
+  };
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-linear-to-br from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] select-none pointer-events-auto z-50 p-4">
@@ -70,7 +76,7 @@ export default function StartMenu() {
 
             <div className="flex flex-col gap-4 w-full h-sm:gap-2.5 h-xs:gap-2">
               <button
-                onClick={startGame}
+                onClick={handleStartGame}
                 className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 🎮 Start Game
