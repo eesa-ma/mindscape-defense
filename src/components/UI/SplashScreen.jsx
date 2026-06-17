@@ -14,7 +14,7 @@ export default function SplashScreen() {
 
   return (
     <div 
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-linear-to-br from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] cursor-pointer overflow-hidden p-4"
+      className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-linear-to-br from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] cursor-pointer overflow-hidden p-4"
       onClick={handleEnter}
     >
       {/* Background Image nicely blended with the pastel gradient */}

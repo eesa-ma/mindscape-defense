@@ -102,7 +102,7 @@ export default function OnboardingScreen() {
               transition={{ duration: 0.3 }}
               className="flex flex-col items-center w-full"
             >
-              <div className="w-full max-w-[280px] sm:max-w-[340px] mb-4 sm:mb-6 h-sm:max-w-[140px] h-sm:mb-3 h-xs:max-w-[100px] animate-cloud-bob relative">
+              <div className="w-full max-w-70 sm:max-w-85 mb-4 sm:mb-6 h-sm:max-w-35 h-sm:mb-3 h-xs:max-w-25 animate-cloud-bob relative">
                 <div className="absolute inset-4 bg-indigo-200/50 rounded-full filter blur-xl animate-pulse"></div>
                 <img 
                   src={slides[currentSlide].image} 

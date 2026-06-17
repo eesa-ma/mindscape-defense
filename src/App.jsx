@@ -15,6 +15,42 @@ import LevelSelectScreen from './components/UI/LevelSelectScreen';
 import OnboardingScreen from './components/UI/OnboardingScreen';
 import SplashScreen from './components/UI/SplashScreen';
 
+function MenuFullscreenToggle() {
+  const { gameStatus } = useGameState();
+  const [fullscreen, setFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => setFullscreen(isFullscreen());
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    setFullscreen(isFullscreen());
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  // Don't show on Splash Screen (they haven't entered yet) or when Playing (HUD has its own button)
+  if (gameStatus === 'playing' || gameStatus === 'splash') return null;
+
+  return (
+    <button
+      onClick={toggleFullscreen}
+      className="fixed top-4 right-4 sm:top-6 sm:right-6 z-99999 bg-white/80 backdrop-blur-md border-[3px] border-slate-300 p-2 sm:p-2.5 rounded-xl text-slate-600 pointer-events-auto shadow-[3px_3px_0px_rgba(203,213,225,1)] hover:bg-white hover:text-slate-800 hover:-translate-y-0.5 active:translate-y-0.5 transition-all h-sm:p-1.5 h-xs:p-1 flex items-center justify-center"
+      title="Toggle Fullscreen"
+    >
+      {fullscreen ? (
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M15 9V4.5M15 9h4.5M9 15v4.5M9 15H4.5M15 15v4.5M15 15h4.5" />
+        </svg>
+      ) : (
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+        </svg>
+      )}
+    </button>
+  );
+}
 
 function HUD() {
   const { connection, score, lives, level, enemiesDefeatedThisLevel, isMuted, toggleMute, gameStatus, togglePause } = useGameState();
@@ -24,6 +60,8 @@ function HUD() {
     const handleFullscreenChange = () => setFullscreen(isFullscreen());
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    // Set initial state
+    setFullscreen(isFullscreen());
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
       document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
@@ -284,6 +322,9 @@ function GameRunner() {
       <LevelSelectScreen />
       <OrientationGate />
       <LoadingScreen />
+      
+      {/* Menu controls (hidden during gameplay) */}
+      <MenuFullscreenToggle />
     </div>
   );
 }
