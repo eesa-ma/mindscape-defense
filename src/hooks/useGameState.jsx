@@ -11,10 +11,13 @@ export const GameStateProvider = ({ children }) => {
   const [activeInsight, setActiveInsight] = useState(null);
   const [threats, setThreats] = useState([]);
   const [targetedThreat, setTargetedThreat] = useState(null);
-  
   const [gameStatus, setGameStatus] = useState('menu'); 
   const [isPaused, setIsPaused] = useState(false);
   const [level, setLevel] = useState(1);
+  const [maxUnlockedLevel, setMaxUnlockedLevel] = useState(() => {
+    const saved = localStorage.getItem('mindscapeMaxLevel');
+    return saved ? parseInt(saved, 10) : 1;
+  });
   const [enemiesDefeatedThisLevel, setEnemiesDefeatedThisLevel] = useState(0); 
   const [isPortrait, setIsPortrait] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -45,19 +48,23 @@ export const GameStateProvider = ({ children }) => {
     return { spawnRate }; 
   }, [level]);
 
-  // Progression logic: Threshold increases by 5 each level (L1 needs 5, L2 needs 10, L3 needs 15...)
+  // Progression logic: Level completion
   useEffect(() => {
     if (gameStatus !== 'playing') return;
     
-    const requiredForNextLevel = level * 5;
+    // Calculate enemies required for the CURRENT level
+    const requiredForLevelComplete = level * 5;
     
-    if (level < 6 && enemiesDefeatedThisLevel >= requiredForNextLevel) {
-      setLevel(prev => prev + 1);
-      setEnemiesDefeatedThisLevel(0); // Reset for the next level's count
-      // Optional: Play a level-up sound here if added to audioSynth later
-      setConnection(prev => Math.min(prev + 20, 100)); // Bonus connection on level up
+    if (enemiesDefeatedThisLevel >= requiredForLevelComplete) {
+      setGameStatus('won');
+      // If we beat our highest unlocked level (and it's not the final level 6)
+      if (level === maxUnlockedLevel && level < 6) {
+        const nextLevel = level + 1;
+        setMaxUnlockedLevel(nextLevel);
+        localStorage.setItem('mindscapeMaxLevel', nextLevel.toString());
+      }
     }
-  }, [enemiesDefeatedThisLevel, gameStatus, level]);
+  }, [enemiesDefeatedThisLevel, gameStatus, level, maxUnlockedLevel]);
 
   // Handle game music ambient pad playback
   useEffect(() => {
@@ -190,12 +197,16 @@ export const GameStateProvider = ({ children }) => {
   };
 
   const startGame = () => {
-    audioSynth.playClick();
+    setGameStatus('levelSelect');
+    audioSynth.playSuccess();
+  };
+
+  const startLevel = (lvl) => {
+    setLevel(lvl);
     setConnection(100);
     setLives(3);
     setScore(0);
     setEnemiesDefeatedThisLevel(0);
-    setLevel(1);
     setThreats([]);
     setTargetedThreat(null);
     setGameStatus('playing');
@@ -203,8 +214,12 @@ export const GameStateProvider = ({ children }) => {
     setWrongAnswerCount(0);
   };
 
-  const restartGame = () => {
-    startGame();
+  const restartLevel = () => {
+    startLevel(level);
+  };
+
+  const returnToLevelSelect = () => {
+    setGameStatus('levelSelect');
   };
 
   const goToMenu = () => {
@@ -235,8 +250,8 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers, startGame, goToMenu
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount,
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, startGame, startLevel, returnToLevelSelect, goToMenu
     }}>
       {children}
     </GameStateContext.Provider>

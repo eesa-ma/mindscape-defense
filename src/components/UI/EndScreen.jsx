@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
 
 export default function EndScreen() {
-  const { gameStatus, score, restartGame, togglePause, isPaused, quitGame } = useGameState();
+  const { gameStatus, score, level, restartLevel, startLevel, returnToLevelSelect, togglePause, isPaused, goToMenu } = useGameState();
 
   // Show pause menu
   if (isPaused && gameStatus === 'playing') {
@@ -31,17 +31,17 @@ export default function EndScreen() {
             </button>
             
             <button
-              onClick={restartGame}
+              onClick={restartLevel}
               className="w-full py-3 sm:py-3.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
             >
               Restart
             </button>
             
             <button
-              onClick={quitGame}
+              onClick={goToMenu}
               className="w-full py-3 sm:py-3.5 bg-rose-300 hover:bg-rose-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
             >
-              Quit Game
+              Quit to Menu
             </button>
           </div>
         </motion.div>
@@ -75,12 +75,30 @@ export default function EndScreen() {
             <span className="text-2xl sm:text-3xl font-black text-amber-500 h-sm:text-xl">{score}</span>
           </div>
 
-          <button
-            onClick={restartGame}
-            className="w-full py-3 sm:py-3.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
-          >
-            Re-Enter Mindscape
-          </button>
+          <div className="flex flex-col gap-3">
+            {isVictory && level < 6 && (
+              <button
+                onClick={() => startLevel(level + 1)}
+                className="w-full py-3 sm:py-3.5 bg-emerald-300 hover:bg-emerald-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
+              >
+                Next Level
+              </button>
+            )}
+
+            <button
+              onClick={restartLevel}
+              className="w-full py-3 sm:py-3.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
+            >
+              {isVictory ? 'Replay Level' : 'Retry Level'}
+            </button>
+
+            <button
+              onClick={returnToLevelSelect}
+              className="w-full py-3 sm:py-3.5 bg-slate-200 hover:bg-slate-300 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer h-sm:py-2 h-sm:text-xs h-sm:rounded-xl h-sm:border-2 h-xs:py-1.5 h-xs:text-[0.7rem] h-xs:rounded-lg"
+            >
+              Level Select
+            </button>
+          </div>
         </motion.div>
       </div>
     );
