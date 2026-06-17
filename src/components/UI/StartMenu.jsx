@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, Gamepad2, BookOpen, Lightbulb, ArrowLeft, Joystick, BatteryCharging, Users, Clock, Sparkles, MessageSquare, PhoneOff, MessageCircle } from 'lucide-react';
 import { useGameState } from '../../hooks/useGameState';
 import { requestFullscreen } from '../../utils/fullscreen';
 
@@ -63,7 +64,7 @@ export default function StartMenu() {
                   ease: "easeInOut"
                 }}
               >
-                ✨
+                <Sparkles className="inline w-5 h-5 mx-2 text-indigo-400" />
               </motion.div>
             </div>
 
@@ -71,7 +72,7 @@ export default function StartMenu() {
               Mindscape Defense
             </h1>
             <p className="text-xs sm:text-sm font-extrabold text-indigo-500 uppercase tracking-widest mb-8 leading-relaxed h-sm:text-[0.55rem] h-sm:mb-2.5 h-xs:mb-1.5">
-              🛡️ Shield Your Focus, Cultivate Resilience 🛡️
+              <Shield className="inline w-4 h-4 mr-2" /> Shield Your Focus, Cultivate Resilience <Shield className="inline w-4 h-4 ml-2" />
             </p>
 
             <div className="flex flex-col gap-4 w-full h-sm:gap-2.5 h-xs:gap-2">
@@ -79,14 +80,14 @@ export default function StartMenu() {
                 onClick={handleStartGame}
                 className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                🎮 Start Game
+                <Gamepad2 className="inline w-5 h-5 mr-2" /> Start Game
               </button>
 
               <button
                 onClick={() => setShowInstructions(true)}
                 className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                📖 How to Play
+                <BookOpen className="inline w-5 h-5 mr-2" /> How to Play
               </button>
             </div>
           </motion.div>
@@ -102,7 +103,7 @@ export default function StartMenu() {
             {/* Header */}
             <div className="text-center mb-4 shrink-0 h-sm:mb-1.5">
               <h2 className="text-2xl sm:text-3xl font-black text-slate-800 mb-1 h-sm:text-[1.25rem] h-xs:text-[1rem]">
-                📖 How to Play
+                <BookOpen className="inline w-6 h-6 mr-2" /> How to Play
               </h2>
               <p className="text-xs text-slate-500 font-bold uppercase tracking-wider h-sm:text-[0.55rem]">
                 Resilience Guide & Controls
@@ -113,11 +114,11 @@ export default function StartMenu() {
             <div className="overflow-y-auto pr-1.5 flex-1 min-h-0 flex gap-4 text-slate-700 text-xs sm:text-sm leading-relaxed mb-4 scrollbar-thin h-sm:flex-col h-sm:gap-2.5 h-sm:mb-1.5 h-xs:gap-2">
               {/* Rules description */}
               <div className="bg-sky-50 border-2 border-slate-800 p-3 rounded-2xl shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] flex-1 h-sm:flex-none h-sm:w-full h-sm:p-2.5 h-sm:shrink-0">
-                <p className="font-extrabold text-sky-950 mb-1 h-sm:text-[0.65rem] h-sm:leading-tight">🎮 Core Objective:</p>
+                <p className="font-extrabold text-sky-950 mb-1 h-sm:text-[0.65rem] h-sm:leading-tight"><Gamepad2 className="inline w-4 h-4 mr-1" /> Core Objective:</p>
                 <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-tight">
                   Emotional threats (Burnout, Loneliness, Anxiety, etc.) will float in from the surrounding fog. If they reach your character in the center, your Connection decreases and you lose a life.
                 </p>
-                <p className="font-extrabold text-sky-950 mt-2.5 mb-1 h-sm:text-[0.65rem] h-sm:mt-1 h-sm:leading-tight">🕹️ Controls:</p>
+                <p className="font-extrabold text-sky-950 mt-2.5 mb-1 h-sm:text-[0.65rem] h-sm:mt-1 h-sm:leading-tight"><Joystick className="inline w-4 h-4 mr-1" /> Controls:</p>
                 <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-tight">
                   1. **Target**: The closest threat is automatically targeted! (Or click/tap any threat or its label bubble to target it manually).<br />
                   2. **Cope**: Click the matching coping button on the bottom dock (or press its corresponding key: **1, 2, 3, 4, 5, 6, 7**).
@@ -127,7 +128,7 @@ export default function StartMenu() {
               {/* Cheat Sheet Table */}
               <div className="border-2 border-slate-800 rounded-2xl overflow-hidden shadow-[2.5px_2.5px_0px_rgba(30,41,59,1)] bg-white flex-1 h-sm:flex-none h-sm:w-full h-sm:shrink-0">
                 <div className="bg-purple-100 border-b-2 border-slate-800 p-2 text-center text-slate-800 font-black uppercase text-[10px] tracking-wider h-sm:p-1.5">
-                  💡 Resilience Cheat Sheet
+                  <Lightbulb className="inline w-5 h-5 mr-2" /> Resilience Cheat Sheet
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse text-[10px] sm:text-xs">
@@ -139,40 +140,40 @@ export default function StartMenu() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-bold">
-                      <tr>
+                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
                         <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-amber-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">1</kbd></td>
-                        <td className="p-2 text-amber-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">😴 Rest & Recharge</td>
-                        <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Burnout, Exhaustion, Creative Block</td>
+                        <td className="p-2 text-amber-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><BatteryCharging className="inline w-4 h-4 mr-1"/> Rest & Recharge</td>
+                        <td className="p-2 text-amber-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Burnout, Exhaustion</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
                         <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-purple-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">2</kbd></td>
-                        <td className="p-2 text-purple-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">🫂 Seek Support</td>
-                        <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Social Rejection, Loneliness, Imposter Syndrome</td>
+                        <td className="p-2 text-purple-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><Users className="inline w-4 h-4 mr-1"/> Seek Support</td>
+                        <td className="p-2 text-purple-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Loneliness, Imposter Syndrome</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
                         <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-sky-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">3</kbd></td>
-                        <td className="p-2 text-sky-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">⏰ Time Management</td>
-                        <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Academic Pressure, Procrastination, Overwhelm</td>
+                        <td className="p-2 text-sky-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><Clock className="inline w-4 h-4 mr-1"/> Time Management</td>
+                        <td className="p-2 text-sky-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Academic Pressure, Overwhelm</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
                         <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-emerald-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">4</kbd></td>
-                        <td className="p-2 text-emerald-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">✨ Reflection</td>
-                        <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Negative Thoughts, Self-Doubt, Anxiety</td>
+                        <td className="p-2 text-emerald-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><Sparkles className="inline w-4 h-4 mr-1"/> Reflection</td>
+                        <td className="p-2 text-emerald-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Negative Thoughts, Anxiety</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
                         <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-indigo-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">5</kbd></td>
-                        <td className="p-2 text-indigo-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">💌 Reach Out</td>
-                        <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Isolation, Ghosting, Detachment</td>
+                        <td className="p-2 text-indigo-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><MessageSquare className="inline w-4 h-4 mr-1"/> Reach Out</td>
+                        <td className="p-2 text-indigo-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Isolation, Ghosting</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
                         <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-teal-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">6</kbd></td>
-                        <td className="p-2 text-teal-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">📵 Digital Detox</td>
-                        <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Social Comparison, FOMO, Cyberbullying</td>
+                        <td className="p-2 text-teal-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><PhoneOff className="inline w-4 h-4 mr-1"/> Digital Detox</td>
+                        <td className="p-2 text-teal-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Social Comparison, FOMO</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-indigo-200/50 last:border-0 hover:bg-indigo-50/50 transition-colors">
                         <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-pink-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">7</kbd></td>
-                        <td className="p-2 text-pink-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">💬 Communication</td>
-                        <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Family Conflict, Misunderstandings, Peer Pressure</td>
+                        <td className="p-2 text-pink-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><MessageCircle className="inline w-4 h-4 mr-1"/> Communication</td>
+                        <td className="p-2 text-pink-800 text-sm h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem] leading-tight">Family Conflict, Peer Pressure</td>
                       </tr>
                     </tbody>
                   </table>
@@ -185,7 +186,7 @@ export default function StartMenu() {
               onClick={() => setShowInstructions(false)}
               className="w-full shrink-0 py-3 h-sm:py-2 h-sm:text-[0.75rem] h-sm:rounded-[0.85rem] h-sm:border-[2.5px] bg-pink-200 hover:bg-pink-300 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer text-center"
             >
-              ⬅️ Back to Menu
+              <ArrowLeft className="inline w-5 h-5 mr-2" /> Back to Menu
             </button>
           </motion.div>
         )}

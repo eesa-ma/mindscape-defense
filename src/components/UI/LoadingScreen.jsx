@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useProgress } from '@react-three/drei';
+import { Shield, Loader2, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LOADING_TIPS = [
@@ -69,7 +70,7 @@ export default function LoadingScreen() {
               
               {/* Floating Heart */}
               <motion.div 
-                className="absolute -right-1 bottom-1 text-3xl"
+                className="absolute -right-1 bottom-1 text-pink-500"
                 animate={{ 
                   y: [0, -8, 0],
                   scale: [1, 1.15, 1],
@@ -81,7 +82,7 @@ export default function LoadingScreen() {
                   ease: "easeInOut"
                 }}
               >
-                💖
+                <Heart size={32} fill="currentColor" />
               </motion.div>
             </div>
 
@@ -89,7 +90,7 @@ export default function LoadingScreen() {
               Mindscape Defense
             </h1>
             <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-500 mb-6 h-sm:text-[0.55rem] h-sm:mb-2">
-              🛡️ Cultivating Resilience 🛡️
+              <Shield className="inline w-4 h-4 mr-2" /> Cultivating Resilience <Shield className="inline w-4 h-4 ml-2" />
             </p>
 
             {/* Bubbly Progress Bar */}

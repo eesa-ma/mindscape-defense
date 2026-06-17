@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
 import { requestFullscreen } from '../../utils/fullscreen';
+import { Heart, Cloud, Star } from 'lucide-react';
 
 export default function OnboardingScreen() {
   const { gameStatus, completeOnboarding } = useGameState();
@@ -45,9 +46,9 @@ export default function OnboardingScreen() {
           </p>
           
           <ul className="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-3 sm:p-4 text-xs sm:text-sm font-bold text-indigo-900 flex flex-col gap-2 h-sm:text-[0.65rem] h-sm:p-2 h-xs:text-[0.6rem]">
-            <li className="flex items-center gap-2"><span>❤️</span> Keep your Connection Meter above zero</li>
-            <li className="flex items-center gap-2"><span>🌫️</span> Prevent loneliness from consuming the Mindscape</li>
-            <li className="flex items-center gap-2"><span>⭐</span> Earn points by making healthy choices</li>
+            <li className="flex items-center"><Heart className="inline w-4 h-4 text-rose-500 mr-2" fill="currentColor" /> Keep your Connection Meter above zero</li>
+            <li className="flex items-center"><Cloud className="inline w-4 h-4 text-slate-400 mr-2" /> Prevent loneliness from consuming the Mindscape</li>
+            <li className="flex items-center"><Star className="inline w-4 h-4 text-amber-500 mr-2" fill="currentColor" /> Earn points by making healthy choices</li>
           </ul>
 
           <p className="text-center italic font-bold text-slate-500 mt-2 text-xs sm:text-sm h-sm:text-[0.65rem] h-sm:mt-0">

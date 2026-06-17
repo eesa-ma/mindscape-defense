@@ -1,6 +1,7 @@
 import React from 'react';
 import { COPING_MECHANISMS } from '../../config/gameData';
 import { useGameState } from '../../hooks/useGameState';
+import { BatteryCharging, Users, Clock, Sparkles, MessageSquare, PhoneOff, MessageCircle } from 'lucide-react';
 
 const STYLE_MAP = {
   '1': 'bg-amber-100 border-amber-400 text-amber-900 hover:bg-amber-200',
@@ -12,14 +13,14 @@ const STYLE_MAP = {
   '7': 'bg-pink-100 border-pink-400 text-pink-900 hover:bg-pink-200',
 };
 
-const EMOJI_MAP = {
-  '1': '😴',
-  '2': '🫂',
-  '3': '⏰',
-  '4': '✨',
-  '5': '💌',
-  '6': '📵',
-  '7': '💬',
+const ICON_MAP = {
+  '1': <BatteryCharging />,
+  '2': <Users />,
+  '3': <Clock />,
+  '4': <Sparkles />,
+  '5': <MessageSquare />,
+  '6': <PhoneOff />,
+  '7': <MessageCircle />,
 };
 
 export default function CopingDock() {
@@ -45,8 +46,8 @@ export default function CopingDock() {
         className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-2xl border-[3px] border-slate-800 flex flex-col items-center justify-center transition-all duration-200 cursor-pointer group hover:scale-105 active:scale-95 hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] ${colorStyle} shadow-[3px_3px_0px_rgba(30,41,59,1)] shrink-0 h-sm:w-20 h-sm:h-14 h-sm:rounded-[0.85rem] h-xs:w-16 h-xs:h-10 h-xs:rounded-[0.6rem]`}
       >
         <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 h-sm:mb-0 h-xs:mb-0">
-          <span className="text-sm sm:text-base md:text-lg lg:text-2xl transition-transform duration-200 group-hover:scale-110 h-sm:text-sm h-xs:text-[11px]">
-            {EMOJI_MAP[mechanism.key]}
+          <span className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
+            {ICON_MAP[mechanism.key]}
           </span>
           <kbd className="text-[8px] sm:text-[10px] md:text-xs lg:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[8px] h-xs:hidden">
             {mechanism.key}

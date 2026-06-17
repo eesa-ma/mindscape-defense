@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Volume2, VolumeX, Maximize, Minimize, Heart, Star } from 'lucide-react';
+import './index.css';
 import { GameStateProvider, useGameState } from './hooks/useGameState';
 import { useKeyboardControls } from './hooks/useKeyboardControls';
 import { toggleFullscreen, isFullscreen } from './utils/fullscreen';
@@ -40,13 +42,9 @@ function MenuFullscreenToggle() {
       title="Toggle Fullscreen"
     >
       {fullscreen ? (
-        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M15 9V4.5M15 9h4.5M9 15v4.5M9 15H4.5M15 15v4.5M15 15h4.5" />
-        </svg>
+        <Minimize className="w-5 h-5 sm:w-6 sm:h-6" />
       ) : (
-        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-        </svg>
+        <Maximize className="w-5 h-5 sm:w-6 sm:h-6" />
       )}
     </button>
   );
@@ -152,7 +150,7 @@ function HUD() {
       <div className="flex flex-col gap-1 sm:gap-2">
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="hud-card bg-cyan-100 border-[3px] border-slate-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl sm:rounded-3xl text-slate-800 pointer-events-auto shadow-[3px_3px_0px_rgba(30,41,59,1)] transition-all duration-500">
-            <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-cyan-800 block">💖 Connection Meter</span>
+            <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-cyan-800 flex items-center gap-1"><Heart className="w-3 h-3" fill="currentColor" /> Connection Meter</span>
             <span className="hud-card-value text-lg sm:text-2xl font-black text-cyan-600">{connection}%</span>
           </div>
           <button
@@ -170,13 +168,8 @@ function HUD() {
         </div>
         <div className="hud-lives flex gap-1.5 text-lg sm:text-2xl pl-1">
           {Array.from({ length: 3 }).map((_, i) => (
-            <span
-              key={i}
-              className={`inline-block transition-transform duration-500 ${i < lives ? 'scale-100 animate-heart-pulse text-rose-500' : 'scale-95 text-slate-400 opacity-40'
-                }`}
-              style={{ animationDelay: `${i * 0.15}s` }}
-            >
-              ❤️
+            <span key={i} className="text-[12px] sm:text-[16px] filter drop-shadow-md transition-all duration-300 flex items-center justify-center">
+              {i < lives ? <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" fill="currentColor" /> : <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-slate-300 opacity-50" fill="currentColor" />}
             </span>
           ))}
         </div>
@@ -184,7 +177,7 @@ function HUD() {
 
       {/* Level & Progress Display */}
       <div className="hud-timer flex flex-col items-center bg-purple-100 border-[3px] border-slate-800 px-4 py-1.5 sm:px-6 sm:py-2.5 rounded-3xl text-center shadow-[3px_3px_0px_rgba(30,41,59,1)] pointer-events-auto">
-        <span className="hud-timer-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-widest text-purple-800">⭐ LEVEL {level}</span>
+        <span className="hud-timer-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-widest text-purple-800 flex items-center justify-center gap-1"><Star className="w-3 h-3" fill="currentColor" /> LEVEL {level}</span>
         <span className="hud-timer-value text-sm sm:text-xl font-black text-purple-950">
           {level < 6 ? `${enemiesDefeatedThisLevel} / ${level * 5}` : 'MAX'}
         </span>
@@ -224,7 +217,7 @@ function HUD() {
         </button>
 
         <div className="hud-card bg-amber-100 border-[3px] border-slate-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl sm:rounded-3xl text-slate-800 text-right pointer-events-auto shadow-[3px_3px_0px_rgba(30,41,59,1)] transition-all duration-500">
-          <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-amber-800 block">⭐ Score</span>
+          <span className="hud-card-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider text-amber-800 flex items-center justify-end gap-1"><Star className="w-3 h-3" fill="currentColor" /> Score</span>
           <span className="hud-card-value text-lg sm:text-2xl font-black text-amber-600">
             {score.toLocaleString('en-US', { minimumIntegerDigits: 5, useGrouping: false })}
           </span>
