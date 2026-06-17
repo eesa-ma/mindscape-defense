@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { audioSynth } from '../utils/audioSynth';
+import { COPING_MECHANISMS } from '../config/gameData';
 
 const GameStateContext = createContext();
 
@@ -10,13 +11,17 @@ export const GameStateProvider = ({ children }) => {
   const [activeInsight, setActiveInsight] = useState(null);
   const [threats, setThreats] = useState([]);
   const [targetedThreat, setTargetedThreat] = useState(null);
-  
-  const [gameStatus, setGameStatus] = useState('menu'); 
+  const [gameStatus, setGameStatus] = useState('splash');
   const [isPaused, setIsPaused] = useState(false);
-  const [timer, setTimer] = useState(60); 
-  const [gameStage, setGameStage] = useState('early'); 
+  const [level, setLevel] = useState(1);
+  const [maxUnlockedLevel, setMaxUnlockedLevel] = useState(() => {
+    const saved = localStorage.getItem('mindscapeMaxLevel');
+    return saved ? parseInt(saved, 10) : 1;
+  });
+  const [enemiesDefeatedThisLevel, setEnemiesDefeatedThisLevel] = useState(0); 
   const [isPortrait, setIsPortrait] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
 
   // Monitor orientation matches in sync with CSS
   useEffect(() => {
@@ -38,32 +43,28 @@ export const GameStateProvider = ({ children }) => {
 
   // Difficulty scaling logic based on game plan stages
   const getStageModifiers = useCallback(() => {
-    if (gameStage === 'mid') return { spawnRate: 3000, speedMultiplier: 1.5 }; 
-    if (gameStage === 'late') return { spawnRate: 1800, speedMultiplier: 2.2 }; 
-    return { spawnRate: 4500, speedMultiplier: 1.0 }; 
-  }, [gameStage]);
+    // Faster spawns at higher levels
+    const spawnRate = Math.max(1500, 4500 - (level * 600)); 
+    return { spawnRate }; 
+  }, [level]);
 
+  // Progression logic: Level completion
   useEffect(() => {
-    if (gameStatus !== 'playing' || isPortrait || isPaused) return;
-
-    const clock = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          setGameStatus('won'); 
-          clearInterval(clock);
-          return 0;
-        }
-        
-        // Progression triggers
-        if (prev === 40) setGameStage('mid');
-        if (prev === 20) setGameStage('late');
-        
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(clock);
-  }, [gameStatus, isPortrait, isPaused]);
+    if (gameStatus !== 'playing') return;
+    
+    // Calculate enemies required for the CURRENT level
+    const requiredForLevelComplete = level * 5;
+    
+    if (enemiesDefeatedThisLevel >= requiredForLevelComplete) {
+      setGameStatus('won');
+      // If we beat our highest unlocked level (and it's not the final level 6)
+      if (level === maxUnlockedLevel && level < 6) {
+        const nextLevel = level + 1;
+        setMaxUnlockedLevel(nextLevel);
+        localStorage.setItem('mindscapeMaxLevel', nextLevel.toString());
+      }
+    }
+  }, [enemiesDefeatedThisLevel, gameStatus, level, maxUnlockedLevel]);
 
   // Handle game music ambient pad playback
   useEffect(() => {
@@ -93,22 +94,64 @@ export const GameStateProvider = ({ children }) => {
     audioSynth.playSuccess(); // play success arpeggio
     setScore(prev => prev + points); 
     setConnection(prev => Math.min(prev + 10, 100)); 
+    setEnemiesDefeatedThisLevel(prev => prev + 1);
     setActiveInsight(insightText);
     setTimeout(() => setActiveInsight(null), 3500);
   };
 
-  const spawnThreat = useCallback((type) => {
+  const completeOnboarding = useCallback(() => {
+    localStorage.setItem('mindscapeOnboardingCompleted', 'true');
+    setGameStatus('menu');
+  }, []);
+
+  const enterGame = useCallback(() => {
+    const hasSeenOnboarding = localStorage.getItem('mindscapeOnboardingCompleted');
+    setGameStatus(hasSeenOnboarding ? 'menu' : 'onboarding');
+  }, []);
+
+  const spawnThreat = useCallback(() => {
     if (gameStatus !== 'playing' || isPaused) return;
 
-    const angle = Math.random() * Math.PI * 2;
     const spawnDistance = 15;
-    const modifiers = getStageModifiers();
     
+    // Determine which strategies are unlocked at this level
+    // Level 1: 2 strategies (index 0, 1). Level 6: 7 strategies (index 0..6)
+    const strategyKeys = ['1', '2', '3', '4', '5', '6', '7'];
+    const unlockedKeys = strategyKeys.slice(0, level + 1);
+    
+    // Aggregate all possible threat types that the player can currently counter
+    const possibleThreats = unlockedKeys.flatMap(k => COPING_MECHANISMS[k].counteracts);
+    const selectedType = possibleThreats[Math.floor(Math.random() * possibleThreats.length)];
+
+    // Faster speed at higher levels
+    const speedMultiplier = 1 + (level * 0.15);
+
+    // Threats come from: top, left (upper half), right (upper half)
+    // In 3D: camera is behind (positive Z), so:
+    //   top    = negative Z (far from camera)
+    //   left   = negative X, upper half = Z from -spawnDistance to 0
+    //   right  = positive X, upper half = Z from -spawnDistance to 0
+    const zone = Math.floor(Math.random() * 3); // 0=top, 1=left, 2=right
+    let spawnX, spawnZ;
+    if (zone === 0) {
+      // Top: spread across X, far negative Z
+      spawnX = (Math.random() - 0.5) * spawnDistance * 1.5;
+      spawnZ = -spawnDistance;
+    } else if (zone === 1) {
+      // Left upper half
+      spawnX = -spawnDistance;
+      spawnZ = -spawnDistance + Math.random() * spawnDistance;
+    } else {
+      // Right upper half
+      spawnX = spawnDistance;
+      spawnZ = -spawnDistance + Math.random() * spawnDistance;
+    }
+
     const newThreat = {
       id: Math.random().toString(36).substr(2, 9),
-      type: type,
-      position: [Math.cos(angle) * spawnDistance, 0, Math.sin(angle) * spawnDistance],
-      speed: (0.02 + Math.random() * 0.02) * modifiers.speedMultiplier,
+      type: selectedType,
+      position: [spawnX, 0, spawnZ],
+      speed: (0.02 + Math.random() * 0.02) * speedMultiplier,
     };
 
     setThreats(prev => {
@@ -116,7 +159,7 @@ export const GameStateProvider = ({ children }) => {
       if (updated.length === 0) setTargetedThreat(newThreat);
       return [...updated, newThreat];
     });
-  }, [gameStatus, isPaused, getStageModifiers]);
+  }, [gameStatus, isPaused, level]);
 
   const removeThreat = (id) => {
     setThreats(prev => {
@@ -153,7 +196,8 @@ export const GameStateProvider = ({ children }) => {
       removeThreat(targetedThreat.id);
     } else {
       audioSynth.playFailure(); // play warning slide on incorrect cope
-      const penalty = gameStage === 'late' ? 25 : 15;
+      setWrongAnswerCount(prev => prev + 1);
+      const penalty = level >= 4 ? 25 : 15;
       setConnection(prev => {
         const next = Math.max(prev - penalty, 0);
         if (next <= 0) setGameStatus('lost');
@@ -163,20 +207,29 @@ export const GameStateProvider = ({ children }) => {
   };
 
   const startGame = () => {
-    audioSynth.playClick();
+    setGameStatus('levelSelect');
+    audioSynth.playSuccess();
+  };
+
+  const startLevel = (lvl) => {
+    setLevel(lvl);
     setConnection(100);
     setLives(3);
     setScore(0);
+    setEnemiesDefeatedThisLevel(0);
     setThreats([]);
     setTargetedThreat(null);
-    setGameStage('early');
     setGameStatus('playing');
-    setTimer(60);
     setIsPaused(false);
+    setWrongAnswerCount(0);
   };
 
-  const restartGame = () => {
-    startGame();
+  const restartLevel = () => {
+    startLevel(level);
+  };
+
+  const returnToLevelSelect = () => {
+    setGameStatus('levelSelect');
   };
 
   const goToMenu = () => {
@@ -201,14 +254,24 @@ export const GameStateProvider = ({ children }) => {
     setIsMuted(prev => !prev);
   };
 
+  const resetProgress = useCallback(() => {
+    if (window.confirm("Are you sure you want to completely wipe your progress and start over? This cannot be undone.")) {
+      localStorage.removeItem('mindscapeOnboardingCompleted');
+      localStorage.removeItem('mindscapeMaxLevel');
+      setMaxUnlockedLevel(1);
+      setLevel(1);
+      setGameStatus('splash');
+    }
+  }, []);
+
   useEffect(() => {
     audioSynth.setMuted(isMuted);
   }, [isMuted]);
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused, isMuted,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers, startGame, goToMenu
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount,
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, enterGame, startGame, startLevel, returnToLevelSelect, goToMenu, resetProgress
     }}>
       {children}
     </GameStateContext.Provider>

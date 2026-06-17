@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
+import { Html, Sparkles } from '@react-three/drei';
 import { useGameState } from '../../hooks/useGameState';
 
 export default function Threat({ threatData }) {
   const meshRef = useRef();
   const visualGroupRef = useRef();
   const particlesRef = useRef();
-  
+
   const { handleThreatCollision, targetedThreat, setTargetedThreat, isPortrait, isPaused } = useGameState();
   const isTargeted = targetedThreat?.id === threatData.id;
 
@@ -50,9 +50,10 @@ export default function Threat({ threatData }) {
 
     if (!meshRef.current) return;
 
-    // 1. Move closer to center [0, 0, 0]
+    // 1. Move closer to player at [0, 0, 5]
+    const targetZ = 5;
     meshRef.current.position.x -= Math.sign(meshRef.current.position.x) * threatData.speed;
-    meshRef.current.position.z -= Math.sign(meshRef.current.position.z) * threatData.speed;
+    meshRef.current.position.z -= Math.sign(meshRef.current.position.z - targetZ) * threatData.speed;
 
     // 2. Y-axis organic bobbing wave
     meshRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 2 + threatData.speed * 100) * 0.2;
@@ -64,7 +65,7 @@ export default function Threat({ threatData }) {
 
     // 4. Collision threshold check
     const distance = Math.sqrt(
-      meshRef.current.position.x ** 2 + meshRef.current.position.z ** 2
+      meshRef.current.position.x ** 2 + (meshRef.current.position.z - targetZ) ** 2
     );
 
     if (distance < 1.3) {
@@ -149,11 +150,10 @@ export default function Threat({ threatData }) {
             center
             className="select-none"
           >
-            <div 
+            <div
               onClick={(e) => { e.stopPropagation(); setTargetedThreat(threatData); }}
-              className={`pointer-events-auto cursor-pointer whitespace-nowrap px-3 py-1.5 text-[10px] font-extrabold rounded-2xl border-2 border-slate-800 transition-all duration-300 shadow-[2px_2px_0px_rgba(30,41,59,1)] ${specs.labelColor} ${
-                isTargeted ? 'scale-110 border-slate-800 shadow-[2.5px_2.5px_0px_rgba(245,158,11,1)]' : 'opacity-90'
-              }`}
+              className={`pointer-events-auto cursor-pointer whitespace-nowrap px-3 py-1.5 text-[10px] font-extrabold rounded-2xl border-2 border-slate-800 transition-all duration-300 shadow-[2px_2px_0px_rgba(30,41,59,1)] ${specs.labelColor} ${isTargeted ? 'scale-110 border-slate-800 shadow-[2.5px_2.5px_0px_rgba(245,158,11,1)]' : 'opacity-90'
+                }`}
             >
               <span className="mr-1">{THREAT_EMOJIS[threatData.type] || '⚠️'}</span>
               {threatData.type}
@@ -166,7 +166,7 @@ export default function Threat({ threatData }) {
               <dodecahedronGeometry args={[0.38, 1]} />
               <meshStandardMaterial color={specs.color} emissive={specs.color} emissiveIntensity={isTargeted ? 2.5 : 0.7} flatShading fog={false} />
             </mesh>
-            
+
             {/* Bubbly white rotating halo ring when targeted */}
             {isTargeted && (
               <mesh position={[0, 0, 0]} rotation={[Math.PI / 3, 0, 0]}>
@@ -174,6 +174,10 @@ export default function Threat({ threatData }) {
                 <meshBasicMaterial color="#ffffff" transparent opacity={0.75} fog={false} />
               </mesh>
             )}
+            
+            {/* Shadowy loneliness aura */}
+            <Sparkles count={20} scale={1.5} size={2} speed={0.4} color="#1e293b" opacity={0.6} />
+            <Sparkles count={10} scale={2} size={1} speed={0.2} color="#475569" opacity={0.4} />
           </group>
 
           {/* LAZER BEAM HINT: If targeted, show a subtle connecting line to player */}
@@ -182,7 +186,7 @@ export default function Threat({ threatData }) {
               <bufferGeometry>
                 <bufferAttribute
                   attach="attributes-position"
-                  args={[new Float32Array([0, 0, 0, -threatData.position[0], -threatData.position[1], -threatData.position[2]]), 3]}
+                  args={[new Float32Array([0, 0, 5, -threatData.position[0], -threatData.position[1], -(threatData.position[2] - 5)]), 3]}
                 />
               </bufferGeometry>
               <lineBasicMaterial color="#38bdf8" transparent opacity={0.35} linewidth={2} fog={false} />

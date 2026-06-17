@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
+import { requestFullscreen } from '../../utils/fullscreen';
 
 export default function StartMenu() {
   const { gameStatus, startGame } = useGameState();
   const [showInstructions, setShowInstructions] = useState(false);
 
   if (gameStatus !== 'menu') return null;
+
+  const handleStartGame = () => {
+    requestFullscreen();
+    startGame();
+  };
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-linear-to-br from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] select-none pointer-events-auto z-50 p-4">
@@ -70,7 +76,7 @@ export default function StartMenu() {
 
             <div className="flex flex-col gap-4 w-full h-sm:gap-2.5 h-xs:gap-2">
               <button
-                onClick={startGame}
+                onClick={handleStartGame}
                 className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 🎮 Start Game
@@ -114,7 +120,7 @@ export default function StartMenu() {
                 <p className="font-extrabold text-sky-950 mt-2.5 mb-1 h-sm:text-[0.65rem] h-sm:mt-1 h-sm:leading-tight">🕹️ Controls:</p>
                 <p className="font-medium text-slate-600 h-sm:text-[0.65rem] h-sm:leading-tight">
                   1. **Target**: The closest threat is automatically targeted! (Or click/tap any threat or its label bubble to target it manually).<br />
-                  2. **Cope**: Click the matching coping button on the bottom dock (or press its corresponding key: **Q, W, E, R, A, S, D**).
+                  2. **Cope**: Click the matching coping button on the bottom dock (or press its corresponding key: **1, 2, 3, 4, 5, 6, 7**).
                 </p>
               </div>
 
@@ -134,37 +140,37 @@ export default function StartMenu() {
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-bold">
                       <tr>
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-amber-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">Q</kbd></td>
+                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-amber-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">1</kbd></td>
                         <td className="p-2 text-amber-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">😴 Rest & Recharge</td>
                         <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Burnout, Exhaustion, Creative Block</td>
                       </tr>
                       <tr>
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-purple-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">W</kbd></td>
+                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-purple-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">2</kbd></td>
                         <td className="p-2 text-purple-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">🫂 Seek Support</td>
                         <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Social Rejection, Loneliness, Imposter Syndrome</td>
                       </tr>
                       <tr>
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-sky-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">E</kbd></td>
+                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-sky-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">3</kbd></td>
                         <td className="p-2 text-sky-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">⏰ Time Management</td>
                         <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Academic Pressure, Procrastination, Overwhelm</td>
                       </tr>
                       <tr>
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-emerald-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">R</kbd></td>
+                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-emerald-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">4</kbd></td>
                         <td className="p-2 text-emerald-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">✨ Reflection</td>
                         <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Negative Thoughts, Self-Doubt, Anxiety</td>
                       </tr>
                       <tr>
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-indigo-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">A</kbd></td>
+                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-indigo-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">5</kbd></td>
                         <td className="p-2 text-indigo-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">💌 Reach Out</td>
                         <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Isolation, Ghosting, Detachment</td>
                       </tr>
                       <tr>
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-teal-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">S</kbd></td>
+                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-teal-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">6</kbd></td>
                         <td className="p-2 text-teal-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">📵 Digital Detox</td>
                         <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Social Comparison, FOMO, Cyberbullying</td>
                       </tr>
                       <tr>
-                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-pink-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">D</kbd></td>
+                        <td className="p-2 text-center h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]"><kbd className="bg-pink-100 border border-slate-400 px-1 py-0.5 rounded font-mono h-sm:text-[0.55rem] h-sm:px-0.5 h-sm:py-0">7</kbd></td>
                         <td className="p-2 text-pink-900 h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">💬 Communication</td>
                         <td className="p-2 text-slate-500 font-medium h-sm:p-0.5 h-sm:px-1.5 h-sm:text-[0.625rem]">Family Conflict, Misunderstandings, Peer Pressure</td>
                       </tr>
