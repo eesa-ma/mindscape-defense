@@ -1,7 +1,6 @@
-import React from 'react';
 import { useGameState } from '../../hooks/useGameState';
 import { audioSynth } from '../../utils/audioSynth';
-import { requestMobileFullscreen } from '../../utils/fullscreen';
+import { requestFullscreen } from '../../utils/fullscreen';
 
 export default function LevelSelectScreen() {
   const { gameStatus, maxUnlockedLevel, startLevel, goToMenu } = useGameState();
@@ -9,8 +8,8 @@ export default function LevelSelectScreen() {
   if (gameStatus !== 'levelSelect') return null;
 
   const handleLevelSelect = (lvl) => {
-    requestMobileFullscreen();
     if (lvl <= maxUnlockedLevel) {
+      requestFullscreen();
       audioSynth.playSuccess();
       startLevel(lvl);
     } else {

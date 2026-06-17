@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
+import { requestFullscreen } from '../../utils/fullscreen';
 
 export default function OnboardingScreen() {
   const { gameStatus, completeOnboarding } = useGameState();
@@ -11,7 +12,7 @@ export default function OnboardingScreen() {
   const slides = [
     {
       title: "The Mindscape",
-      icon: "🏔️",
+      image: "/images/onboarding/slide_1.png",
       content: (
         <p className="text-slate-600 font-medium text-sm sm:text-base md:text-lg leading-relaxed text-center h-sm:text-xs">
           Welcome to your <span className="font-bold text-indigo-600">Mindscape</span> — a living reflection of your inner world. It is shaped by your memories, experiences, hopes, and connections. While it may seem peaceful, challenges can emerge from the fog and threaten the balance within.
@@ -20,7 +21,7 @@ export default function OnboardingScreen() {
     },
     {
       title: "Defend & Cope",
-      icon: "🛡️",
+      image: "/images/onboarding/slide_2.png",
       content: (
         <div className="flex flex-col gap-4 items-center">
           <p className="text-slate-600 font-medium text-sm sm:text-base md:text-lg leading-relaxed text-center h-sm:text-xs">
@@ -36,7 +37,7 @@ export default function OnboardingScreen() {
     },
     {
       title: "Grow Stronger",
-      icon: "🌱",
+      image: "/images/onboarding/slide_3.png",
       content: (
         <div className="flex flex-col gap-3 h-sm:gap-2">
           <p className="text-slate-600 font-medium text-sm sm:text-base leading-relaxed text-center h-sm:text-xs">
@@ -58,6 +59,7 @@ export default function OnboardingScreen() {
   ];
 
   const handleNext = () => {
+    requestFullscreen();
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(prev => prev + 1);
     } else {
@@ -72,10 +74,10 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-linear-to-br from-[#e0e7ff] via-[#f3e8ff] to-[#fae8ff] select-none pointer-events-auto z-50 p-4">
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-linear-to-br from-[#ffe4e6] via-[#ffd3b6] to-[#dbeafe] select-none pointer-events-auto z-50 p-4">
       {/* Background Decor */}
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-indigo-300/20 rounded-full filter blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-fuchsia-300/20 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-rose-300/20 rounded-full filter blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-blue-300/20 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
 
       <div className="relative z-10 w-full max-w-2xl bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl shadow-[8px_8px_0px_rgba(30,41,59,1)] flex flex-col items-center max-h-[95vh] h-sm:max-h-[92vh] h-sm:p-4 h-sm:w-[95%] h-xs:p-3 overflow-y-auto scrollbar-thin">
         
@@ -90,7 +92,7 @@ export default function OnboardingScreen() {
         </div>
 
         {/* Carousel Content */}
-        <div className="w-full flex-1 flex flex-col items-center min-h-[220px] h-sm:min-h-[150px]">
+        <div className="w-full shrink-0 flex flex-col items-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
@@ -100,10 +102,16 @@ export default function OnboardingScreen() {
               transition={{ duration: 0.3 }}
               className="flex flex-col items-center w-full"
             >
-              <div className="text-5xl sm:text-6xl mb-3 h-sm:text-4xl h-sm:mb-1 animate-cloud-bob">
-                {slides[currentSlide].icon}
+              <div className="w-full max-w-[280px] sm:max-w-[340px] mb-4 sm:mb-6 h-sm:max-w-[140px] h-sm:mb-3 h-xs:max-w-[100px] animate-cloud-bob relative">
+                <div className="absolute inset-4 bg-indigo-200/50 rounded-full filter blur-xl animate-pulse"></div>
+                <img 
+                  src={slides[currentSlide].image} 
+                  alt={slides[currentSlide].title}
+                  className="w-full h-auto drop-shadow-2xl relative z-10 hover:scale-105 transition-transform duration-500 ease-out mix-blend-multiply rounded-3xl"
+                  style={{ maskImage: 'radial-gradient(circle at center, black 50%, transparent 100%)', WebkitMaskImage: 'radial-gradient(circle at center, black 50%, transparent 100%)' }}
+                />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4 h-sm:text-xl h-sm:mb-2 text-center uppercase tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4 h-sm:text-lg h-sm:mb-2 text-center uppercase tracking-tight">
                 {slides[currentSlide].title}
               </h1>
               
@@ -115,7 +123,7 @@ export default function OnboardingScreen() {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="w-full flex gap-4 mt-8 h-sm:mt-4 h-xs:mt-3">
+        <div className="w-full flex gap-4 mt-8 h-sm:mt-4 h-xs:mt-3 shrink-0">
           {currentSlide > 0 ? (
             <button
               onClick={handleBack}

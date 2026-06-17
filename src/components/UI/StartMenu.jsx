@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
-import { requestMobileFullscreen } from '../../utils/fullscreen';
+import { requestFullscreen } from '../../utils/fullscreen';
 
 export default function StartMenu() {
   const { gameStatus, startGame } = useGameState();
@@ -10,7 +10,7 @@ export default function StartMenu() {
   if (gameStatus !== 'menu') return null;
 
   const handleStartGame = () => {
-    requestMobileFullscreen();
+    requestFullscreen();
     startGame();
   };
 

@@ -13,6 +13,7 @@ import CelebrationOverlay from './components/UI/CelebrationOverlay';
 import FailureOverlay from './components/UI/FailureOverlay';
 import LevelSelectScreen from './components/UI/LevelSelectScreen';
 import OnboardingScreen from './components/UI/OnboardingScreen';
+import SplashScreen from './components/UI/SplashScreen';
 
 
 function HUD() {
@@ -278,6 +279,7 @@ function GameRunner() {
       <CopingDock />
       <EndScreen /> {/* Active endgame layer checks */}
       <OnboardingScreen />
+      <SplashScreen />
       <StartMenu />
       <LevelSelectScreen />
       <OrientationGate />
