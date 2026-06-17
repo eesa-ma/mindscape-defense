@@ -13,6 +13,7 @@ export const GameStateProvider = ({ children }) => {
   const [targetedThreat, setTargetedThreat] = useState(null);
   const [gameStatus, setGameStatus] = useState('splash');
   const [isPaused, setIsPaused] = useState(false);
+  const [isCelebrating, setIsCelebrating] = useState(false);
   const [level, setLevel] = useState(1);
   const [maxUnlockedLevel, setMaxUnlockedLevel] = useState(() => {
     const saved = localStorage.getItem('mindscapeMaxLevel');
@@ -109,7 +110,9 @@ export const GameStateProvider = ({ children }) => {
     setConnection(prev => Math.min(prev + 10, 100)); 
     setEnemiesDefeatedThisLevel(prev => prev + 1);
     setActiveInsight(insightText);
+    setIsCelebrating(true);
     setTimeout(() => setActiveInsight(null), 3500);
+    setTimeout(() => setIsCelebrating(false), 2000);
   };
 
   const completeOnboarding = useCallback(() => {
@@ -287,7 +290,7 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount, playerName, hasSetPlayerName,
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount, playerName, hasSetPlayerName, isCelebrating,
       setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, enterGame, startGame, startLevel, returnToLevelSelect, goToMenu, resetProgress, updatePlayerName
     }}>
       {children}

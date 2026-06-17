@@ -189,7 +189,7 @@ function Environment() {
             <meshStandardMaterial color="#0ea5e9" wireframe fog={false} />
           </mesh>
         }>
-          <group rotation={[0, Math.PI, 0]}>
+          <group rotation={[0, Math.PI, 0]} scale={1.3}>
             <ManModel position={[0, 0, 0]} />
           </group>
         </Suspense>
