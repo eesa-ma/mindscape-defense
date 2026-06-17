@@ -28,6 +28,11 @@ export default function SplashScreen() {
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-300/30 rounded-full filter blur-3xl animate-pulse pointer-events-none" style={{ animationDelay: '1.5s' }} />
       
       <div className="relative z-10 flex flex-col items-center animate-cloud-bob">
+        <img 
+          src="/logo.jpeg" 
+          alt="Brand Logo" 
+          className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] border-4 border-white mb-6 bg-white" 
+        />
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-slate-800 mb-8 tracking-widest uppercase drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] text-center px-4">
           Mindscape Defense
         </h1>

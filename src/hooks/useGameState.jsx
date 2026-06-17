@@ -22,6 +22,19 @@ export const GameStateProvider = ({ children }) => {
   const [isPortrait, setIsPortrait] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
+  const [playerName, setPlayerName] = useState(() => {
+    return localStorage.getItem('mindscapePlayerName') || 'Player';
+  });
+  const [hasSetPlayerName, setHasSetPlayerName] = useState(() => {
+    return localStorage.getItem('mindscapeHasSetName') === 'true';
+  });
+
+  const updatePlayerName = useCallback((newName) => {
+    setPlayerName(newName);
+    localStorage.setItem('mindscapePlayerName', newName);
+    setHasSetPlayerName(true);
+    localStorage.setItem('mindscapeHasSetName', 'true');
+  }, []);
 
   // Monitor orientation matches in sync with CSS
   useEffect(() => {
@@ -258,6 +271,10 @@ export const GameStateProvider = ({ children }) => {
     if (window.confirm("Are you sure you want to completely wipe your progress and start over? This cannot be undone.")) {
       localStorage.removeItem('mindscapeOnboardingCompleted');
       localStorage.removeItem('mindscapeMaxLevel');
+      localStorage.removeItem('mindscapePlayerName');
+      localStorage.removeItem('mindscapeHasSetName');
+      setHasSetPlayerName(false);
+      setPlayerName('Player');
       setMaxUnlockedLevel(1);
       setLevel(1);
       setGameStatus('splash');
@@ -270,8 +287,8 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, enterGame, startGame, startLevel, returnToLevelSelect, goToMenu, resetProgress
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount, playerName, hasSetPlayerName,
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, enterGame, startGame, startLevel, returnToLevelSelect, goToMenu, resetProgress, updatePlayerName
     }}>
       {children}
     </GameStateContext.Provider>

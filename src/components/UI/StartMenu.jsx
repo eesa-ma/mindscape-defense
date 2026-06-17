@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Gamepad2, BookOpen, Lightbulb, ArrowLeft, Joystick, BatteryCharging, Users, Clock, Sparkles, MessageSquare, PhoneOff, MessageCircle } from 'lucide-react';
+import { Shield, Gamepad2, BookOpen, Lightbulb, ArrowLeft, Joystick, BatteryCharging, Users, Clock, Sparkles, MessageSquare, PhoneOff, MessageCircle, Settings, Volume2, VolumeX, RotateCcw, UserCircle2 } from 'lucide-react';
 import { useGameState } from '../../hooks/useGameState';
 import { requestFullscreen } from '../../utils/fullscreen';
 
 export default function StartMenu() {
-  const { gameStatus, startGame } = useGameState();
+  const { gameStatus, startGame, isMuted, toggleMute, resetProgress, playerName, updatePlayerName } = useGameState();
   const [showInstructions, setShowInstructions] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [instructionTab, setInstructionTab] = useState('rules'); // 'rules' or 'cheatsheet'
+  const [tempName, setTempName] = useState(playerName);
+
+  useEffect(() => {
+    setTempName(playerName);
+  }, [playerName]);
 
   if (gameStatus !== 'menu') return null;
 
@@ -23,79 +29,85 @@ export default function StartMenu() {
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-300/20 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
 
       <AnimatePresence mode="wait">
-        {!showInstructions ? (
+        {showSettings ? (
           <motion.div
-            key="welcome"
+            key="settings"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4 }}
-            className="relative z-10 max-w-sm sm:max-w-md w-full bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl text-center shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col items-center animate-cloud-bob h-sm:p-4 h-sm:rounded-3xl h-sm:max-h-[92vh] h-sm:w-[95%] h-sm:max-w-84 h-xs:p-3 h-xs:max-w-76"
+            className="relative z-10 w-full max-w-sm sm:max-w-md bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col h-sm:p-4 h-sm:rounded-3xl h-sm:w-[95%] h-sm:max-h-[92vh] h-xs:p-3"
           >
-            {/* Cute Mascot cloud illustration */}
-            <div className="relative mb-6 h-sm:mb-4 flex items-center justify-center">
-              <svg viewBox="0 0 120 80" className="w-32 h-24 h-sm:w-18 h-sm:h-14 h-sm:mb-1 h-xs:w-15 h-xs:h-11 relative">
-                {/* Shield shadow */}
-                <ellipse cx="60" cy="72" rx="30" ry="6" fill="#cbd5e1" opacity="0.6" />
-                
-                {/* Outer Shield Border */}
-                <path d="M 60 10 L 95 20 C 95 45 80 65 60 75 C 40 65 25 45 25 20 Z" fill="#e0e7ff" stroke="#818cf8" strokeWidth="4" strokeLinejoin="round" />
-                
-                {/* Inner Shield Body */}
-                <path d="M 60 18 L 85 26 C 85 43 75 57 60 65 C 45 57 35 43 35 26 Z" fill="#8b5cf6" />
-                
-                {/* Mind Core / Star */}
-                <path d="M 60 25 L 63 35 L 73 38 L 63 41 L 60 51 L 57 41 L 47 38 L 57 35 Z" fill="#fde047" className="animate-pulse" />
-                
-                {/* Floating Sparks */}
-                <path d="M 45 25 L 47 30 L 52 32 L 47 34 L 45 39 L 43 34 L 38 32 L 43 30 Z" fill="#fde047" opacity="0.8" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
-                <path d="M 75 45 L 76.5 49 L 81 50.5 L 76.5 52 L 75 56 L 73.5 52 L 69 50.5 L 73.5 49 Z" fill="#fde047" opacity="0.8" className="animate-pulse" style={{ animationDelay: '1s' }} />
-              </svg>
+            <div className="text-center mb-6 shrink-0 h-sm:mb-3">
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-800 mb-1 h-sm:text-[1.25rem] h-xs:text-[1rem]">
+                <Settings className="inline w-6 h-6 mr-2" /> Settings
+              </h2>
+            </div>
+
+            <div className="flex flex-col gap-5 flex-1 overflow-y-auto mb-6 px-1 h-sm:gap-3 h-sm:mb-3 scrollbar-thin">
               
-              <motion.div 
-                className="absolute -right-2 bottom-1 text-3xl h-sm:text-2xl h-xs:text-xl"
-                animate={{ 
-                  y: [0, -8, 0],
-                  scale: [1, 1.15, 1],
-                  rotate: [0, 8, -8, 0]
-                }}
-                transition={{ 
-                  duration: 2.5, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                <Sparkles className="inline w-5 h-5 mx-2 text-indigo-400" />
-              </motion.div>
+              {/* Change Name */}
+              <div className="bg-sky-50 border-2 border-slate-200 p-4 rounded-2xl flex flex-col gap-2 h-sm:p-3">
+                <label className="font-extrabold text-slate-700 text-sm flex items-center gap-2"><UserCircle2 className="w-4 h-4"/> Player Name</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={tempName}
+                    onChange={(e) => setTempName(e.target.value)}
+                    className="flex-1 bg-white border-2 border-slate-300 rounded-xl px-3 py-2 font-bold text-slate-700 focus:outline-none focus:border-sky-500 transition-colors h-sm:py-1 h-sm:text-sm"
+                    placeholder="Enter name..."
+                  />
+                  <button 
+                    onClick={() => updatePlayerName(tempName || 'Player')}
+                    className="bg-sky-500 hover:bg-sky-600 text-white border-2 border-slate-800 font-bold px-4 rounded-xl shadow-[2px_2px_0px_rgba(30,41,59,1)] active:translate-y-0.5 active:shadow-none transition-all h-sm:px-3 h-sm:text-sm"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+
+              {/* Music Toggle */}
+              <div className="bg-purple-50 border-2 border-slate-200 p-4 rounded-2xl flex items-center justify-between h-sm:p-3">
+                <span className="font-extrabold text-slate-700 text-sm flex items-center gap-2">
+                  {isMuted ? <VolumeX className="w-4 h-4"/> : <Volume2 className="w-4 h-4"/>} 
+                  Background Music
+                </span>
+                <button
+                  onClick={toggleMute}
+                  className={`relative inline-flex h-7 w-12 items-center rounded-full border-2 border-slate-800 transition-colors focus:outline-none ${!isMuted ? 'bg-emerald-400' : 'bg-slate-300'}`}
+                >
+                  <span className={`inline-block h-5 w-5 transform rounded-full bg-white border-2 border-slate-800 transition-transform ${!isMuted ? 'translate-x-5' : 'translate-x-1'}`} />
+                </button>
+              </div>
+
+              {/* Reset Game */}
+              <div className="bg-rose-50 border-2 border-slate-200 p-4 rounded-2xl flex flex-col gap-2 h-sm:p-3">
+                <span className="font-extrabold text-slate-700 text-sm flex items-center gap-2"><RotateCcw className="w-4 h-4 text-rose-500"/> Danger Zone</span>
+                <p className="text-xs font-medium text-slate-500">Wipe all saved progress, including unlocked levels and completed onboarding.</p>
+                <button
+                  onClick={() => {
+                    resetProgress();
+                    setShowSettings(false);
+                  }}
+                  className="mt-2 py-2 bg-rose-500 hover:bg-rose-600 text-white border-2 border-slate-800 font-extrabold uppercase tracking-wider rounded-xl shadow-[2px_2px_0px_rgba(30,41,59,1)] active:translate-y-0.5 active:shadow-none transition-all h-sm:py-1.5 h-sm:text-xs text-sm"
+                >
+                  Reset All Progress
+                </button>
+              </div>
+
             </div>
 
-            <p className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
-              Mind Empowered presents
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-black text-slate-800 mb-2 tracking-wide h-sm:text-[1.35rem] h-sm:mb-0.5 h-xs:text-[1.15rem]">
-              Mindscape Defense
-            </h1>
-            <p className="text-xs sm:text-sm font-extrabold text-indigo-500 uppercase tracking-widest mb-8 leading-relaxed h-sm:text-[0.55rem] h-sm:mb-2.5 h-xs:mb-1.5">
-              <Shield className="inline w-4 h-4 mr-2" /> Shield Your Focus, Cultivate Resilience <Shield className="inline w-4 h-4 ml-2" />
-            </p>
-
-            <div className="flex flex-col gap-4 w-full h-sm:gap-2.5 h-xs:gap-2">
-              <button
-                onClick={handleStartGame}
-                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
-              >
-                <Gamepad2 className="inline w-5 h-5 mr-2" /> Start Game
-              </button>
-
-              <button
-                onClick={() => setShowInstructions(true)}
-                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
-              >
-                <BookOpen className="inline w-5 h-5 mr-2" /> How to Play
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                updatePlayerName(tempName || 'Player');
+                setShowSettings(false);
+              }}
+              className="w-full shrink-0 py-3 h-sm:py-2 h-sm:text-[0.75rem] h-sm:rounded-[0.85rem] h-sm:border-[2.5px] bg-slate-200 hover:bg-slate-300 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer text-center"
+            >
+              <ArrowLeft className="inline w-5 h-5 mr-2" /> Back to Menu
+            </button>
           </motion.div>
-        ) : (
+        ) : showInstructions ? (
           <motion.div
             key="instructions"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -227,6 +239,92 @@ export default function StartMenu() {
             >
               <ArrowLeft className="inline w-5 h-5 mr-2" /> Back to Menu
             </button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="welcome"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.4 }}
+            className="relative z-10 max-w-sm sm:max-w-md w-full bg-white border-4 border-slate-800 p-6 sm:p-8 rounded-3xl text-center shadow-[6px_6px_0px_rgba(30,41,59,1)] flex flex-col items-center animate-cloud-bob h-sm:p-4 h-sm:rounded-3xl h-sm:max-h-[92vh] h-sm:w-[95%] h-sm:max-w-84 h-xs:p-3 h-xs:max-w-76"
+          >
+            {/* Cute Mascot cloud illustration */}
+            <div className="relative mb-6 h-sm:mb-4 flex items-center justify-center">
+              <svg viewBox="0 0 120 80" className="w-32 h-24 h-sm:w-18 h-sm:h-14 h-sm:mb-1 h-xs:w-15 h-xs:h-11 relative">
+                {/* Shield shadow */}
+                <ellipse cx="60" cy="72" rx="30" ry="6" fill="#cbd5e1" opacity="0.6" />
+                
+                {/* Outer Shield Border */}
+                <path d="M 60 10 L 95 20 C 95 45 80 65 60 75 C 40 65 25 45 25 20 Z" fill="#e0e7ff" stroke="#818cf8" strokeWidth="4" strokeLinejoin="round" />
+                
+                {/* Inner Shield Body */}
+                <path d="M 60 18 L 85 26 C 85 43 75 57 60 65 C 45 57 35 43 35 26 Z" fill="#8b5cf6" />
+                
+                {/* Mind Core / Star */}
+                <path d="M 60 25 L 63 35 L 73 38 L 63 41 L 60 51 L 57 41 L 47 38 L 57 35 Z" fill="#fde047" className="animate-pulse" />
+                
+                {/* Floating Sparks */}
+                <path d="M 45 25 L 47 30 L 52 32 L 47 34 L 45 39 L 43 34 L 38 32 L 43 30 Z" fill="#fde047" opacity="0.8" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+                <path d="M 75 45 L 76.5 49 L 81 50.5 L 76.5 52 L 75 56 L 73.5 52 L 69 50.5 L 73.5 49 Z" fill="#fde047" opacity="0.8" className="animate-pulse" style={{ animationDelay: '1s' }} />
+              </svg>
+              
+              <motion.div 
+                className="absolute -right-2 bottom-1 text-3xl h-sm:text-2xl h-xs:text-xl"
+                animate={{ 
+                  y: [0, -8, 0],
+                  scale: [1, 1.15, 1],
+                  rotate: [0, 8, -8, 0]
+                }}
+                transition={{ 
+                  duration: 2.5, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <Sparkles className="inline w-5 h-5 mx-2 text-indigo-400" />
+              </motion.div>
+            </div>
+
+            {/* Settings Button - Top Right of Card */}
+            <button
+              type="button"
+              onClick={() => setShowSettings(true)}
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 bg-slate-100 hover:bg-slate-200 border-2 sm:border-[3px] border-slate-800 p-2 sm:p-2.5 rounded-xl text-slate-700 hover:text-slate-900 transition-all shadow-[2px_2px_0px_rgba(30,41,59,1)] active:translate-y-0.5 active:shadow-none z-20 cursor-pointer h-sm:p-1.5 h-sm:top-3 h-sm:right-3"
+              title="Settings"
+            >
+              <Settings className="w-5 h-5 sm:w-6 sm:h-6 pointer-events-none" />
+            </button>
+
+            <p className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 mt-4">
+              Mind Empowered presents
+            </p>
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-800 mb-2 tracking-wide h-sm:text-[1.35rem] h-sm:mb-0.5 h-xs:text-[1.15rem]">
+              Mindscape Defense
+            </h1>
+            <p className="text-xs sm:text-sm font-extrabold text-indigo-500 uppercase tracking-widest mb-4 leading-relaxed h-sm:text-[0.55rem] h-sm:mb-2.5 h-xs:mb-1.5">
+              <Shield className="inline w-4 h-4 mr-2" /> Shield Your Focus <Shield className="inline w-4 h-4 ml-2" />
+            </p>
+            <p className="text-xs font-bold text-slate-600 mb-6 bg-slate-100 py-1.5 px-4 rounded-full border-2 border-slate-200">
+              Welcome back, <span className="text-indigo-600 font-black">{playerName}</span>!
+            </p>
+
+            <div className="flex flex-col gap-4 w-full h-sm:gap-2.5 h-xs:gap-2">
+              <button
+                onClick={handleStartGame}
+                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-violet-300 hover:bg-violet-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
+              >
+                <Gamepad2 className="inline w-5 h-5 mr-2" /> Start Game
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowInstructions(true)}
+                className="w-full py-3 sm:py-4 h-sm:py-2 h-sm:rounded-[0.85rem] h-sm:text-[0.75rem] h-sm:border-[2.5px] h-xs:py-1.5 bg-amber-300 hover:bg-amber-400 border-[3px] border-slate-800 text-slate-800 font-extrabold uppercase tracking-wider rounded-2xl shadow-[3px_3px_0px_rgba(30,41,59,1)] hover:scale-102 active:scale-98 active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(30,41,59,1)] transition-all cursor-pointer flex items-center justify-center gap-2"
+              >
+                <BookOpen className="inline w-5 h-5 mr-2" /> How to Play
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

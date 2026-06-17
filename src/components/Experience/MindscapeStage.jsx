@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Sparkles, Float, Sphere } from '@react-three/drei';
+import { Sparkles, Float, Sphere, Html } from '@react-three/drei';
 import { useGameState } from '../../hooks/useGameState';
 import Threat from './Threat';
 import ScreenSmoke from './ScreenSmoke';
@@ -141,7 +141,7 @@ function DecorativeFlora() {
 
 
 function Environment() {
-  const { connection, threats, spawnThreat, gameStatus, getStageModifiers, isPortrait, isPaused } = useGameState();
+  const { connection, threats, spawnThreat, gameStatus, getStageModifiers, isPortrait, isPaused, playerName } = useGameState();
   
   // 4. Fog Thickens exponentially at low connection
   const fogDensity = 0.005 + Math.pow((100 - connection) / 100, 2.5) * 0.12;
@@ -193,6 +193,12 @@ function Environment() {
             <ManModel position={[0, 0, 0]} />
           </group>
         </Suspense>
+
+        <Html position={[0, 3.2, 0]} center zIndexRange={[10, 0]}>
+          <div className="bg-slate-800/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-black whitespace-nowrap shadow-[2px_2px_0px_rgba(0,0,0,0.5)] border-2 border-indigo-400 select-none">
+            {playerName}
+          </div>
+        </Html>
 
         {/* Glowing aura ring at feet */}
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>

@@ -16,6 +16,7 @@ import FailureOverlay from './components/UI/FailureOverlay';
 import LevelSelectScreen from './components/UI/LevelSelectScreen';
 import OnboardingScreen from './components/UI/OnboardingScreen';
 import SplashScreen from './components/UI/SplashScreen';
+import NamePromptScreen from './components/UI/NamePromptScreen';
 
 function MenuFullscreenToggle() {
   const { gameStatus } = useGameState();
@@ -348,6 +349,7 @@ function GameRunner() {
       <EndScreen /> {/* Active endgame layer checks */}
       <OnboardingScreen />
       <SplashScreen />
+      <NamePromptScreen />
       <StartMenu />
       <LevelSelectScreen />
       <OrientationGate />
