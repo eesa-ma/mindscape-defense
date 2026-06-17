@@ -106,7 +106,7 @@ export const GameStateProvider = ({ children }) => {
     
     // Determine which strategies are unlocked at this level
     // Level 1: 2 strategies (index 0, 1). Level 6: 7 strategies (index 0..6)
-    const strategyKeys = ['Q', 'W', 'E', 'R', 'A', 'S', 'D'];
+    const strategyKeys = ['1', '2', '3', '4', '5', '6', '7'];
     const unlockedKeys = strategyKeys.slice(0, level + 1);
     
     // Aggregate all possible threat types that the player can currently counter
