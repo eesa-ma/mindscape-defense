@@ -69,6 +69,9 @@ export default function StartMenu() {
               </motion.div>
             </div>
 
+            <p className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">
+              Mind Empowered presents
+            </p>
             <h1 className="text-3xl sm:text-4xl font-black text-slate-800 mb-2 tracking-wide h-sm:text-[1.35rem] h-sm:mb-0.5 h-xs:text-[1.15rem]">
               Mindscape Defense
             </h1>

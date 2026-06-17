@@ -265,22 +265,12 @@ class AudioSynth {
     
     const now = this.ctx.currentTime;
     
-    // Start ambient sources
-    try {
-      if (this.droneOsc) this.droneOsc.start(now);
-      if (this.noiseSource) this.noiseSource.start(now);
-      
-      // Smooth fade-in of background ambience
-      this.ambienceVolumeGain.gain.setValueAtTime(0, now);
-      this.ambienceVolumeGain.gain.linearRampToValueAtTime(0.35, now + 2.0);
-    } catch (e) {
-      console.warn("Error starting ambient soundscape", e);
-    }
+  
     
     this.padStarted = true;
     
-    // Start looping piano sequencer
-    this.startSequence();
+    // Start looping piano sequencer (DISABLED)
+    // this.startSequence();
   }
 
   stopPad() {

@@ -246,6 +246,43 @@ const CracksOverlay = ({ connection }) => {
   );
 };
 
+function BackgroundMusic() {
+  const { gameStatus, isMuted } = useGameState();
+  const audioRef = React.useRef(null);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    
+    const playAudio = async () => {
+      try {
+        if (audioRef.current.paused) {
+          await audioRef.current.play();
+        }
+      } catch (err) {
+        // Autoplay might be blocked until user interacts
+      }
+    };
+    
+    if (gameStatus !== 'splash') {
+      playAudio();
+    }
+  }, [gameStatus]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = isMuted;
+  }, [isMuted]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    // Lower volume for menus, higher for gameplay
+    const targetVolume = gameStatus === 'playing' ? 0.6 : 0.2;
+    audioRef.current.volume = targetVolume;
+  }, [gameStatus]);
+
+  return <audio ref={audioRef} src="/bg-music.mpeg" loop />;
+}
+
 function GameRunner() {
   const { executeCopingStrategy, connection, gameStatus } = useGameState();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -315,6 +352,7 @@ function GameRunner() {
       <LevelSelectScreen />
       <OrientationGate />
       <LoadingScreen />
+      <BackgroundMusic />
       
       {/* Menu controls (hidden during gameplay) */}
       <MenuFullscreenToggle />
