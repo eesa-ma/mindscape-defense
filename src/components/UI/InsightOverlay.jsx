@@ -6,7 +6,7 @@ export default function InsightOverlay() {
   const { activeInsight } = useGameState();
 
   return (
-    <div className="absolute right-6 top-24 w-80 z-50 pointer-events-none h-sm:top-16 h-sm:right-2 h-sm:w-60 h-xs:top-13 h-xs:right-1.5 h-xs:w-52">
+    <div className="absolute right-6 top-36 sm:top-44 md:top-48 w-80 z-50 pointer-events-none h-sm:top-24 h-sm:right-4 h-sm:w-60 h-xs:top-20 h-xs:right-2 h-xs:w-52">
       <AnimatePresence>
         {activeInsight && (
           <motion.div

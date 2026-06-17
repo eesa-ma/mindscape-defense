@@ -49,11 +49,11 @@ export default function CopingDock() {
           <span className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 transition-transform duration-200 group-hover:scale-110 flex items-center justify-center">
             {ICON_MAP[mechanism.key]}
           </span>
-          <kbd className="text-[8px] sm:text-[10px] md:text-xs lg:text-sm font-black font-mono tracking-wider bg-white px-1 py-0 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[8px] h-xs:hidden">
+          <kbd className="text-[9px] sm:text-[11px] md:text-sm lg:text-base font-black font-mono tracking-wider bg-white px-1 py-0 rounded border border-slate-300 text-slate-800 shadow-[1px_1px_0px_rgba(30,41,59,1)] h-sm:text-[9px] h-xs:hidden">
             {mechanism.key}
           </kbd>
         </div>
-        <span className="text-[6px] sm:text-[7px] md:text-[9px] lg:text-[11px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[7px] h-sm:leading-none h-xs:text-[6px] h-xs:leading-[0.95]">
+        <span className="text-[8px] sm:text-[9px] md:text-[11px] lg:text-[13px] font-extrabold tracking-tight text-center px-0.5 leading-tight font-sans h-sm:text-[9px] h-sm:leading-none h-xs:text-[8px] h-xs:leading-[0.95]">
           {mechanism.label}
         </span>
       </button>
