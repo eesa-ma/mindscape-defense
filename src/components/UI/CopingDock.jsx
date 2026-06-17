@@ -23,13 +23,17 @@ const EMOJI_MAP = {
 };
 
 export default function CopingDock() {
-  const { executeCopingStrategy, gameStatus } = useGameState();
+  const { executeCopingStrategy, gameStatus, level } = useGameState();
 
   if (gameStatus !== 'playing') return null;
 
   const allMechanisms = Object.values(COPING_MECHANISMS);
-  const leftMechanisms = allMechanisms.slice(0, 3);
-  const rightMechanisms = allMechanisms.slice(3);
+  // Level 1 unlocks first 2 mechanisms. Each level adds 1 more. Max 7.
+  const unlockedMechanisms = allMechanisms.slice(0, level + 1);
+  
+  const half = Math.ceil(unlockedMechanisms.length / 2);
+  const leftMechanisms = unlockedMechanisms.slice(0, half);
+  const rightMechanisms = unlockedMechanisms.slice(half);
 
   const renderMechanism = (mechanism) => {
     const colorStyle = STYLE_MAP[mechanism.key] || 'bg-slate-50 border-slate-200 text-slate-900';

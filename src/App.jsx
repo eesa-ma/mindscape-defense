@@ -13,7 +13,7 @@ import FailureOverlay from './components/UI/FailureOverlay';
 
 
 function HUD() {
-  const { connection, score, lives, timer, gameStage, isMuted, toggleMute, gameStatus, togglePause } = useGameState();
+  const { connection, score, lives, level, enemiesDefeatedThisLevel, isMuted, toggleMute, gameStatus, togglePause } = useGameState();
 
   if (gameStatus !== 'playing') return null;
 
@@ -129,10 +129,12 @@ function HUD() {
         </div>
       </div>
 
-      {/* Real-time Countdown Timer & Stage Tracking Display */}
+      {/* Level & Progress Display */}
       <div className="hud-timer flex flex-col items-center bg-purple-100 border-[3px] border-slate-800 px-4 py-1.5 sm:px-6 sm:py-2.5 rounded-3xl text-center shadow-[3px_3px_0px_rgba(30,41,59,1)] pointer-events-auto">
-        <span className="hud-timer-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-widest text-purple-800">⏰ Stage: {gameStage}</span>
-        <span className="hud-timer-value text-sm sm:text-xl font-black text-purple-950">00:{timer < 10 ? `0${timer}` : timer}</span>
+        <span className="hud-timer-title text-[8px] sm:text-[10px] font-extrabold uppercase tracking-widest text-purple-800">⭐ LEVEL {level}</span>
+        <span className="hud-timer-value text-sm sm:text-xl font-black text-purple-950">
+          {level < 6 ? `${enemiesDefeatedThisLevel} / ${level * 5}` : 'MAX'}
+        </span>
       </div>
 
       <div className="flex gap-2 sm:gap-3 items-center">

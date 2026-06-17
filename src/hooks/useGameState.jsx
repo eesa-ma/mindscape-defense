@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { audioSynth } from '../utils/audioSynth';
+import { COPING_MECHANISMS } from '../config/gameData';
 
 const GameStateContext = createContext();
 
@@ -13,8 +14,8 @@ export const GameStateProvider = ({ children }) => {
   
   const [gameStatus, setGameStatus] = useState('menu'); 
   const [isPaused, setIsPaused] = useState(false);
-  const [timer, setTimer] = useState(60); 
-  const [gameStage, setGameStage] = useState('early'); 
+  const [level, setLevel] = useState(1);
+  const [enemiesDefeatedThisLevel, setEnemiesDefeatedThisLevel] = useState(0); 
   const [isPortrait, setIsPortrait] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
@@ -39,32 +40,24 @@ export const GameStateProvider = ({ children }) => {
 
   // Difficulty scaling logic based on game plan stages
   const getStageModifiers = useCallback(() => {
-    if (gameStage === 'mid') return { spawnRate: 3000, speedMultiplier: 1.5 }; 
-    if (gameStage === 'late') return { spawnRate: 1800, speedMultiplier: 2.2 }; 
-    return { spawnRate: 4500, speedMultiplier: 1.0 }; 
-  }, [gameStage]);
+    // Faster spawns at higher levels
+    const spawnRate = Math.max(1500, 4500 - (level * 600)); 
+    return { spawnRate }; 
+  }, [level]);
 
+  // Progression logic: Threshold increases by 5 each level (L1 needs 5, L2 needs 10, L3 needs 15...)
   useEffect(() => {
-    if (gameStatus !== 'playing' || isPortrait || isPaused) return;
-
-    const clock = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          setGameStatus('won'); 
-          clearInterval(clock);
-          return 0;
-        }
-        
-        // Progression triggers
-        if (prev === 40) setGameStage('mid');
-        if (prev === 20) setGameStage('late');
-        
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(clock);
-  }, [gameStatus, isPortrait, isPaused]);
+    if (gameStatus !== 'playing') return;
+    
+    const requiredForNextLevel = level * 5;
+    
+    if (level < 6 && enemiesDefeatedThisLevel >= requiredForNextLevel) {
+      setLevel(prev => prev + 1);
+      setEnemiesDefeatedThisLevel(0); // Reset for the next level's count
+      // Optional: Play a level-up sound here if added to audioSynth later
+      setConnection(prev => Math.min(prev + 20, 100)); // Bonus connection on level up
+    }
+  }, [enemiesDefeatedThisLevel, gameStatus, level]);
 
   // Handle game music ambient pad playback
   useEffect(() => {
@@ -94,15 +87,27 @@ export const GameStateProvider = ({ children }) => {
     audioSynth.playSuccess(); // play success arpeggio
     setScore(prev => prev + points); 
     setConnection(prev => Math.min(prev + 10, 100)); 
+    setEnemiesDefeatedThisLevel(prev => prev + 1);
     setActiveInsight(insightText);
     setTimeout(() => setActiveInsight(null), 3500);
   };
 
-  const spawnThreat = useCallback((type) => {
+  const spawnThreat = useCallback(() => {
     if (gameStatus !== 'playing' || isPaused) return;
 
     const spawnDistance = 15;
-    const modifiers = getStageModifiers();
+    
+    // Determine which strategies are unlocked at this level
+    // Level 1: 2 strategies (index 0, 1). Level 6: 7 strategies (index 0..6)
+    const strategyKeys = ['Q', 'W', 'E', 'R', 'A', 'S', 'D'];
+    const unlockedKeys = strategyKeys.slice(0, level + 1);
+    
+    // Aggregate all possible threat types that the player can currently counter
+    const possibleThreats = unlockedKeys.flatMap(k => COPING_MECHANISMS[k].counteracts);
+    const selectedType = possibleThreats[Math.floor(Math.random() * possibleThreats.length)];
+
+    // Faster speed at higher levels
+    const speedMultiplier = 1 + (level * 0.15);
 
     // Threats come from: top, left (upper half), right (upper half)
     // In 3D: camera is behind (positive Z), so:
@@ -127,9 +132,9 @@ export const GameStateProvider = ({ children }) => {
 
     const newThreat = {
       id: Math.random().toString(36).substr(2, 9),
-      type: type,
+      type: selectedType,
       position: [spawnX, 0, spawnZ],
-      speed: (0.02 + Math.random() * 0.02) * modifiers.speedMultiplier,
+      speed: (0.02 + Math.random() * 0.02) * speedMultiplier,
     };
 
     setThreats(prev => {
@@ -137,7 +142,7 @@ export const GameStateProvider = ({ children }) => {
       if (updated.length === 0) setTargetedThreat(newThreat);
       return [...updated, newThreat];
     });
-  }, [gameStatus, isPaused, getStageModifiers]);
+  }, [gameStatus, isPaused, level]);
 
   const removeThreat = (id) => {
     setThreats(prev => {
@@ -175,7 +180,7 @@ export const GameStateProvider = ({ children }) => {
     } else {
       audioSynth.playFailure(); // play warning slide on incorrect cope
       setWrongAnswerCount(prev => prev + 1);
-      const penalty = gameStage === 'late' ? 25 : 15;
+      const penalty = level >= 4 ? 25 : 15;
       setConnection(prev => {
         const next = Math.max(prev - penalty, 0);
         if (next <= 0) setGameStatus('lost');
@@ -189,11 +194,11 @@ export const GameStateProvider = ({ children }) => {
     setConnection(100);
     setLives(3);
     setScore(0);
+    setEnemiesDefeatedThisLevel(0);
+    setLevel(1);
     setThreats([]);
     setTargetedThreat(null);
-    setGameStage('early');
     setGameStatus('playing');
-    setTimer(60);
     setIsPaused(false);
     setWrongAnswerCount(0);
   };
@@ -230,7 +235,7 @@ export const GameStateProvider = ({ children }) => {
 
   return (
     <GameStateContext.Provider value={{
-      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, timer, gameStage, isPortrait, isPaused, isMuted, wrongAnswerCount,
+      connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount,
       setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartGame, togglePause, quitGame, toggleMute, getStageModifiers, startGame, goToMenu
     }}>
       {children}

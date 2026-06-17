@@ -158,20 +158,10 @@ function Environment() {
   useEffect(() => {
     if (gameStatus !== 'playing' || isPortrait || isPaused) return;
 
-    const categories = [
-      'Burnout', 'Exhaustion', 'Creative Block',
-      'Social Rejection', 'Loneliness', 'Imposter Syndrome',
-      'Academic Pressure', 'Procrastination', 'Overwhelm',
-      'Negative Thoughts', 'Self-Doubt', 'Anxiety',
-      'Isolation', 'Ghosting', 'Detachment',
-      'Social Comparison', 'FOMO', 'Cyberbullying',
-      'Family Conflict', 'Misunderstandings', 'Peer Pressure'
-    ];
     const modifiers = getStageModifiers();
 
     const spawnLoop = () => {
-      const randomType = categories[Math.floor(Math.random() * categories.length)];
-      spawnThreat(randomType);
+      spawnThreat();
     };
 
     const intervalId = setInterval(spawnLoop, modifiers.spawnRate);
