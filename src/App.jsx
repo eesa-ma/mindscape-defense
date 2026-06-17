@@ -5,13 +5,14 @@ import { toggleFullscreen, isFullscreen } from './utils/fullscreen';
 import MindscapeStage from './components/Experience/MindscapeStage';
 import CopingDock from './components/UI/CopingDock';
 import InsightOverlay from './components/UI/InsightOverlay';
-import EndScreen from './components/UI/EndScreen'; // Import the overlay
+import EndScreen from './components/UI/EndScreen';
 import OrientationGate from './components/UI/OrientationGate';
 import LoadingScreen from './components/UI/LoadingScreen';
 import StartMenu from './components/UI/StartMenu';
 import CelebrationOverlay from './components/UI/CelebrationOverlay';
 import FailureOverlay from './components/UI/FailureOverlay';
 import LevelSelectScreen from './components/UI/LevelSelectScreen';
+import OnboardingScreen from './components/UI/OnboardingScreen';
 
 
 function HUD() {
@@ -276,6 +277,7 @@ function GameRunner() {
       <FailureOverlay />
       <CopingDock />
       <EndScreen /> {/* Active endgame layer checks */}
+      <OnboardingScreen />
       <StartMenu />
       <LevelSelectScreen />
       <OrientationGate />

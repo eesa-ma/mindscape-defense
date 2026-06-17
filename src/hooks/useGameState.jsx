@@ -11,7 +11,10 @@ export const GameStateProvider = ({ children }) => {
   const [activeInsight, setActiveInsight] = useState(null);
   const [threats, setThreats] = useState([]);
   const [targetedThreat, setTargetedThreat] = useState(null);
-  const [gameStatus, setGameStatus] = useState('menu'); 
+  const [gameStatus, setGameStatus] = useState(() => {
+    const hasSeenOnboarding = localStorage.getItem('mindscapeOnboardingCompleted');
+    return hasSeenOnboarding ? 'menu' : 'onboarding';
+  });
   const [isPaused, setIsPaused] = useState(false);
   const [level, setLevel] = useState(1);
   const [maxUnlockedLevel, setMaxUnlockedLevel] = useState(() => {
@@ -98,6 +101,11 @@ export const GameStateProvider = ({ children }) => {
     setActiveInsight(insightText);
     setTimeout(() => setActiveInsight(null), 3500);
   };
+
+  const completeOnboarding = useCallback(() => {
+    localStorage.setItem('mindscapeOnboardingCompleted', 'true');
+    setGameStatus('menu');
+  }, []);
 
   const spawnThreat = useCallback(() => {
     if (gameStatus !== 'playing' || isPaused) return;
@@ -251,7 +259,7 @@ export const GameStateProvider = ({ children }) => {
   return (
     <GameStateContext.Provider value={{
       connection, lives, score, activeInsight, threats, targetedThreat, gameStatus, level, maxUnlockedLevel, enemiesDefeatedThisLevel, isPortrait, isPaused, isMuted, wrongAnswerCount,
-      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, startGame, startLevel, returnToLevelSelect, goToMenu
+      setTargetedThreat, spawnThreat, removeThreat, handleThreatCollision, executeCopingStrategy, restartLevel, togglePause, quitGame, toggleMute, getStageModifiers, completeOnboarding, startGame, startLevel, returnToLevelSelect, goToMenu
     }}>
       {children}
     </GameStateContext.Provider>
