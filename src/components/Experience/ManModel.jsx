@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useGraph } from '@react-three/fiber'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { SkeletonUtils } from 'three-stdlib'
@@ -7,7 +7,7 @@ import { useGameState } from '../../hooks/useGameState'
 export default function ManModel(props) {
   const group = useRef()
   const { scene, animations } = useGLTF('/Man.glb')
-  const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene])
+  const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes, materials } = useGraph(clone)
   const { actions, names } = useAnimations(animations, group)
   const { isCelebrating, isMistake } = useGameState()

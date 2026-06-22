@@ -272,9 +272,6 @@ function Environment() {
         color="#fde047" 
         position={[0, 2, 6]} 
       />
-
-
-
       {threats.map((threat) => (
         <Threat key={threat.id} threatData={threat} />
       ))}

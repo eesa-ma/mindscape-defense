@@ -263,10 +263,7 @@ class AudioSynth {
       this.ctx.resume();
     }
     
-    const now = this.ctx.currentTime;
-    
   
-    
     this.padStarted = true;
     
     // Start looping piano sequencer (DISABLED)
@@ -285,7 +282,9 @@ class AudioSynth {
       this.ambienceVolumeGain.gain.cancelScheduledValues(now);
       this.ambienceVolumeGain.gain.setValueAtTime(this.ambienceVolumeGain.gain.value, now);
       this.ambienceVolumeGain.gain.linearRampToValueAtTime(0, now + 1.0);
-    } catch (e) {}
+    } catch {
+      // ignore
+    }
     
     this.padStarted = false;
     
@@ -293,7 +292,9 @@ class AudioSynth {
       try {
         if (this.droneOsc) { this.droneOsc.stop(); this.droneOsc.disconnect(); }
         if (this.noiseSource) { this.noiseSource.stop(); this.noiseSource.disconnect(); }
-      } catch (e) {}
+      } catch {
+        // ignore
+      }
       
       this.droneOsc = null;
       this.noiseSource = null;
@@ -322,7 +323,9 @@ class AudioSynth {
       console.error("AudioSynth error setting masterGain.gain:", e);
       try {
         this.masterGain.gain.value = muted ? 0 : 0.8;
-      } catch (err) {}
+      } catch {
+        // ignore
+      }
     }
   }
 
@@ -353,7 +356,9 @@ class AudioSynth {
       this.ambienceVolumeGain.gain.cancelScheduledValues(now);
       this.ambienceVolumeGain.gain.setValueAtTime(this.ambienceVolumeGain.gain.value, now);
       this.ambienceVolumeGain.gain.linearRampToValueAtTime(targetGain, now + 1.2);
-    } catch (e) {}
+    } catch (e) {
+      // ignore
+    }
   }
 
   playSuccess() {

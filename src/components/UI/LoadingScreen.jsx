@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useProgress } from '@react-three/drei';
-import { Shield, Loader2, Heart } from 'lucide-react';
+import { Shield, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LOADING_TIPS = [

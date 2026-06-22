@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { audioSynth } from '../utils/audioSynth';
 import { COPING_MECHANISMS } from '../config/gameData';
 
@@ -248,11 +248,15 @@ export const GameStateProvider = ({ children }) => {
   };
 
   const returnToLevelSelect = () => {
+    setThreats([]);
+    setTargetedThreat(null);
     setGameStatus('levelSelect');
   };
 
   const goToMenu = () => {
     audioSynth.playClick();
+    setThreats([]);
+    setTargetedThreat(null);
     setGameStatus('menu');
   };
 
@@ -266,6 +270,8 @@ export const GameStateProvider = ({ children }) => {
   const quitGame = () => {
     audioSynth.playClick();
     setIsPaused(false);
+    setThreats([]);
+    setTargetedThreat(null);
     setGameStatus('menu'); // Quit redirects back to main menu
   };
 
