@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html, Sparkles } from '@react-three/drei';
 import { useGameState } from '../../hooks/useGameState';
@@ -8,7 +8,7 @@ export default function Threat({ threatData }) {
   const visualGroupRef = useRef();
   const particlesRef = useRef();
 
-  const { handleThreatCollision, targetedThreat, setTargetedThreat, isPortrait, isPaused } = useGameState();
+  const { handleThreatCollision, targetedThreat, setTargetedThreat, isPortrait, isPaused, gameStatus } = useGameState();
   const isTargeted = targetedThreat?.id === threatData.id;
 
   // New states for the destruction animation
@@ -17,7 +17,7 @@ export default function Threat({ threatData }) {
 
   // Generate random velocities for 30 explosion particles
   const particleCount = 30;
-  const pVelocities = React.useMemo(() => {
+  const pVelocities = useMemo(() => {
     const v = [];
     for (let i = 0; i < particleCount; i++) {
       v.push([
@@ -31,7 +31,7 @@ export default function Threat({ threatData }) {
 
   useFrame((state) => {
     // If screen is in portrait mode, freeze frame logic
-    if (isPortrait || isPaused) return;
+    if (isPortrait || isPaused || gameStatus !== 'playing') return;
 
     // If destroyed, animate the explosion particles breaking outward
     if (isDestroyed) {
@@ -74,7 +74,7 @@ export default function Threat({ threatData }) {
   });
 
   // Intercept the removal to play our animation first
-  React.useEffect(() => {
+  useEffect(() => {
     // If this threat was targeted but is suddenly missing from global state, it means it was successfully countered!
     if (!isDestroyed && targetedThreat?.id !== threatData.id && meshRef.current === undefined) {
       // Small trick: state updates happen instantly, we can listen to parent changes if needed, 
@@ -92,15 +92,6 @@ export default function Threat({ threatData }) {
     labelColor: 'text-slate-700 border-slate-300 bg-white/95 backdrop-blur-sm' // Clean, bright UI label
   };
 
-  const THREAT_EMOJIS = {
-    'Burnout': '🤯', 'Exhaustion': '😫', 'Creative Block': '🎨❌',
-    'Social Rejection': '🥺', 'Loneliness': '🥀', 'Imposter Syndrome': '🎭',
-    'Academic Pressure': '📚', 'Procrastination': '⏳', 'Overwhelm': '🌀',
-    'Negative Thoughts': '🌩️', 'Self-Doubt': '😰', 'Anxiety': '💭',
-    'Isolation': '🚪', 'Ghosting': '🔇', 'Detachment': '❄️',
-    'Social Comparison': '📱', 'FOMO': '👀', 'Cyberbullying': '💔',
-    'Family Conflict': '💥', 'Misunderstandings': '🗣️❌', 'Peer Pressure': '👥'
-  };
 
   // Hack to make executeCopingStrategy trigger this component's local animation
   // We check if the global threats array still has us; if it doesn't, we show particles for 20 frames before vanishing completely.

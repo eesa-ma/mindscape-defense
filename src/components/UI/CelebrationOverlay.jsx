@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useGameState } from '../../hooks/useGameState';
 
 const COLORS = ['#fde047', '#f472b6', '#60a5fa', '#a78bfa', '#34d399', '#fb923c', '#ffffff'];

@@ -1,6 +1,5 @@
 import { useGameState } from '../../hooks/useGameState';
-import { motion } from 'framer-motion';
-import { Lock } from 'lucide-react';
+import { Lock, Star, ChevronLeft, Volume2, VolumeX } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
 import { requestFullscreen } from '../../utils/fullscreen';
 

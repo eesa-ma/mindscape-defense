@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Volume2, VolumeX, Maximize, Minimize, Heart, Star } from 'lucide-react';
 import './index.css';
 import { GameStateProvider, useGameState } from './hooks/useGameState';
@@ -249,7 +249,7 @@ const CracksOverlay = ({ connection }) => {
 
 function BackgroundMusic() {
   const { gameStatus, isMuted } = useGameState();
-  const audioRef = React.useRef(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     if (!audioRef.current) return;

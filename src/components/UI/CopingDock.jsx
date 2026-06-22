@@ -1,4 +1,3 @@
-import React from 'react';
 import { COPING_MECHANISMS } from '../../config/gameData';
 import { useGameState } from '../../hooks/useGameState';
 import { BatteryCharging, Users, Clock, Sparkles, MessageSquare, PhoneOff, MessageCircle } from 'lucide-react';

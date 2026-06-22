@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameState } from '../../hooks/useGameState';
 import { Trophy, HeartCrack, ListFilter } from 'lucide-react';

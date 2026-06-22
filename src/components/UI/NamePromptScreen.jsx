@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserCircle2, ArrowRight } from 'lucide-react';
 import { useGameState } from '../../hooks/useGameState';

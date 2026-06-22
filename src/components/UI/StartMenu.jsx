@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Gamepad2, BookOpen, Lightbulb, ArrowLeft, Joystick, BatteryCharging, Users, Clock, Sparkles, MessageSquare, PhoneOff, MessageCircle, Settings, Volume2, VolumeX, RotateCcw, UserCircle2 } from 'lucide-react';
 import { useGameState } from '../../hooks/useGameState';
